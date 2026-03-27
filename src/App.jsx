@@ -8,6 +8,19 @@ import Tracker from './pages/Tracker';
 import BookingWizard from './pages/BookingWizard';
 import WellnessCircle from './pages/WellnessCircle';
 import Directory from './pages/Directory';
+import Navbar from './components/Navbar';
+import { Outlet } from 'react-router-dom';
+
+function AuthenticatedLayout() {
+  return (
+    <div className="flex flex-col min-h-screen bg-[#FAF9F6]">
+      <Navbar />
+      <div className="flex-1 flex flex-col items-stretch [&>div]:flex-1">
+        <Outlet />
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -16,11 +29,13 @@ function App() {
         <Routes>
           <Route path="/auth" element={<Auth />} />
           
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/tracker" element={<ProtectedRoute><Tracker /></ProtectedRoute>} />
-          <Route path="/booking" element={<ProtectedRoute><BookingWizard /></ProtectedRoute>} />
-          <Route path="/wellness" element={<ProtectedRoute><WellnessCircle /></ProtectedRoute>} />
-          <Route path="/directory" element={<ProtectedRoute><Directory /></ProtectedRoute>} />
+          <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/tracker" element={<Tracker />} />
+            <Route path="/booking" element={<BookingWizard />} />
+            <Route path="/wellness" element={<WellnessCircle />} />
+            <Route path="/directory" element={<Directory />} />
+          </Route>
           
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

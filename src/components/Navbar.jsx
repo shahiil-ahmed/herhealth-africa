@@ -1,0 +1,113 @@
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Home, Clipboard, LineChart, Stethoscope, Heart } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import Profile from '../pages/Profile';
+
+export default function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUser } = useAuth();
+  
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  // Prevent background scrolling when Profile is open
+  useEffect(() => {
+    if (isProfileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isProfileOpen]);
+
+  const userName = currentUser?.displayName || 'Shahil';
+  const userInitial = userName[0]?.toUpperCase() || 'S';
+
+  const navItems = [
+    { icon: Home, label: 'HOME', path: '/dashboard' },
+    { icon: Clipboard, label: 'BOOKING', path: '/booking' },
+    { icon: LineChart, label: 'TRACK', path: '/tracker' },
+    { icon: Stethoscope, label: 'DOCTOR', path: '/directory' },
+    { icon: Heart, label: 'SISTERHOOD', path: '/wellness' },
+  ];
+
+  return (
+    <>
+      {/* Desktop Top Header */}
+      <div className="hidden md:flex sticky top-0 left-0 w-full h-16 bg-white border-b border-black/5 items-center justify-between px-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] z-[90]">
+        <div className="text-2xl font-medium text-dark-plum font-[Fraunces,serif]">
+          Her<span className="italic text-rose-pink">Health</span>
+        </div>
+        
+        <div className="flex items-center gap-8">
+          {navItems.map((item, i) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <div 
+                key={i} 
+                onClick={() => navigate(item.path)}
+                className={`flex items-center gap-2 cursor-pointer transition-colors font-[Jost,sans-serif] font-semibold tracking-wider text-[13px] ${
+                  isActive ? 'text-rose-pink' : 'text-dark-plum/60 hover:text-dark-plum'
+                }`}
+              >
+                <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                <span>{item.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <button 
+          onClick={() => setIsProfileOpen(true)}
+          className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
+        >
+          {userInitial}
+        </button>
+      </div>
+
+      {/* Mobile Top Header */}
+      <div className="md:hidden sticky top-0 left-0 w-full h-16 bg-white border-b border-black/5 flex items-center justify-between px-6 z-[90]">
+        <div className="text-xl font-medium text-dark-plum font-[Fraunces,serif]">
+          Her<span className="italic text-rose-pink">Health</span>
+        </div>
+        <button 
+          onClick={() => setIsProfileOpen(true)}
+          className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
+        >
+          {userInitial}
+        </button>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-black/5 rounded-t-[24px] shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-40">
+        <div className="flex items-end justify-between px-6 pt-3 pb-6 max-w-xl mx-auto">
+          {navItems.map((item, i) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <div 
+                key={i} 
+                onClick={() => navigate(item.path)}
+                className="flex flex-col items-center gap-1.5 cursor-pointer group"
+              >
+                <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#E8DCE5] text-dark-plum' : 'text-dark-plum/40 group-hover:bg-base-white group-hover:text-dark-plum/80'}`}>
+                  <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                </div>
+                <span className={`text-[9px] font-semibold tracking-wider transition-colors ${isActive ? 'text-dark-plum' : 'text-dark-plum/40 group-hover:text-dark-plum/80'}`}>
+                  {item.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {isProfileOpen && (
+        <Profile onClose={() => setIsProfileOpen(false)} />
+      )}
+    </>
+  );
+}

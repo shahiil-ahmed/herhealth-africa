@@ -1,35 +1,22 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
+  const { currentUser } = useAuth();
   
   // eslint-disable-next-line no-unused-vars
   const [cycleData, setCycleData] = useState({ phase: 'Follicular Phase', day: 8 });
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  async function handleLogout() {
-    try {
-      await logout();
-      navigate('/auth');
-    } catch (error) {
-      console.error('Failed to log out', error);
-    }
-  }
 
   // Get first name or default to 'SISTER', all caps
   const userName = currentUser?.displayName 
     ? currentUser.displayName.split(' ')[0].toUpperCase() 
     : 'SISTER';
-    
-  const userInitial = userName[0] || 'S';
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full flex-1">
       {/* Ensure scrollbar-hide if we add a global class, or just normal overflow */}
-      <div className="flex-1 overflow-y-auto pb-[100px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="flex-1 overflow-y-auto pb-24 md:pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         
         <div className="bg-ink px-[22px] md:px-20 pt-[28px] md:pt-16 pb-[32px] md:pb-20 relative overflow-hidden">
           <div 
@@ -42,50 +29,6 @@ export default function Dashboard() {
           <div className="flex justify-between items-start relative z-20">
             <div className="text-[11px] tracking-[2px] uppercase text-white/35 mb-3">
               WELCOME BACK, {userName} ✦
-            </div>
-            
-            {/* Profile Dropdown Container */}
-            <div className="relative">
-              <button 
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="w-10 h-10 rounded-full bg-clay/20 border border-clay/30 flex items-center justify-center text-white font-jost font-semibold text-lg cursor-pointer hover:bg-clay/40 transition-colors shadow-lg"
-              >
-                {userInitial}
-              </button>
-              
-              {isProfileOpen && (
-                <div className="absolute right-0 top-12 w-64 bg-base-white rounded-[20px] shadow-card-hover border border-clay/10 p-5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="mb-4">
-                    <div className="text-[15px] font-semibold text-ink leading-tight">
-                      {currentUser?.displayName || 'Sister'}
-                    </div>
-                    <div className="text-[12px] text-dust truncate">
-                      {currentUser?.email || 'member@herhealth.com'}
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4 mb-5 pb-4 border-b border-black/5">
-                    <div>
-                      <div className="text-[18px] font-fraunces font-semibold text-clay">14</div>
-                      <div className="text-[10px] uppercase tracking-wider text-dust font-medium">Days Logged</div>
-                    </div>
-                    <div>
-                      <div className="text-[18px] font-fraunces font-semibold text-clay">5 <span className="text-[14px]">🔥</span></div>
-                      <div className="text-[10px] uppercase tracking-wider text-dust font-medium">Streak</div>
-                    </div>
-                  </div>
-                  
-                  <button className="w-full text-left py-2 px-3 rounded-xl text-[13px] font-medium text-ink hover:bg-linen transition-colors mb-2">
-                    ⚙️ Cycle Settings
-                  </button>
-                  <button 
-                    onClick={handleLogout}
-                    className="w-full text-left py-2 px-3 rounded-xl text-[13px] font-medium text-rose-pink hover:bg-rose-pink/10 transition-colors"
-                  >
-                    Log Out
-                  </button>
-                </div>
-              )}
             </div>
           </div>
           
