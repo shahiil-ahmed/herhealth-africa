@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { updateProfile } from 'firebase/auth';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,8 +23,8 @@ export default function Auth() {
       if (isLogin) {
         await login(email, password);
       } else {
-        await signup(email, password);
-        // Note: we could also update the user's display name here using updateProfile
+        const userCred = await signup(email, password);
+        await updateProfile(userCred.user, { displayName: name });
       }
       navigate('/dashboard');
     } catch (err) {
