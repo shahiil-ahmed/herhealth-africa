@@ -8,7 +8,8 @@ const resources = [
   { icon: BookOpen, title: "Endometriosis: The 7-Year Wait", subtitle: "GUIDE" },
   { icon: CheckSquare, title: "Doctor Visit Prep Checklist", subtitle: "FREE TOOL" },
   { icon: Stethoscope, title: "Questions to Ask Your Gynaecologist", subtitle: "GUIDE" },
-  { icon: Leaf, title: "Anti-Inflammatory Food Guide for Nigerian Women", subtitle: "NUTRITION" }
+  { icon: Leaf, title: "Anti-Inflammatory Food Guide for Nigerian Women", subtitle: "NUTRITION" },
+  { icon: Video, title: "Cycle Charting: A Practical Guide", subtitle: "WHITEBOARD VIDEO" }
 ];
 
 export default function Dashboard() {
@@ -117,17 +118,34 @@ export default function Dashboard() {
         {/* Testimonial Section */}
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8">
           <h2 className="text-2xl mb-6 text-dark-plum">She said <span className="italic text-rose-pink font-[Fraunces,serif]">it first</span></h2>
-          <div className="bg-dark-plum rounded-[24px] p-6 md:p-8 max-w-3xl shadow-lg border border-black/5">
-            <p className="text-white text-lg md:text-xl italic font-[Fraunces,serif] leading-relaxed mb-6">
-              "I was 25 when I was diagnosed. Heavy bleeding, severe pain, constantly bloated. The nurse handed me my results with a look of pity. I just wanted someone to tell me I would be fine."
-            </p>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-rose-pink flex items-center justify-center text-white font-semibold text-lg shrink-0">
-                A
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            <div className="bg-dark-plum rounded-[24px] p-6 md:p-8 max-w-3xl shadow-lg border border-black/5">
+              <p className="text-white text-lg md:text-xl italic font-[Fraunces,serif] leading-relaxed mb-6">
+                "I was 25 when I was diagnosed. Heavy bleeding, severe pain, constantly bloated. The nurse handed me my results with a look of pity. I just wanted someone to tell me I would be fine."
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-rose-pink flex items-center justify-center text-white font-semibold text-lg shrink-0">
+                  A
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-white text-sm font-medium">Amara, 26 — Lagos</span>
+                  <span className="text-white/60 text-xs mt-0.5">Fibroids diagnosed at 25</span>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="text-white text-sm font-medium">Amara, 26 — Lagos</span>
-                <span className="text-white/60 text-xs mt-0.5">Fibroids diagnosed at 25</span>
+            </div>
+
+            <div className="bg-dark-plum rounded-[24px] p-6 md:p-8 max-w-3xl shadow-lg border border-black/5">
+              <p className="text-white text-lg md:text-xl italic font-[Fraunces,serif] leading-relaxed mb-6">
+                "My journey with HerHealth changed everything. From the first consultation to finding a vetted specialist, I felt seen and supported. My health is now a conversation, not a series of dismissive appointments."
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-rose-pink flex items-center justify-center text-white font-semibold text-lg shrink-0">
+                  C
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-white text-sm font-medium">Chinaza, 29 — Lagos</span>
+                  <span className="text-white/60 text-xs mt-0.5">PCOS management journey</span>
+                </div>
               </div>
             </div>
           </div>
