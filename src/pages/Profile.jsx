@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -5,9 +6,21 @@ import {
   Lock, LogOut, ChevronRight
 } from 'lucide-react';
 
-export default function Profile({ onClose }) {
+export default function Profile({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const userName = currentUser?.displayName || 'Shahil';
   const userInitial = userName[0]?.toUpperCase() || 'S';
@@ -23,10 +36,16 @@ export default function Profile({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-300" onClick={onClose}>
+    <>
+      {/* Dark Backdrop */}
       <div 
-        className="max-w-md w-full h-full relative pb-24 bg-base-white font-[Jost,sans-serif] shadow-[-10px_0_40px_rgba(0,0,0,0.08)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] animate-in slide-in-from-right duration-300"
-        onClick={(e) => e.stopPropagation()}
+        className={`fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[90] transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+        onClick={onClose}
+      />
+      
+      {/* Side Drawer Panel */}
+      <div 
+        className={`fixed top-0 right-0 h-full w-full max-w-md pb-24 bg-base-white font-[Jost,sans-serif] shadow-[-10px_0_40px_rgba(0,0,0,0.08)] overflow-y-auto overscroll-contain transform-gpu [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transform transition-transform duration-300 ease-in-out z-[100] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex items-center justify-between px-6 pt-10 pb-6">
           <button 
@@ -109,6 +128,6 @@ export default function Profile({ onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

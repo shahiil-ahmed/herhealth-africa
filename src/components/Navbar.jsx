@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, Clipboard, LineChart, Stethoscope, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -10,19 +10,6 @@ export default function Navbar() {
   const { currentUser } = useAuth();
   
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  // Prevent background scrolling when Profile is open
-  useEffect(() => {
-    if (isProfileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isProfileOpen]);
 
   const userName = currentUser?.displayName || 'Shahil';
   const userInitial = userName[0]?.toUpperCase() || 'S';
@@ -38,12 +25,13 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Top Header */}
-      <div className="hidden md:flex sticky top-0 left-0 w-full h-16 bg-white border-b border-black/5 items-center justify-between px-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] z-[90]">
-        <div className="text-2xl font-medium text-dark-plum font-[Fraunces,serif]">
-          Her<span className="italic text-rose-pink">Health</span>
-        </div>
-        
-        <div className="flex items-center gap-8">
+      <div className="hidden md:block sticky top-0 left-0 w-full bg-white border-b border-black/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] z-[90]">
+        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 h-16 flex items-center justify-between">
+          <div className="text-2xl font-medium text-dark-plum font-[Fraunces,serif]">
+            Her<span className="italic text-rose-pink">Health</span>
+          </div>
+          
+          <div className="flex items-center gap-8">
           {navItems.map((item, i) => {
             const isActive = location.pathname === item.path;
             return (
@@ -61,12 +49,13 @@ export default function Navbar() {
           })}
         </div>
 
-        <button 
-          onClick={() => setIsProfileOpen(true)}
-          className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
-        >
-          {userInitial}
-        </button>
+          <button 
+            onClick={() => setIsProfileOpen(true)}
+            className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
+          >
+            {userInitial}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Top Header */}
@@ -105,9 +94,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {isProfileOpen && (
-        <Profile onClose={() => setIsProfileOpen(false)} />
-      )}
+      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </>
   );
 }
