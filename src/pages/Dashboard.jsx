@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { Video, BookOpen } from 'lucide-react';
+import { Video, BookOpen, CheckSquare, Stethoscope, Leaf } from 'lucide-react';
+
+const resources = [
+  { icon: Video, title: "What Are Fibroids? Explained Simply", subtitle: "WHITEBOARD VIDEO" },
+  { icon: BookOpen, title: "Endometriosis: The 7-Year Wait", subtitle: "GUIDE" },
+  { icon: CheckSquare, title: "Doctor Visit Prep Checklist", subtitle: "FREE TOOL" },
+  { icon: Stethoscope, title: "Questions to Ask Your Gynaecologist", subtitle: "GUIDE" },
+  { icon: Leaf, title: "Anti-Inflammatory Food Guide for Nigerian Women", subtitle: "NUTRITION" }
+];
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
@@ -129,24 +137,16 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 pb-24">
           <h2 className="text-2xl mb-6 text-dark-plum">Learn & <span className="italic text-rose-pink font-[Fraunces,serif]">Understand</span></h2>
           
-          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {/* Card 1 */}
-            <div className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 cursor-pointer hover:-translate-y-1 transition-transform">
-              <div className="w-10 h-10 rounded-full bg-[#FAF9F6] flex items-center justify-center text-dark-plum mb-4">
-                <Video size={18} />
+          <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {resources.map((resource, index) => (
+              <div key={index} className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
+                <div>
+                  <resource.icon size={24} className="text-dark-plum" />
+                  <div className="text-dark-plum text-base font-medium mt-4 leading-snug">{resource.title}</div>
+                </div>
+                <div className="text-gray-400 uppercase text-[10px] tracking-wider mt-2 font-semibold">{resource.subtitle}</div>
               </div>
-              <div className="text-dark-plum font-medium text-sm leading-snug">What Are Fibroids? Explained Simply</div>
-              <div className="text-gray-500 uppercase text-[10px] tracking-wider mt-2 font-semibold">WHITEBOARD VIDEO</div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 cursor-pointer hover:-translate-y-1 transition-transform">
-              <div className="w-10 h-10 rounded-full bg-[#FAF9F6] flex items-center justify-center text-dark-plum mb-4">
-                <BookOpen size={18} />
-              </div>
-              <div className="text-dark-plum font-medium text-sm leading-snug">Endometriosis: The Guide</div>
-              <div className="text-gray-500 uppercase text-[10px] tracking-wider mt-2 font-semibold">GUIDE</div>
-            </div>
+            ))}
           </div>
         </div>
 
