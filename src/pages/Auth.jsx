@@ -35,8 +35,10 @@ export default function Auth() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="px-8 py-10 flex-1 flex flex-col justify-center">
+    <div className="flex flex-col min-h-screen bg-[#FAF9F6] items-center justify-center p-4 sm:p-8">
+      
+      <div className="w-full max-w-md bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 p-8 md:p-10">
+        
         <div className="text-center mb-8">
           <div className="font-fraunces text-[32px] font-extralight mb-2 text-ink">
             Her<em className="italic text-clay">Health</em>
@@ -46,15 +48,15 @@ export default function Auth() {
           </p>
         </div>
 
-        <div className="flex gap-5 mb-6 border-b border-black/5">
+        <div className="flex gap-5 mb-8 border-b border-black/5">
           <div 
-            className={`py-2 px-1 text-[14px] cursor-pointer relative ${isLogin ? 'text-clay font-semibold after:content-[""] after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:h-[2px] after:bg-clay' : 'text-dust font-medium'}`}
+            className={`py-2 px-1 text-[14px] cursor-pointer relative transition-colors ${isLogin ? 'text-clay font-semibold after:content-[""] after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:h-[2px] after:bg-clay' : 'text-dust font-medium hover:text-ink'}`}
             onClick={() => setIsLogin(true)}
           >
             Login
           </div>
           <div 
-            className={`py-2 px-1 text-[14px] cursor-pointer relative ${!isLogin ? 'text-clay font-semibold after:content-[""] after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:h-[2px] after:bg-clay' : 'text-dust font-medium'}`}
+            className={`py-2 px-1 text-[14px] cursor-pointer relative transition-colors ${!isLogin ? 'text-clay font-semibold after:content-[""] after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:h-[2px] after:bg-clay' : 'text-dust font-medium hover:text-ink'}`}
             onClick={() => setIsLogin(false)}
           >
             Sign Up
@@ -69,7 +71,7 @@ export default function Auth() {
                 type="text" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-base-white border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10"
+                className="w-full bg-[#FAF9F6] border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10 focus:bg-white"
                 placeholder="Amara Okafor"
               />
             </div>
@@ -82,34 +84,34 @@ export default function Auth() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-base-white border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10"
+              className="w-full bg-[#FAF9F6] border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10 focus:bg-white"
               placeholder="name@email.com"
             />
           </div>
           
-          <div className="mb-[18px]">
+          <div className="mb-[24px]">
             <label className="text-[10px] font-semibold tracking-[1.2px] uppercase text-dust mb-2 block">Password</label>
             <input 
               type="password" 
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-base-white border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10"
+              className="w-full bg-[#FAF9F6] border-[1.5px] border-clay/10 rounded-[13px] px-4 py-[13px] font-jost text-[14px] text-ink outline-none transition-all duration-200 focus:border-clay focus:ring-[3px] focus:ring-clay/10 focus:bg-white"
               placeholder="••••••••"
             />
             {isLogin && (
-              <div className="text-right mt-2">
-                <a href="#" className="text-[11px] text-clay no-underline">Forgot Password?</a>
+              <div className="text-right mt-3">
+                <a href="#" className="text-[11px] font-medium text-clay hover:text-clay-deep transition-colors no-underline">Forgot Password?</a>
               </div>
             )}
           </div>
           
-          {error && <p className="text-[#d32f2f] text-[12px] mb-4">{error}</p>}
+          {error && <p className="text-[#d32f2f] bg-[#fdecea] p-3 rounded-lg text-[13px] font-medium mb-4 text-center">{error}</p>}
 
           <button 
             type="submit"
             disabled={loading}
-            className="bg-clay text-white border-none rounded-[14px] px-6 py-4 font-jost text-[14px] font-medium w-full cursor-pointer transition-all duration-200 tracking-[0.3px] relative overflow-hidden hover:bg-clay-deep hover:-translate-y-[1px] hover:shadow-[0_8px_24px_rgba(184,92,56,0.35)] disabled:opacity-70 after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,transparent_60%)]"
+            className="bg-clay text-white border-none rounded-[14px] px-6 py-[14px] font-jost text-[15px] font-medium w-full cursor-pointer transition-all duration-200 tracking-[0.3px] relative overflow-hidden hover:bg-clay/90 hover:-translate-y-[1px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] disabled:opacity-70 disabled:hover:translate-y-0"
           >
             {loading ? 'Processing...' : (isLogin ? 'Login →' : 'Sign Up →')}
           </button>
