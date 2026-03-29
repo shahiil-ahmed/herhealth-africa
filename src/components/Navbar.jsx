@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Clipboard, LineChart, Stethoscope, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Profile from '../pages/Profile';
 
@@ -15,11 +14,11 @@ export default function Navbar() {
   const userInitial = userName[0]?.toUpperCase() || 'S';
 
   const navItems = [
-    { icon: Home, label: 'HOME', path: '/dashboard' },
-    { icon: Clipboard, label: 'BOOKING', path: '/booking' },
-    { icon: LineChart, label: 'TRACK', path: '/tracker' },
-    { icon: Stethoscope, label: 'DOCTOR', path: '/directory' },
-    { icon: Heart, label: 'SISTERHOOD', path: '/wellness' },
+    { icon: '🏠', label: 'HOME', path: '/dashboard' },
+    { icon: '📋', label: 'BOOK', path: '/booking' },
+    { icon: '📈', label: 'TRACK', path: '/tracker' },
+    { icon: '🏥', label: 'DOCTORS', path: '/directory' },
+    { icon: '💜', label: 'SISTERHOOD', path: '/wellness' },
   ];
 
   return (
@@ -42,7 +41,7 @@ export default function Navbar() {
                   isActive ? 'text-rose-pink' : 'text-dark-plum/60 hover:text-dark-plum'
                 }`}
               >
-                <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                <span className="text-[18px] leading-none mb-0.5">{item.icon}</span>
                 <span>{item.label}</span>
               </div>
             );
@@ -83,7 +82,7 @@ export default function Navbar() {
                 className="flex flex-col items-center gap-1.5 cursor-pointer group"
               >
                 <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#E8DCE5] text-dark-plum' : 'text-dark-plum/40 group-hover:bg-base-white group-hover:text-dark-plum/80'}`}>
-                  <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                  <span className="text-[18px] leading-none">{item.icon}</span>
                 </div>
                 <span className={`text-[9px] font-semibold tracking-wider transition-colors ${isActive ? 'text-dark-plum' : 'text-dark-plum/40 group-hover:text-dark-plum/80'}`}>
                   {item.label}
