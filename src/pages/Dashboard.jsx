@@ -8,31 +8,43 @@ const resources = [
     icon: Video,
     title: "What Are Fibroids? Explained Simply",
     subtitle: "WHITEBOARD VIDEO",
+    color: "text-[#D4688A]",
+    bg: "bg-[#D4688A]/10",
   },
   {
     icon: BookOpen,
     title: "Endometriosis: The 7-Year Wait",
     subtitle: "GUIDE",
+    color: "text-[#8B5CF6]",
+    bg: "bg-[#8B5CF6]/10",
   },
   {
     icon: CheckSquare,
     title: "Doctor Visit Prep Checklist",
     subtitle: "FREE TOOL",
+    color: "text-[#065F46]",
+    bg: "bg-[#065F46]/10",
   },
   {
     icon: Stethoscope,
     title: "Questions to Ask Your Gynaecologist",
     subtitle: "GUIDE",
+    color: "text-[#D4688A]",
+    bg: "bg-[#D4688A]/10",
   },
   {
     icon: Leaf,
     title: "Anti-Inflammatory Food Guide for Nigerian Women",
     subtitle: "NUTRITION",
+    color: "text-[#065F46]",
+    bg: "bg-[#065F46]/10",
   },
   {
     icon: Video,
     title: "Cycle Charting: A Practical Guide",
     subtitle: "WHITEBOARD VIDEO",
+    color: "text-[#8B5CF6]",
+    bg: "bg-[#8B5CF6]/10",
   },
 ];
 
@@ -244,7 +256,9 @@ export default function Dashboard() {
                 className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform"
               >
                 <div>
-                  <resource.icon size={24} className="text-[#2D1B2E]" />
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${resource.bg} ${resource.color}`}>
+                    <resource.icon size={20} />
+                  </div>
                   <div className="text-[#2D1B2E] text-base font-medium mt-4 leading-snug">
                     {resource.title}
                   </div>
