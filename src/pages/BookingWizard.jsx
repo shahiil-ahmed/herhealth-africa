@@ -69,6 +69,18 @@ export default function BookingWizard() {
         <div className="flex-1 p-6 md:p-10 lg:p-14">
           {step < 4 && (
             <>
+              {/* Disclaimer moved to the very first section of the page */}
+              <div className="mb-6 md:mb-8 bg-[#FFF5F8] rounded-[20px] p-5 border border-[#FEE2E2]">
+                <p className="text-[#D4688A] text-xs leading-relaxed font-medium">
+                  <span className="font-bold flex items-center gap-1.5 mb-1.5 text-sm">
+                    <ShieldCheck size={16} /> Please note
+                  </span>
+                  HerHealth provides health navigation and advocacy support only. We
+                  do not diagnose, prescribe or treat. We connect you with the right
+                  specialists.
+                </p>
+              </div>
+
               {/* Mobile Header with Back Button (Hidden on Desktop) */}
               <div className="flex items-center justify-center relative h-10 mb-2 md:hidden">
                 <button
@@ -577,17 +589,6 @@ export default function BookingWizard() {
               </ul>
             </div>
 
-            {/* Moved Disclaimer to the bottom of the Info Panel */}
-            <div className="mt-12 lg:mt-16 bg-white/60 rounded-[20px] p-5 border border-[#FEE2E2]">
-              <p className="text-[#D4688A] text-xs leading-relaxed font-medium">
-                <span className="font-bold flex items-center gap-1.5 mb-1.5 text-sm">
-                  <ShieldCheck size={16} /> Please note
-                </span>
-                HerHealth provides health navigation and advocacy support only. We
-                do not diagnose, prescribe or treat. We connect you with the right
-                specialists.
-              </p>
-            </div>
           </div>
         )}
       </div>
