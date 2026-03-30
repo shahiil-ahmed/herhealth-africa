@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Tracker from './pages/Tracker';
 import BookingWizard from './pages/BookingWizard';
 import WellnessCircle from './pages/WellnessCircle';
-import Directory from './pages/Directory';
+import Discover from './pages/Discover';
 import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ function App() {
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/booking" element={<BookingWizard />} />
             <Route path="/wellness" element={<WellnessCircle />} />
-            <Route path="/directory" element={<Directory />} />
+            <Route path="/discover" element={<Discover />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

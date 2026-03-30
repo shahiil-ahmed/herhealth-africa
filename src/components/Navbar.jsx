@@ -17,7 +17,7 @@ export default function Navbar() {
     { icon: '🏠', label: 'HOME', path: '/dashboard' },
     { icon: '📋', label: 'BOOK', path: '/booking' },
     { icon: '📈', label: 'TRACK', path: '/tracker' },
-    { icon: '🏥', label: 'DOCTORS', path: '/directory' },
+    { icon: '🏥', label: 'DISCOVER', path: '/discover' },
     { icon: '💜', label: 'SISTERHOOD', path: '/wellness' },
   ];
 
