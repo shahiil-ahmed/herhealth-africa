@@ -18,7 +18,7 @@ export default function Navbar() {
     { icon: '📋', label: 'BOOK', path: '/booking' },
     { icon: '📈', label: 'TRACK', path: '/tracker' },
     { icon: '🏥', label: 'DISCOVER', path: '/discover' },
-    { icon: '💜', label: 'SISTERHOOD', path: '/wellness' },
+    { icon: '💜', label: 'SISTERHOOD', path: '/sisterhood' },
   ];
 
   return (

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Tracker from './pages/Tracker';
 import BookingWizard from './pages/BookingWizard';
 import WellnessCircle from './pages/WellnessCircle';
+import Sisterhood from './pages/Sisterhood';
 import Discover from './pages/Discover';
 import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
@@ -34,6 +35,7 @@ function App() {
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/booking" element={<BookingWizard />} />
             <Route path="/wellness" element={<WellnessCircle />} />
+            <Route path="/sisterhood" element={<Sisterhood />} />
             <Route path="/discover" element={<Discover />} />
           </Route>
           
