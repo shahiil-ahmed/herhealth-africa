@@ -92,7 +92,7 @@ const Sisterhood = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#FAF9F6] max-w-2xl mx-auto w-full relative shadow-sm">
+    <div className="flex flex-col h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] bg-[#FAF9F6] max-w-2xl mx-auto w-full relative shadow-sm">
       <div className="sticky top-0 z-50 bg-[#FAF9F6]/90 backdrop-blur-xl border-b border-black/5 px-4 py-4 flex items-center gap-3">
         <button 
           onClick={() => setActiveCircle(null)}
@@ -119,7 +119,7 @@ const Sisterhood = () => {
         ))}
       </div>
 
-      <div className="p-4 bg-white border-t border-black/5 pb-safe">
+      <div className="p-4 bg-white border-t border-black/5 pb-[100px] md:pb-4">
         <div className="flex items-center gap-2 bg-[#FAF9F6] border border-black/10 rounded-full p-1.5">
           <input 
             type="text"
