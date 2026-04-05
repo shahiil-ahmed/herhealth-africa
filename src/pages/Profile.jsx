@@ -6,6 +6,7 @@ import {
   Lock, LogOut, ChevronRight
 } from 'lucide-react';
 import EditProfileModal from '../components/EditProfileModal';
+import NotificationSettingsModal from '../components/NotificationSettingsModal';
 import { db } from '../firebase/firebaseConfig';
 import { doc, onSnapshot } from 'firebase/firestore';
 
@@ -13,6 +14,7 @@ export default function Profile({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
@@ -119,7 +121,11 @@ export default function Profile({ isOpen, onClose }) {
               ].map((item, i) => (
                 <div 
                   key={i} 
-                  onClick={item.title === 'Edit Profile' ? () => setIsEditModalOpen(true) : undefined}
+                  onClick={
+                    item.title === 'Edit Profile' ? () => setIsEditModalOpen(true) : 
+                    item.title === 'Notifications' ? () => setIsNotificationModalOpen(true) : 
+                    undefined
+                  }
                   className="bg-white rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-black/5 cursor-pointer active:scale-[0.98] transition-transform"
                 >
                   <div className="w-10 h-10 rounded-full bg-base-white flex items-center justify-center text-dark-plum shrink-0">
@@ -152,6 +158,10 @@ export default function Profile({ isOpen, onClose }) {
       <EditProfileModal 
         isOpen={isEditModalOpen} 
         onClose={() => setIsEditModalOpen(false)} 
+      />
+      <NotificationSettingsModal 
+        isOpen={isNotificationModalOpen} 
+        onClose={() => setIsNotificationModalOpen(false)} 
       />
     </>
   );
