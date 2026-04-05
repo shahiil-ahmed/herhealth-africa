@@ -8,31 +8,33 @@ import {
   CheckCircle2,
   ShieldCheck,
 } from "lucide-react";
+import { auth, db } from "../firebase/firebaseConfig";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function BookingWizard() {
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState(false);
+  const [bookingData, setBookingData] = useState({
     package: "",
-    name: "",
+    fullName: "",
     whatsapp: "",
     concern: "",
-    time: "",
+    preferredTime: "",
     duration: "",
     seenDoctor: "",
-    additionalInfo: "",
+    notes: "",
   });
 
   const handlePackageSelect = (pkgName) => {
-    setFormData({ ...formData, package: pkgName });
+    setBookingData({ ...bookingData, package: pkgName });
     setError("");
     setStep(2);
   };
 
   const handleContinue = () => {
-    if (!formData.name.trim() || !formData.whatsapp.trim() || !formData.time) {
+    if (!bookingData.fullName.trim() || !bookingData.whatsapp.trim() || !bookingData.preferredTime) {
       setError(
         "Please fill in your Full Name, WhatsApp Number, and preferred Time slot.",
       );
@@ -42,20 +44,44 @@ export default function BookingWizard() {
     setStep(3);
   };
 
-  const handleSubmit = (e) => {
+  const handleFinalSubmit = async (e) => {
     e.preventDefault();
-    console.log("Session Booked!", formData);
-    setStep(4);
-    setFormData({
-      package: "",
-      name: "",
-      whatsapp: "",
-      concern: "",
-      time: "",
-      duration: "",
-      seenDoctor: "",
-      additionalInfo: "",
-    });
+    
+    if (!auth.currentUser) {
+      setError("You must be logged in to book a session.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const bookingsRef = collection(db, "bookings");
+      await addDoc(bookingsRef, {
+        ...bookingData,
+        userId: auth.currentUser.uid,
+        userEmail: auth.currentUser.email,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      setStep(4);
+      setBookingData({
+        package: "",
+        fullName: "",
+        whatsapp: "",
+        concern: "",
+        preferredTime: "",
+        duration: "",
+        seenDoctor: "",
+        notes: "",
+      });
+    } catch (err) {
+      console.error("Error saving booking:", err);
+      setError("Failed to book session. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -245,7 +271,7 @@ export default function BookingWizard() {
               </p>
 
               {/* Selected Package Summary */}
-              {formData.package && (
+              {bookingData.package && (
                 <div
                   onClick={() => setStep(1)}
                   className="bg-[#FFF5F8] border-[1.5px] border-[#D4688A]/20 rounded-[20px] p-4 flex items-center justify-between mb-8 cursor-pointer hover:border-[#D4688A]/40 transition-all group"
@@ -255,7 +281,7 @@ export default function BookingWizard() {
                       SELECTED PACKAGE
                     </p>
                     <p className="font-semibold text-[#2D1B2E] text-[15px]">
-                      {formData.package}
+                      {bookingData.package}
                     </p>
                   </div>
                   <div className="text-[#D4688A] text-sm font-medium bg-white px-4 py-2 rounded-full shadow-sm group-hover:shadow-md transition-all">
@@ -272,9 +298,9 @@ export default function BookingWizard() {
                   <input
                     type="text"
                     placeholder="Amara Okafor"
-                    value={formData.name}
+                    value={bookingData.fullName}
                     onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
+                      setBookingData({ ...bookingData, fullName: e.target.value })
                     }
                     className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white"
                   />
@@ -287,9 +313,9 @@ export default function BookingWizard() {
                   <input
                     type="text"
                     placeholder="+234 801 234 5678"
-                    value={formData.whatsapp}
+                    value={bookingData.whatsapp}
                     onChange={(e) =>
-                      setFormData({ ...formData, whatsapp: e.target.value })
+                      setBookingData({ ...bookingData, whatsapp: e.target.value })
                     }
                     className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white"
                   />
@@ -314,10 +340,10 @@ export default function BookingWizard() {
                       <div
                         key={item}
                         onClick={() =>
-                          setFormData({ ...formData, concern: item })
+                          setBookingData({ ...bookingData, concern: item })
                         }
                         className={`rounded-full px-4 py-2 text-sm cursor-pointer transition-all ${
-                          formData.concern === item
+                          bookingData.concern === item
                             ? "bg-[#D4688A] text-white border-transparent shadow-md"
                             : "bg-white border-black/10 text-[#2D1B2E]/70 hover:border-[#D4688A]/50 border-[1.5px]"
                         }`}
@@ -334,9 +360,9 @@ export default function BookingWizard() {
                     <span className="text-[#D4688A]">*</span>
                   </label>
                   <select
-                    value={formData.time}
+                    value={bookingData.preferredTime}
                     onChange={(e) =>
-                      setFormData({ ...formData, time: e.target.value })
+                      setBookingData({ ...bookingData, preferredTime: e.target.value })
                     }
                     className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white"
                   >
@@ -415,9 +441,9 @@ export default function BookingWizard() {
                     HOW LONG HAVE YOU HAD THESE SYMPTOMS?
                   </label>
                   <select
-                    value={formData.duration}
+                    value={bookingData.duration}
                     onChange={(e) =>
-                      setFormData({ ...formData, duration: e.target.value })
+                      setBookingData({ ...bookingData, duration: e.target.value })
                     }
                     className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white"
                   >
@@ -438,9 +464,9 @@ export default function BookingWizard() {
                     HAVE YOU SEEN A DOCTOR ABOUT THIS BEFORE?
                   </label>
                   <select
-                    value={formData.seenDoctor}
+                    value={bookingData.seenDoctor}
                     onChange={(e) =>
-                      setFormData({ ...formData, seenDoctor: e.target.value })
+                      setBookingData({ ...bookingData, seenDoctor: e.target.value })
                     }
                     className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white"
                   >
@@ -464,11 +490,11 @@ export default function BookingWizard() {
                     ANYTHING ELSE YOU WANT YOUR NAVIGATOR TO KNOW?
                   </label>
                   <textarea
-                    value={formData.additionalInfo}
+                    value={bookingData.notes}
                     onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        additionalInfo: e.target.value,
+                      setBookingData({
+                        ...bookingData,
+                        notes: e.target.value,
                       })
                     }
                     rows={4}
@@ -485,10 +511,18 @@ export default function BookingWizard() {
                     Back
                   </button>
                   <button
-                    onClick={handleSubmit}
-                    className="bg-[#D4688A] text-white rounded-[16px] py-4 flex-1 font-medium text-[15px] hover:bg-[#BE185D] transition-colors"
+                    onClick={handleFinalSubmit}
+                    disabled={loading}
+                    className="bg-[#D4688A] text-white rounded-[16px] py-4 flex-1 font-medium text-[15px] hover:bg-[#BE185D] transition-colors flex items-center justify-center gap-2"
                   >
-                    Confirm & Book Session →
+                    {loading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      "Confirm & Book Session →"
+                    )}
                   </button>
                 </div>
               </div>
