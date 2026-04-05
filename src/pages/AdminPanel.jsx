@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Users, CalendarCheck, UserPlus, Bell, Search, Trash2, Plus, X } from 'lucide-react';
+import { LayoutDashboard, Users, CalendarCheck, UserPlus, Bell, Search, Trash2, Plus, X, Heart } from 'lucide-react';
 import { db } from '../firebase/firebaseConfig';
 import { 
   collection, 
@@ -18,6 +18,7 @@ export default function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [specialists, setSpecialists] = useState([]);
+  const [nominations, setNominations] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newSpecialist, setNewSpecialist] = useState({ 
     name: '', 
@@ -64,6 +65,19 @@ export default function AdminPanel() {
     return () => unsubscribe();
   }, []);
 
+  // Fetch Nominations Real-time
+  useEffect(() => {
+    const q = query(collection(db, 'nominations'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setNominations(data);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Calculate dynamic stats
   const totalUsers = users.length;
   const oneWeekAgo = new Date();
@@ -76,6 +90,7 @@ export default function AdminPanel() {
   const stats = { 
     totalUsers, 
     bookingsThisWeek, 
+    totalNominations: nominations.length,
     activeCircle: "Cycle Awareness" // Mocked for now until Wellness Circle logic implemented
   };
 
@@ -94,6 +109,16 @@ export default function AdminPanel() {
         await deleteDoc(doc(db, 'specialists', id));
       } catch (error) {
         console.error("Error deleting specialist:", error);
+      }
+    }
+  };
+
+  const handleDeleteNomination = async (id) => {
+    if (window.confirm("Are you sure you want to remove this nomination?")) {
+      try {
+        await deleteDoc(doc(db, 'nominations', id));
+      } catch (error) {
+        console.error("Error deleting nomination:", error);
       }
     }
   };
@@ -126,7 +151,8 @@ export default function AdminPanel() {
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'bookings', label: 'Bookings', icon: CalendarCheck },
-    { id: 'directory', label: 'Directory', icon: UserPlus }
+    { id: 'directory', label: 'Directory', icon: UserPlus },
+    { id: 'nominations', label: 'Nominations', icon: Heart }
   ];
 
   return (
@@ -184,8 +210,8 @@ export default function AdminPanel() {
                   <p className="text-3xl font-semibold">{stats.bookingsThisWeek}</p>
                 </div>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-black/5">
-                  <p className="text-sm text-[#2D1B2E]/60 mb-2 font-medium">Most Active Circle</p>
-                  <p className="text-xl font-semibold mt-1">{stats.activeCircle}</p>
+                  <p className="text-sm text-[#2D1B2E]/60 mb-2 font-medium">New Nominations</p>
+                  <p className="text-3xl font-semibold">{stats.totalNominations}</p>
                 </div>
               </div>
               
@@ -345,6 +371,44 @@ export default function AdminPanel() {
                     <p className="text-[#2D1B2E]/40 text-sm">No specialists in the directory.</p>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+          {activeTab === 'nominations' && (
+            <div className="bg-white rounded-2xl shadow-sm border border-black/5 overflow-hidden animate-in fade-in duration-300">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Doctor Name</th>
+                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Clinic/Hospital</th>
+                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Submitted</th>
+                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {nominations.map((nom) => (
+                      <tr key={nom.id} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-6 py-4 border-b border-black/5 text-sm font-medium">{nom.doctorName}</td>
+                        <td className="px-6 py-4 border-b border-black/5 text-sm text-[#2D1B2E]/70">{nom.clinicName}</td>
+                        <td className="px-6 py-4 border-b border-black/5 text-sm text-[#2D1B2E]/70">{formatFirestoreDate(nom.createdAt)}</td>
+                        <td className="px-6 py-4 border-b border-black/5 text-right">
+                          <button 
+                            onClick={() => handleDeleteNomination(nom.id)}
+                            className="p-2 text-red-500/50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {nominations.length === 0 && (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-12 text-center text-[#2D1B2E]/40 text-sm">No nominations to review.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}

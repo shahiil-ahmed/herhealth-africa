@@ -61,8 +61,12 @@ export default function Discover() {
         createdAt: serverTimestamp()
       });
       setIsNominationSubmitted(true);
-      setNomination({ doctorName: '', clinicName: '' });
-      setTimeout(() => setIsNominationSubmitted(false), 5000);
+      
+      // Reset logic: Clear form and result after 5 seconds
+      setTimeout(() => {
+        setIsNominationSubmitted(false);
+        setNomination({ doctorName: '', clinicName: '' });
+      }, 5000);
     } catch (error) {
       console.error("Error submitting nomination:", error);
     } finally {
@@ -176,16 +180,19 @@ export default function Discover() {
         </div>
 
         {/* Nomination Form Section */}
-        <div className="mt-16 bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-black/5 relative overflow-hidden text-center md:text-left">
+        <div className="mt-16 bg-white rounded-[32px] shadow-sm border border-black/5 relative overflow-hidden text-center md:text-left transition-all duration-500 min-h-[200px]">
+          {/* Success Banner */}
           <div 
-            className={`absolute top-0 left-0 w-full bg-emerald-500 text-white text-sm py-3 font-bold uppercase tracking-widest transition-transform duration-500 z-10 ${
-              isNominationSubmitted ? 'translate-y-0' : '-translate-y-full'
+            className={`absolute top-0 left-0 right-0 w-full bg-emerald-500 text-white text-[10px] md:text-xs py-4 px-6 font-bold uppercase tracking-[2px] transition-all duration-500 z-20 rounded-t-[32px] flex items-center justify-center md:justify-start ${
+              isNominationSubmitted ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
             }`}
           >
-            Nomination Received • Thank you 🌸
+            <span className="flex items-center gap-2">
+              Nomination Received • Thank you 🌸
+            </span>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
+          <div className="p-8 md:p-12 flex flex-col lg:flex-row gap-12 items-center">
             <div className="max-w-md">
               <h2 className="text-2xl font-medium text-dark-plum">Know a specialist we should vet?</h2>
               <p className="text-dark-plum/60 text-sm mt-3 leading-relaxed">
