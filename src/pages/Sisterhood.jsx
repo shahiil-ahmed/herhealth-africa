@@ -35,6 +35,22 @@ const Sisterhood = () => {
     return 'U';
   };
 
+  const getAvatarColor = (uid) => {
+    const colors = [
+      'bg-rose-100 text-rose-700',      // Dusty Rose
+      'bg-emerald-100 text-emerald-700', // Sage Green
+      'bg-purple-100 text-purple-700',  // Muted Lavender
+      'bg-slate-200 text-slate-700',    // Slate Blue
+      'bg-amber-100 text-amber-700',     // Soft Amber
+      'bg-teal-100 text-teal-700'        // Soft Teal
+    ];
+    let hash = 0;
+    for (let i = 0; i < uid.length; i++) {
+      hash = uid.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -235,25 +251,45 @@ const Sisterhood = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-8 space-y-6 [&::-webkit-scrollbar]:hidden">
-        {messages.map(msg => {
+      <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2 [&::-webkit-scrollbar]:hidden">
+        {messages.map((msg, index) => {
           const isMe = msg.senderUid === auth.currentUser?.uid;
+          const isFirstInStreak = index === 0 || messages[index - 1].senderUid !== msg.senderUid;
+          const isLastInStreak = index === messages.length - 1 || messages[index + 1].senderUid !== msg.senderUid;
+
           return (
-            <div key={msg.id} className={`flex gap-3 ${isMe ? 'flex-row-reverse' : ''} items-end`}>
-              {!isMe && (
-                <div className="w-8 h-8 rounded-full bg-dark-plum/5 text-dark-plum/60 flex items-center justify-center text-[10px] font-bold shrink-0 border border-black/5">
-                  {msg.senderInitial}
+            <div 
+              key={msg.id} 
+              className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'} ${isFirstInStreak ? 'mt-6' : 'mt-1'}`}
+            >
+              <div className={`flex items-end gap-2 max-w-[85%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
+                {/* Avatar for others - only on the first message of a streak */}
+                {!isMe ? (
+                  <div className="w-8 shrink-0 flex justify-center">
+                    {isFirstInStreak ? (
+                      <div className={`w-8 h-8 rounded-full ${getAvatarColor(msg.senderUid)} flex items-center justify-center text-[10px] font-bold border border-black/5 shadow-sm`}>
+                        {msg.senderInitial}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                  <div className={`p-3.5 shadow-sm text-[14px] leading-relaxed relative ${
+                    isMe 
+                      ? 'bg-rose-pink text-white rounded-[20px] rounded-br-none' 
+                      : 'bg-white text-dark-plum border border-black/5 rounded-[20px] rounded-bl-none'
+                  }`}>
+                    {msg.text}
+                  </div>
+                  
+                  {/* Subtle Timestamp - only on the last message of a streak or if needed for every message */}
+                  {isLastInStreak && (
+                    <span className="text-[10px] text-gray-400 opacity-70 mt-1 font-medium px-1">
+                      {formatTime(msg.createdAt)}
+                    </span>
+                  )}
                 </div>
-              )}
-              <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[80%]`}>
-                <div className={`p-4 shadow-sm text-[14px] ${
-                  isMe 
-                    ? 'bg-rose-pink text-white rounded-[24px] rounded-br-none' 
-                    : 'bg-white text-dark-plum border border-black/5 rounded-[24px] rounded-bl-none'
-                }`}>
-                  {msg.text}
-                </div>
-                <span className="text-[9px] text-dark-plum/30 mt-1.5 font-medium">{formatTime(msg.createdAt)}</span>
               </div>
             </div>
           );

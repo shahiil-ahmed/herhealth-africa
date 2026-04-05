@@ -75,8 +75,8 @@ export default function Discover() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2E6EC] pb-24 px-4 md:px-8 pt-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#F2E6EC] pb-24 px-4 pt-6">
+      <div className="max-w-6xl mx-auto px-2 md:px-0">
         
         {/* Header Section */}
         <div className="relative">
@@ -99,8 +99,7 @@ export default function Discover() {
           Learn & Understand
         </h2>
         <div 
-          className="flex overflow-x-auto md:grid md:grid-cols-3 gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden" 
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 snap-x" 
         >
           {resources.map((res, i) => {
             const Icon = res.icon;
@@ -124,17 +123,17 @@ export default function Discover() {
         </div>
 
         {/* Directory & Filters Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-8 mb-6">
-          <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60">
+        <div className="flex flex-col items-start mt-20 mb-10 px-4 md:px-0">
+          <h2 className="text-[11px] font-bold tracking-[2px] uppercase text-dark-plum/60 mb-6">
             Specialist Directory
           </h2>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-nowrap overflow-x-auto justify-start gap-3 w-full pb-4 scrollbar-hide [&::-webkit-scrollbar]:hidden px-2 md:px-0">
             {['All', 'Lagos', 'Abuja', 'Online'].map(loc => (
               <button
                 key={loc}
                 onClick={() => setActiveLocation(loc)}
-                className={`rounded-full px-5 py-2 text-[12px] font-bold tracking-wide uppercase transition-all ${
+                className={`rounded-full px-6 py-2.5 text-[12px] font-bold tracking-wide uppercase transition-all whitespace-nowrap ${
                   activeLocation === loc 
                     ? 'bg-dark-plum text-white shadow-md' 
                     : 'bg-white/50 border border-black/5 text-dark-plum/60 hover:bg-white hover:text-dark-plum'
@@ -147,7 +146,7 @@ export default function Discover() {
         </div>
 
         {/* Dynamic Category Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 md:gap-y-6">
           {categories.map((cat, i) => {
             const matchedSpecialists = specialists.filter(s => 
               s.category === cat.name && 
@@ -161,7 +160,7 @@ export default function Discover() {
             }
 
             return (
-              <div key={i} className="bg-white/40 backdrop-blur-sm rounded-[24px] p-5 border border-dashed border-rose-pink/20 flex gap-4 items-start group hover:bg-white/60 transition-colors">
+              <div key={i} className="bg-white/40 backdrop-blur-sm rounded-[24px] p-5 border border-dashed border-rose-pink/20 flex gap-4 items-start group hover:bg-white/60 transition-colors min-h-[160px]">
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 grayscale opacity-50 ${cat.iconBg}`}>
                   {cat.icon}
                 </div>
