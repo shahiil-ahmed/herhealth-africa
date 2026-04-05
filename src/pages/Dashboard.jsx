@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { Video, BookOpen, CheckSquare, Stethoscope, Leaf } from "lucide-react";
+import UserBookings from "../components/UserBookings";
 
 const resources = [
   {
@@ -124,7 +125,9 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 md:pt-4">
+        <UserBookings />
+
+        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 md:pt-0">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-[10px] md:gap-6 relative z-0">
             <Link to="/booking" className="block no-underline">
               <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:shadow-card-hover bg-[#D4688A] text-white shadow-[0_4px_20px_rgba(212,104,138,0.3)]">

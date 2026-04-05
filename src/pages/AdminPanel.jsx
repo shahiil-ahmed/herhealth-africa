@@ -19,7 +19,12 @@ export default function AdminPanel() {
   const [bookings, setBookings] = useState([]);
   const [specialists, setSpecialists] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newSpecialist, setNewSpecialist] = useState({ name: '', specialty: '' });
+  const [newSpecialist, setNewSpecialist] = useState({ 
+    name: '', 
+    specialty: '',
+    location: 'Lagos',
+    category: 'Gynaecology'
+  });
 
   // Fetch Bookings Real-time
   useEffect(() => {
@@ -101,7 +106,12 @@ export default function AdminPanel() {
         createdAt: serverTimestamp()
       });
       setIsAddModalOpen(false);
-      setNewSpecialist({ name: '', specialty: '' });
+      setNewSpecialist({ 
+        name: '', 
+        specialty: '',
+        location: 'Lagos',
+        category: 'Gynaecology'
+      });
     } catch (error) {
       console.error("Error adding specialist:", error);
     }
@@ -313,7 +323,13 @@ export default function AdminPanel() {
                       </div>
                       <div>
                         <p className="font-medium text-[15px]">{specialist.name}</p>
-                        <p className="text-sm text-[#2D1B2E]/60 mt-0.5">{specialist.specialty}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-sm text-[#2D1B2E]/60">{specialist.specialty}</p>
+                          <span className="w-1 h-1 rounded-full bg-black/10"></span>
+                          <p className="text-xs font-semibold text-[#D4688A] uppercase tracking-wide">{specialist.category}</p>
+                          <span className="w-1 h-1 rounded-full bg-black/10"></span>
+                          <p className="text-xs text-[#2D1B2E]/40 font-medium">{specialist.location}</p>
+                        </div>
                       </div>
                     </div>
                     <button 
@@ -370,6 +386,34 @@ export default function AdminPanel() {
                   value={newSpecialist.specialty}
                   onChange={(e) => setNewSpecialist({...newSpecialist, specialty: e.target.value})}
                 />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#2D1B2E]/60 mb-2 block">Location</label>
+                  <select
+                    className="w-full bg-[#FAF9F6] border border-black/10 rounded-xl px-4 py-3 text-[15px] outline-none focus:border-[#D4688A] transition-all cursor-pointer"
+                    value={newSpecialist.location}
+                    onChange={(e) => setNewSpecialist({...newSpecialist, location: e.target.value})}
+                  >
+                    <option value="Lagos">Lagos</option>
+                    <option value="Abuja">Abuja</option>
+                    <option value="Online">Online</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#2D1B2E]/60 mb-2 block">Category</label>
+                  <select
+                    className="w-full bg-[#FAF9F6] border border-black/10 rounded-xl px-4 py-3 text-[15px] outline-none focus:border-[#D4688A] transition-all cursor-pointer"
+                    value={newSpecialist.category}
+                    onChange={(e) => setNewSpecialist({...newSpecialist, category: e.target.value})}
+                  >
+                    <option value="Gynaecology">Gynaecology</option>
+                    <option value="Endocrinology">Endocrinology</option>
+                    <option value="Pelvic Physio">Pelvic Physio</option>
+                    <option value="Nutrition">Nutrition</option>
+                    <option value="Mental Health">Mental Health</option>
+                  </select>
+                </div>
               </div>
               <div className="flex gap-3 pt-2">
                 <button

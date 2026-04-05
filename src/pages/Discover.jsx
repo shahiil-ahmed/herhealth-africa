@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { ChevronLeft, Search, Video, BookOpen, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send } from 'lucide-react';
+import { db } from '../firebase/firebaseConfig';
+import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const resources = [
   { title: "What Are Fibroids?", type: "WHITEBOARD VIDEO", icon: Video },
@@ -15,9 +17,58 @@ const categories = [
   { name: "Mental Health", icon: "🧠", iconBg: "bg-[#E9D5FF]" }
 ];
 
+const SpecialistCard = ({ name, specialty, location }) => (
+  <div className="bg-white rounded-[24px] p-5 shadow-sm border border-black/5 flex gap-4 items-start hover:shadow-md transition-all group animate-in fade-in zoom-in-95 duration-300">
+    <div className="w-12 h-12 rounded-2xl bg-[#FDE8EE] flex items-center justify-center text-[#D4688A] font-bold text-lg shrink-0 group-hover:scale-110 transition-transform">
+      {name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+    </div>
+    <div className="flex-1">
+      <h3 className="font-semibold text-dark-plum text-[15px]">{name}</h3>
+      <p className="text-xs text-rose-pink font-bold mt-0.5 uppercase tracking-wide">{specialty}</p>
+      <div className="flex items-center gap-1.5 mt-3 text-dark-plum/40 text-[10px] font-bold uppercase tracking-wider">
+        <MapPin size={12} className="text-rose-pink/50" /> {location}
+      </div>
+    </div>
+  </div>
+);
+
 export default function Discover() {
   const [activeLocation, setActiveLocation] = useState('All');
+  const [specialists, setSpecialists] = useState([]);
   const [isNominationSubmitted, setIsNominationSubmitted] = useState(false);
+  const [nomination, setNomination] = useState({ doctorName: '', clinicName: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'specialists'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setSpecialists(data);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleNominate = async (e) => {
+    e.preventDefault();
+    if (!nomination.doctorName || !nomination.clinicName) return;
+    
+    setIsSubmitting(true);
+    try {
+      await addDoc(collection(db, 'nominations'), {
+        ...nomination,
+        createdAt: serverTimestamp()
+      });
+      setIsNominationSubmitted(true);
+      setNomination({ doctorName: '', clinicName: '' });
+      setTimeout(() => setIsNominationSubmitted(false), 5000);
+    } catch (error) {
+      console.error("Error submitting nomination:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F2E6EC] pb-24 px-4 md:px-8 pt-6">
@@ -25,22 +76,22 @@ export default function Discover() {
         
         {/* Header Section */}
         <div className="relative">
-          <button className="md:hidden w-10 h-10 bg-[#E8DCE5] text-[#2D1B2E] rounded-full flex items-center justify-center absolute left-0 top-0">
+          <button className="md:hidden w-10 h-10 bg-[#E8DCE5] text-dark-plum rounded-full flex items-center justify-center absolute left-0 top-0">
             <ChevronLeft size={20} />
           </button>
           
           <div className="text-center md:text-left pt-2 md:pt-0">
-            <h1 className="text-2xl md:text-3xl font-medium text-[#2D1B2E]">
-              Dis<span className="italic text-[#D4688A] font-[Fraunces,serif]">cover</span>
+            <h1 className="text-2xl md:text-3xl font-medium text-dark-plum">
+              Dis<span className="italic text-rose-pink font-[Fraunces,serif]">cover</span>
             </h1>
-            <p className="text-[#2D1B2E]/60 text-sm mt-2 max-w-2xl mx-auto md:mx-0">
+            <p className="text-dark-plum/60 text-sm mt-2 max-w-2xl mx-auto md:mx-0">
               Directory and resources in one safe place.
             </p>
           </div>
         </div>
 
         {/* Educational Resources Section */}
-        <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-[#2D1B2E]/60 mb-4 mt-8">
+        <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60 mb-4 mt-8">
           Learn & Understand
         </h2>
         <div 
@@ -54,12 +105,12 @@ export default function Discover() {
                 key={i} 
                 className="bg-white rounded-[20px] p-5 min-w-[260px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer transition-shadow hover:shadow-md"
               >
-                <div className="text-[#2D1B2E]">
+                <div className="text-rose-pink">
                   <Icon size={24} strokeWidth={1.5} />
                 </div>
                 <div className="mt-8">
-                  <h3 className="font-semibold text-[#2D1B2E] leading-tight">{res.title}</h3>
-                  <p className="text-[10px] text-[#2D1B2E]/50 tracking-[1.5px] uppercase mt-2 font-semibold">
+                  <h3 className="font-semibold text-dark-plum leading-tight text-[15px]">{res.title}</h3>
+                  <p className="text-[10px] text-rose-pink/60 tracking-[1.5px] uppercase mt-2 font-bold">
                     {res.type}
                   </p>
                 </div>
@@ -69,69 +120,112 @@ export default function Discover() {
         </div>
 
         {/* Directory & Filters Section */}
-        <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-[#2D1B2E]/60 mb-4 mt-8">
-          Specialist Directory
-        </h2>
-        
-        <div className="flex flex-wrap gap-2 mb-6">
-          {['All', 'Lagos', 'Abuja', 'Online'].map(loc => (
-            <button
-              key={loc}
-              onClick={() => setActiveLocation(loc)}
-              className={`rounded-full px-5 py-2 text-sm font-medium cursor-pointer transition-colors ${
-                activeLocation === loc 
-                  ? 'bg-[#D4688A] text-white' 
-                  : 'bg-white border border-black/5 text-[#2D1B2E]/70 hover:bg-gray-50'
-              }`}
-            >
-              {loc}
-            </button>
-          ))}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-8 mb-6">
+          <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60">
+            Specialist Directory
+          </h2>
+          
+          <div className="flex flex-wrap gap-2">
+            {['All', 'Lagos', 'Abuja', 'Online'].map(loc => (
+              <button
+                key={loc}
+                onClick={() => setActiveLocation(loc)}
+                className={`rounded-full px-5 py-2 text-[12px] font-bold tracking-wide uppercase transition-all ${
+                  activeLocation === loc 
+                    ? 'bg-dark-plum text-white shadow-md' 
+                    : 'bg-white/50 border border-black/5 text-dark-plum/60 hover:bg-white hover:text-dark-plum'
+                }`}
+              >
+                {loc}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Placeholder Category Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-          {categories.map((cat, i) => (
-            <div key={i} className="bg-white/80 backdrop-blur-sm rounded-[24px] p-5 border border-dashed border-[#D4688A]/30 flex gap-4 items-start hover:bg-white transition-colors cursor-default">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 ${cat.iconBg}`}>
-                {cat.icon}
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-[#2D1B2E]">{cat.name}</h3>
-                <p className="text-xs text-[#2D1B2E]/60 mt-1.5 leading-relaxed">
-                  We are currently vetting top specialists in this field to ensure they meet the HerHealth standard.
-                </p>
-                <div className="bg-[#F2E6EC] text-[#D4688A] text-[10px] px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 mt-3 w-fit">
-                  <Clock size={12} /> Vetting in progress
+        {/* Dynamic Category Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categories.map((cat, i) => {
+            const matchedSpecialists = specialists.filter(s => 
+              s.category === cat.name && 
+              (activeLocation === 'All' || s.location === activeLocation)
+            );
+
+            if (matchedSpecialists.length > 0) {
+              return matchedSpecialists.map(spec => (
+                <SpecialistCard key={spec.id} {...spec} />
+              ));
+            }
+
+            return (
+              <div key={i} className="bg-white/40 backdrop-blur-sm rounded-[24px] p-5 border border-dashed border-rose-pink/20 flex gap-4 items-start group hover:bg-white/60 transition-colors">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 grayscale opacity-50 ${cat.iconBg}`}>
+                  {cat.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-dark-plum opacity-60 text-[15px]">{cat.name}</h3>
+                  <p className="text-[11px] text-dark-plum/40 mt-1.5 leading-relaxed italic">
+                    Vetting top specialists in this field for {activeLocation === 'All' ? 'Nigeria' : activeLocation}...
+                  </p>
+                  <div className="bg-rose-pink/5 text-rose-pink text-[9px] px-2 py-1 rounded-md font-bold uppercase tracking-widest flex items-center gap-1.5 mt-3 w-fit border border-rose-pink/10">
+                    <Clock size={10} /> Vetting
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Nomination Banner */}
-        <div className="mt-10 bg-gradient-to-r from-[#FDE8EE] to-[#EAE0F5] rounded-[24px] p-8 text-center relative overflow-hidden">
-          
+        {/* Nomination Form Section */}
+        <div className="mt-16 bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-black/5 relative overflow-hidden text-center md:text-left">
           <div 
-            className={`absolute top-0 left-0 w-full bg-[#D1FAE5] text-[#065F46] text-sm py-2 font-medium transition-transform duration-300 ${
+            className={`absolute top-0 left-0 w-full bg-emerald-500 text-white text-sm py-3 font-bold uppercase tracking-widest transition-transform duration-500 z-10 ${
               isNominationSubmitted ? 'translate-y-0' : '-translate-y-full'
             }`}
           >
-            Thank you! We'll review your nomination 🌸
+            Nomination Received • Thank you 🌸
           </div>
 
-          <div className="pt-2">
-            <h2 className="text-lg font-medium text-[#2D1B2E]">Know a specialist we should vet?</h2>
-            <p className="text-[#2D1B2E]/60 text-sm mt-2">We're always expanding. Nominate a doctor you trust.</p>
-            <button 
-              onClick={() => {
-                setIsNominationSubmitted(true);
-                setTimeout(() => setIsNominationSubmitted(false), 3000);
-              }}
-              className="mt-4 border border-[#D4688A] text-[#D4688A] rounded-full px-6 py-3 text-sm font-medium hover:bg-white/50 transition bg-transparent cursor-pointer"
-            >
-              Nominate a Specialist
-            </button>
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="max-w-md">
+              <h2 className="text-2xl font-medium text-dark-plum">Know a specialist we should vet?</h2>
+              <p className="text-dark-plum/60 text-sm mt-3 leading-relaxed">
+                HerHealth is built on trust. If you've had a great experience with a doctor, nominate them to join our curated directory.
+              </p>
+            </div>
+            
+            <form onSubmit={handleNominate} className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <input 
+                  required
+                  type="text" 
+                  placeholder="Doctor's Full Name"
+                  className="w-full bg-[#FAF9F6] border border-black/10 rounded-xl px-5 py-4 text-sm outline-none focus:border-rose-pink transition-all"
+                  value={nomination.doctorName}
+                  onChange={(e) => setNomination({...nomination, doctorName: e.target.value})}
+                />
+                <input 
+                  required
+                  type="text" 
+                  placeholder="Clinic or Hospital Name"
+                  className="w-full bg-[#FAF9F6] border border-black/10 rounded-xl px-5 py-4 text-sm outline-none focus:border-rose-pink transition-all"
+                  value={nomination.clinicName}
+                  onChange={(e) => setNomination({...nomination, clinicName: e.target.value})}
+                />
+              </div>
+              <div className="flex flex-col justify-end">
+                <button 
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="w-full bg-rose-pink text-white rounded-xl px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#BE185D] transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                >
+                  {isSubmitting ? 'Submitting...' : (
+                    <>
+                      Nominate Specialist <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 

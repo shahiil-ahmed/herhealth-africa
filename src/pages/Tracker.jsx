@@ -1,4 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { auth, db } from '../firebase/firebaseConfig';
+import { 
+  doc, 
+  setDoc, 
+  collection, 
+  query, 
+  where, 
+  orderBy, 
+  onSnapshot, 
+  Timestamp, 
+  serverTimestamp 
+} from 'firebase/firestore';
 
 function RatingRow({ label, icon, value, onChange }) {
   return (
@@ -35,18 +47,126 @@ export default function Tracker() {
     backPain: 0
   });
   const [notes, setNotes] = useState('');
-  const [saved, setSaved] = useState(false);
   const [mood, setMood] = useState(null);
   const [energy, setEnergy] = useState(5);
   const [modalMode, setModalMode] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [weeklyLogs, setWeeklyLogs] = useState([]);
+  const [lastPeriodDate, setLastPeriodDate] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSavedToday, setHasSavedToday] = useState(false);
+
+  // Fetch User Profile (Last Period Start)
+  useEffect(() => {
+    if (!auth.currentUser) return;
+    
+    const unsubscribe = onSnapshot(doc(db, 'user_profiles', auth.currentUser.uid), (doc) => {
+      if (doc.exists()) {
+        setUserProfile(doc.data());
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Fetch Last 7 Days of Logs
+  useEffect(() => {
+    if (!auth.currentUser) return;
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const dateStr = oneWeekAgo.toISOString().split('T')[0];
+
+    const q = query(
+      collection(db, 'health_logs'),
+      where('userId', '==', auth.currentUser.uid),
+      where('date', '>=', dateStr),
+      orderBy('date', 'asc')
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const logs = snapshot.docs.map(doc => doc.data());
+      setWeeklyLogs(logs);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Reset "Saved" state when any input changes
+  useEffect(() => {
+    if (hasSavedToday) {
+      setHasSavedToday(false);
+    }
+  }, [ratings, mood, energy, notes]);
+
+  const calculateCycleDay = (startDate) => {
+    if (!startDate) return null;
+    
+    const start = startDate instanceof Timestamp ? startDate.toDate() : new Date(startDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+
+    const diffTime = Math.abs(today - start);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays > 35) return 'Reset Needed';
+    return diffDays + 1;
+  };
+
+  const cycleDay = calculateCycleDay(userProfile?.lastPeriodStart);
+
+  const handleSaveCycle = async () => {
+    if (!auth.currentUser || !lastPeriodDate) return;
+    
+    setIsSubmitting(true);
+    try {
+      await setDoc(doc(db, 'user_profiles', auth.currentUser.uid), {
+        lastPeriodStart: Timestamp.fromDate(new Date(lastPeriodDate)),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      setModalMode(null);
+    } catch (error) {
+      console.error("Error saving cycle:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const updateRating = (symptom, value) => {
     setRatings(prev => ({ ...prev, [symptom]: value }));
   };
 
-  const saveLog = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const saveLog = async () => {
+    if (!auth.currentUser) return;
+
+    setIsSubmitting(true);
+    const todayStr = new Date().toISOString().split('T')[0];
+    const docId = `${auth.currentUser.uid}_${todayStr}`;
+
+    // Calculate avg intensity of symptoms > 0
+    const activeRatings = Object.values(ratings).filter(v => v > 0);
+    const avgIntensity = activeRatings.length > 0 
+      ? activeRatings.reduce((a, b) => a + b, 0) / activeRatings.length 
+      : 0;
+
+    try {
+      await setDoc(doc(db, 'health_logs', docId), {
+        userId: auth.currentUser.uid,
+        date: todayStr,
+        mood,
+        energy,
+        ratings,
+        notes,
+        cycleDay: typeof cycleDay === 'number' ? cycleDay : null,
+        avgIntensity,
+        createdAt: serverTimestamp()
+      });
+      
+      setHasSavedToday(true);
+    } catch (error) {
+      console.error("Error saving log:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const today = new Date().toLocaleDateString('en-US', {
@@ -89,12 +209,20 @@ export default function Tracker() {
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-[#D4688A] rounded-xl text-white flex flex-col items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(212,104,138,0.25)]">
                     <span className="text-[9px] uppercase font-bold tracking-wider opacity-90 mt-0.5">Day</span>
-                    <span className="text-xl font-bold leading-none mt-0.5">-</span>
+                    <span className="text-xl font-bold leading-none mt-0.5">
+                      {typeof cycleDay === 'number' ? cycleDay : '-'}
+                    </span>
                   </div>
                   <div>
-                    <h3 className="text-[15px] md:text-base font-semibold text-[#2D1B2E]">Set your cycle</h3>
+                    <h3 className="text-[15px] md:text-base font-semibold text-[#2D1B2E]">
+                      {cycleDay === 'Reset Needed' ? 'Cycle Reset Needed' : cycleDay ? `Day ${cycleDay}` : 'Set your cycle'}
+                    </h3>
                     <p className="text-[13px] md:text-[14px] text-[#2D1B2E]/60 mt-1 leading-relaxed">
-                      Log your last period to track your cycle phases
+                      {cycleDay === 'Reset Needed' 
+                        ? 'Your last period was over 35 days ago. Please log your latest cycle.' 
+                        : cycleDay 
+                        ? `Your cycle started ${cycleDay - 1} days ago.` 
+                        : 'Log your last period to track your cycle phases'}
                     </p>
                   </div>
                 </div>
@@ -191,12 +319,24 @@ export default function Tracker() {
 
               {/* Save Button */}
               <button 
-                className={`text-white border-none rounded-[16px] px-6 py-4 font-[Jost,sans-serif] text-[15px] font-medium w-full cursor-pointer transition-all duration-250 tracking-[0.3px] relative overflow-hidden shadow-sm hover:-translate-y-[1px] ${
-                  saved ? 'bg-[#065F46] shadow-md' : 'bg-[#D4688A] hover:bg-[#BE185D] hover:shadow-[0_8px_24px_rgba(212,104,138,0.35)]'
+                disabled={isSubmitting}
+                className={`text-white border-none rounded-[16px] px-6 py-4 font-[Jost,sans-serif] text-[15px] font-medium w-full cursor-pointer transition-all duration-250 tracking-[0.3px] relative overflow-hidden shadow-sm hover:-translate-y-[1px] flex items-center justify-center gap-3 ${
+                  isSubmitting ? 'bg-[#D4688A] opacity-70 cursor-wait' :
+                  hasSavedToday ? 'bg-[#059669] opacity-90 shadow-md ring-2 ring-[#059669]/20' : 
+                  'bg-[#D4688A] hover:bg-[#BE185D] hover:shadow-[0_8px_24px_rgba(212,104,138,0.35)]'
                 }`}
                 onClick={saveLog}
               >
-                {saved ? '✅ Saved!' : "Save Today's Log ✓"}
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Saving...
+                  </>
+                ) : hasSavedToday ? (
+                  '✓ Logged for Today'
+                ) : (
+                  "Save Today's Log ✓"
+                )}
               </button>
 
               {/* Weekly Chart */}
@@ -209,23 +349,33 @@ export default function Tracker() {
                     Symptom Intensity — Last 7 Days
                   </div>
                   <div className="flex items-end justify-between h-[110px] px-1 md:px-2 gap-2">
-                    {[
-                      { d: 'Mon', h: '44px' }, 
-                      { d: 'Tue', h: '58px' }, 
-                      { d: 'Wed', h: '50px' }, 
-                      { d: 'Thu', h: '64px' }, 
-                      { d: 'Fri', h: '36px' }, 
-                      { d: 'Sat', h: '28px' }, 
-                      { d: 'Today', h: '52px', op: 1 }
-                    ].map(col => (
-                      <div key={col.d} className="flex flex-col items-center gap-2.5 flex-1 group">
-                        <div 
-                          className={`w-full max-w-[14px] md:max-w-[18px] rounded-t-[4px] rounded-b-[2px] transition-all duration-300 group-hover:bg-[#D4688A] ${col.op ? 'bg-[#D4688A] opacity-100' : 'bg-[#E8DCE5] opacity-70'}`} 
-                          style={{ height: col.h }}
-                        ></div>
-                        <div className="text-[10px] md:text-[11px] text-[#2D1B2E]/60 font-semibold">{col.d}</div>
-                      </div>
-                    ))}
+                    {(() => {
+                      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                      const last7Days = Array.from({ length: 7 }, (_, i) => {
+                        const d = new Date();
+                        d.setDate(d.getDate() - (6 - i));
+                        return d;
+                      });
+
+                      return last7Days.map((date, idx) => {
+                        const dateStr = date.toISOString().split('T')[0];
+                        const log = weeklyLogs.find(l => l.date === dateStr);
+                        const intensity = log ? (log.avgIntensity / 5) * 100 : 0;
+                        const isToday = idx === 6;
+
+                        return (
+                          <div key={dateStr} className="flex flex-col items-center gap-2.5 flex-1 group">
+                            <div 
+                              className={`w-full max-w-[14px] md:max-w-[18px] rounded-t-[4px] rounded-b-[2px] transition-all duration-500 group-hover:bg-[#D4688A] ${isToday ? 'bg-[#D4688A] opacity-100' : 'bg-[#E8DCE5] opacity-70'}`} 
+                              style={{ height: `${Math.max(intensity, 8)}px` }}
+                            ></div>
+                            <div className="text-[10px] md:text-[11px] text-[#2D1B2E]/60 font-semibold">
+                              {isToday ? 'Today' : days[date.getDay()]}
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()}
                   </div>
                   <div className="mt-6 text-center text-[12px] md:text-[13px] text-[#2D1B2E]/50 italic font-[Jost,sans-serif]">
                     Based on your saved logs. Save daily for better insights.
@@ -266,7 +416,9 @@ export default function Tracker() {
               </label>
               <input 
                 type="date" 
-                className="w-full bg-white border border-[#D4688A]/20 rounded-[16px] px-4 py-3.5 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] shadow-sm" 
+                value={lastPeriodDate}
+                onChange={(e) => setLastPeriodDate(e.target.value)}
+                className="w-full bg-white border border-[#D4688A] rounded-xl px-4 py-3.5 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:ring-2 focus:ring-[#D4688A]/20 shadow-sm" 
               />
             </div>
             
@@ -296,9 +448,13 @@ export default function Tracker() {
             </div>
 
             <button 
-              onClick={() => setModalMode(null)} 
-              className="w-full bg-[#D4688A] text-white rounded-[16px] py-4 font-medium text-[15px] hover:bg-[#BE185D] transition-colors mt-2 shadow-sm"
+              onClick={handleSaveCycle} 
+              disabled={isSubmitting || !lastPeriodDate}
+              className="w-full bg-[#D4688A] text-white rounded-[16px] py-4 font-medium text-[15px] hover:bg-[#BE185D] transition-colors mt-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
+              {isSubmitting ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : null}
               Save Info →
             </button>
             <button 
