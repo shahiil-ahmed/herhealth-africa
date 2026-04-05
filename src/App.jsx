@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Auth from './pages/Auth';
+import AdminPanel from './pages/AdminPanel';
 import Dashboard from './pages/Dashboard';
 import Tracker from './pages/Tracker';
 import BookingWizard from './pages/BookingWizard';
@@ -29,6 +30,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<AdminPanel />} />
           
           <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
