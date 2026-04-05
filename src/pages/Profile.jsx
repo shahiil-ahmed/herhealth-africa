@@ -1,14 +1,31 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
   ChevronLeft, Sparkles, User, Bell, Calendar, 
   Lock, LogOut, ChevronRight
 } from 'lucide-react';
+import EditProfileModal from '../components/EditProfileModal';
+import { db } from '../firebase/firebaseConfig';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export default function Profile({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const unsubscribe = onSnapshot(doc(db, 'user_profiles', currentUser.uid), (doc) => {
+      if (doc.exists()) {
+        setProfileData(doc.data());
+      }
+    });
+
+    return () => unsubscribe();
+  }, [currentUser]);
 
   useEffect(() => {
     if (isOpen) {
@@ -22,7 +39,7 @@ export default function Profile({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const userName = currentUser?.displayName || 'Shahil';
+  const userName = profileData?.fullName || currentUser?.displayName || 'Shahil';
   const userInitial = userName[0]?.toUpperCase() || 'S';
   const userEmail = currentUser?.email || 'member@herhealth.com';
 
@@ -100,7 +117,11 @@ export default function Profile({ isOpen, onClose }) {
                 { icon: Calendar, title: 'Cycle Settings', desc: 'Period length, cycle length' },
                 { icon: Lock, title: 'Privacy & Data', desc: 'Your health data is yours' },
               ].map((item, i) => (
-                <div key={i} className="bg-white rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-black/5 cursor-pointer active:scale-[0.98] transition-transform">
+                <div 
+                  key={i} 
+                  onClick={item.title === 'Edit Profile' ? () => setIsEditModalOpen(true) : undefined}
+                  className="bg-white rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-black/5 cursor-pointer active:scale-[0.98] transition-transform"
+                >
                   <div className="w-10 h-10 rounded-full bg-base-white flex items-center justify-center text-dark-plum shrink-0">
                     <item.icon size={18} />
                   </div>
@@ -128,6 +149,10 @@ export default function Profile({ isOpen, onClose }) {
           </div>
         </div>
       </div>
+      <EditProfileModal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+      />
     </>
   );
 }
