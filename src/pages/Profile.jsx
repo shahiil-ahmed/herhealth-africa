@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import EditProfileModal from '../components/EditProfileModal';
 import NotificationSettingsModal from '../components/NotificationSettingsModal';
+import CycleSettingsModal from '../components/CycleSettingsModal';
 import { db } from '../firebase/firebaseConfig';
 import { doc, onSnapshot } from 'firebase/firestore';
 
@@ -15,6 +16,7 @@ export default function Profile({ isOpen, onClose }) {
   const { currentUser, logout } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [isCycleModalOpen, setIsCycleModalOpen] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
@@ -124,6 +126,7 @@ export default function Profile({ isOpen, onClose }) {
                   onClick={
                     item.title === 'Edit Profile' ? () => setIsEditModalOpen(true) : 
                     item.title === 'Notifications' ? () => setIsNotificationModalOpen(true) : 
+                    item.title === 'Cycle Settings' ? () => setIsCycleModalOpen(true) :
                     undefined
                   }
                   className="bg-white rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-black/5 cursor-pointer active:scale-[0.98] transition-transform"
@@ -162,6 +165,10 @@ export default function Profile({ isOpen, onClose }) {
       <NotificationSettingsModal 
         isOpen={isNotificationModalOpen} 
         onClose={() => setIsNotificationModalOpen(false)} 
+      />
+      <CycleSettingsModal 
+        isOpen={isCycleModalOpen} 
+        onClose={() => setIsCycleModalOpen(false)} 
       />
     </>
   );
