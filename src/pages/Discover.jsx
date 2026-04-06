@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send } from 'lucide-react';
 import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import ResourceModal from '../components/ResourceModal';
 
 const resources = [
-  { title: "What Are Fibroids?", type: "WHITEBOARD VIDEO", icon: Video },
-  { title: "Endometriosis: The 7-Year Wait", type: "GUIDE", icon: BookOpen },
-  { title: "Questions to Ask Your Gynaecologist", type: "GUIDE", icon: BookOpen }
+  { title: "What Are Fibroids?", type: "WHITEBOARD VIDEO", icon: Video, content: "Text coming soon..." },
+  { title: "Endometriosis: The 7-Year Wait", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
+  { title: "Questions to Ask Your Gynaecologist", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
+  { title: "PCOS: Beyond the Name", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
+  { title: "Fertility Myths vs Facts", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
+  { title: "Period Poverty in Africa", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." }
 ];
 
 const categories = [
@@ -38,6 +42,10 @@ export default function Discover() {
   const [isNominationSubmitted, setIsNominationSubmitted] = useState(false);
   const [nomination, setNomination] = useState({ doctorName: '', clinicName: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // New state for Resource Modal
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'specialists'), (snapshot) => {
@@ -74,6 +82,19 @@ export default function Discover() {
     }
   };
 
+  const handleResourceClick = (resource) => {
+    setSelectedResource(resource);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Delay clearing the resource object until animation finishes
+    setTimeout(() => {
+      if (!isModalOpen) setSelectedResource(null);
+    }, 300);
+  };
+
   return (
     <div className="min-h-screen bg-[#F2E6EC] pb-24 px-4 pt-6">
       <div className="max-w-6xl mx-auto px-2 md:px-0">
@@ -99,16 +120,17 @@ export default function Discover() {
           Learn & Understand
         </h2>
         <div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 snap-x" 
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 px-2 md:px-0" 
         >
           {resources.map((res, i) => {
             const Icon = res.icon;
             return (
               <div 
                 key={i} 
-                className="bg-white rounded-[20px] p-5 min-w-[260px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer transition-shadow hover:shadow-md"
+                onClick={() => handleResourceClick(res)}
+                className="bg-white rounded-[20px] p-5 shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer transition-all hover:shadow-md hover:scale-[1.02] active:scale-95 group"
               >
-                <div className="text-rose-pink">
+                <div className="text-rose-pink group-hover:scale-110 transition-transform">
                   <Icon size={24} strokeWidth={1.5} />
                 </div>
                 <div className="mt-8">
@@ -235,7 +257,15 @@ export default function Discover() {
           </div>
         </div>
 
+        {/* Modal Integration */}
+        <ResourceModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          resource={selectedResource} 
+        />
+
       </div>
     </div>
   );
 }
+
