@@ -114,11 +114,11 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 -mt-6 relative z-10 mb-2">
           <Link to="/tracker" className="block no-underline">
             <div className="bg-white rounded-[20px] shadow-md border border-black/5 p-4 md:p-5 flex flex-col gap-[10px] cursor-pointer hover:-translate-y-1 transition-transform">
-               <div className="text-[10px] font-semibold tracking-[1.5px] text-[#2D1B2E]/60 uppercase">TODAY'S CHECK-IN</div>
+               <div className="text-[10px] font-semibold tracking-[1.5px] text-dark-plum/60 uppercase">TODAY'S CHECK-IN</div>
                <div className="flex gap-3 items-center">
                  <div className="text-[24px]">📊</div>
-                 <div className="text-[12px] text-[#2D1B2E] leading-[1.5] max-w-lg">
-                   Log your symptoms today to build your health picture. <span className="text-[#D4688A] font-medium">Tap to track →</span>
+                 <div className="text-[12px] text-dark-plum leading-normal max-w-lg">
+                   Log your symptoms today to build your health picture. <span className="text-rose-pink font-medium">Tap to track →</span>
                  </div>
                </div>
             </div>
@@ -158,29 +158,29 @@ export default function Dashboard() {
               </div>
             </Link>
 
-            <Link to="/directory" className="block no-underline">
-              <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:shadow-card-hover bg-white border border-black/5 shadow-card text-[#2D1B2E]">
+            <Link to="/discover" className="block no-underline">
+              <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:scale-105 hover:shadow-card-hover bg-white border border-black/5 shadow-card text-dark-plum">
                 <div className="text-[24px] mb-2">🏥</div>
                 <div>
-                  <div className="text-[13px] font-semibold leading-[1.3] text-[#2D1B2E]">
+                  <div className="text-[13px] font-semibold leading-[1.3] text-dark-plum">
                     Find Specialist
                   </div>
-                  <div className="text-[11px] mt-[3px] leading-[1.4] text-[#2D1B2E]/60">
+                  <div className="text-[11px] mt-[3px] leading-[1.4] text-dark-plum/60">
                     Lagos & Abuja vetted
                   </div>
                 </div>
               </div>
             </Link>
 
-            <Link to="/wellness" className="block no-underline">
-              <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:shadow-card-hover bg-[#8B5CF6] text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]">
+            <Link to="/sisterhood" className="block no-underline">
+              <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:scale-105 hover:shadow-card-hover bg-[#8B5CF6] text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]">
                 <div className="absolute -bottom-[20px] -left-[20px] w-[80px] h-[80px] rounded-full bg-white/10"></div>
                 <div className="text-[24px] mb-2 relative z-10">💜</div>
                 <div className="relative z-10">
-                  <div className="text-[13px] font-semibold leading-[1.3] text-white">
+                  <div className="text-[13px] font-semibold leading-tight text-white">
                     Wellness Circle
                   </div>
-                  <div className="text-[11px] mt-[3px] leading-[1.4] text-white/70">
+                  <div className="text-[11px] mt-[3px] leading-normal text-white/70">
                     Heal together
                   </div>
                 </div>
