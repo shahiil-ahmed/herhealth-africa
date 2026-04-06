@@ -2,39 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
 const ResourceModal = ({ isOpen, onClose, resource }) => {
-  const [isRendered, setIsRendered] = useState(false);
+  const [activeResource, setActiveResource] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      setIsRendered(true);
-      // Small timeout to ensure the transition happens after mount
-      const timer = setTimeout(() => setIsVisible(true), 10);
+    if (isOpen && resource) {
+      const timer = setTimeout(() => {
+        setActiveResource(resource);
+        setIsVisible(true);
+      }, 10);
       return () => clearTimeout(timer);
     } else {
-      setIsVisible(false);
-      const timer = setTimeout(() => setIsRendered(false), 300);
-      return () => clearTimeout(timer);
+      const timer1 = setTimeout(() => setIsVisible(false), 0);
+      // Wait for animation to finish before clearing the resource
+      const timer2 = setTimeout(() => setActiveResource(null), 300);
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
     }
-  }, [isOpen]);
+  }, [isOpen, resource]);
 
-  if (!isRendered || !resource) return null;
+  if (!activeResource) return null;
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-end justify-center transition-all duration-300 ${
+      className={`fixed inset-0 z-100 flex items-end justify-center transition-opacity duration-300 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" 
+        className="absolute inset-0 z-90 bg-black/40 backdrop-blur-[2px]" 
         onClick={onClose}
       />
 
       {/* Modal Sheet */}
       <div 
-        className={`relative w-full max-w-2xl bg-[#FEF2F4] rounded-t-[32px] shadow-2xl transition-transform duration-300 transform flex flex-col max-h-[85vh] ${
+        className={`relative z-100 w-full max-w-2xl bg-[#FEF2F4] rounded-t-[32px] shadow-2xl transition-transform duration-300 transform flex flex-col max-h-[85vh] ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -47,10 +52,10 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
         <div className="px-6 pb-4 flex justify-between items-start">
           <div className="pt-2">
             <span className="text-[10px] font-bold text-rose-pink uppercase tracking-[2px]">
-              {resource.type || 'GUIDE'}
+              {activeResource.type || 'GUIDE'}
             </span>
             <h2 className="text-2xl md:text-3xl font-medium text-dark-plum mt-1 leading-tight">
-              {resource.title}
+              {activeResource.title}
             </h2>
           </div>
           <button 
@@ -65,7 +70,7 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
         <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
           <div className="prose prose-sm max-w-none text-dark-plum/80 leading-relaxed space-y-4">
             <p className="text-base">
-              {resource.content || "Text coming soon..."}
+              {activeResource.content || "Text coming soon..."}
             </p>
             {/* Placeholder for more content to demonstrate scrolling */}
             <div className="h-4" />

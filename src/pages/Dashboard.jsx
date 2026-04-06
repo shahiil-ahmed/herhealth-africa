@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { Video, BookOpen, CheckSquare, Stethoscope, Leaf } from "lucide-react";
 import UserBookings from "../components/UserBookings";
+import ResourceModal from "../components/ResourceModal";
 
 const resources = [
   {
@@ -11,6 +12,7 @@ const resources = [
     subtitle: "WHITEBOARD VIDEO",
     color: "text-[#D4688A]",
     bg: "bg-[#D4688A]/10",
+    content: "Text coming soon..."
   },
   {
     icon: BookOpen,
@@ -18,6 +20,7 @@ const resources = [
     subtitle: "GUIDE",
     color: "text-[#8B5CF6]",
     bg: "bg-[#8B5CF6]/10",
+    content: "Text coming soon..."
   },
   {
     icon: CheckSquare,
@@ -25,6 +28,7 @@ const resources = [
     subtitle: "FREE TOOL",
     color: "text-[#065F46]",
     bg: "bg-[#065F46]/10",
+    content: "Text coming soon..."
   },
   {
     icon: Stethoscope,
@@ -32,6 +36,7 @@ const resources = [
     subtitle: "GUIDE",
     color: "text-[#D4688A]",
     bg: "bg-[#D4688A]/10",
+    content: "Text coming soon..."
   },
   {
     icon: Leaf,
@@ -39,6 +44,7 @@ const resources = [
     subtitle: "NUTRITION",
     color: "text-[#065F46]",
     bg: "bg-[#065F46]/10",
+    content: "Text coming soon..."
   },
   {
     icon: Video,
@@ -46,11 +52,14 @@ const resources = [
     subtitle: "WHITEBOARD VIDEO",
     color: "text-[#8B5CF6]",
     bg: "bg-[#8B5CF6]/10",
+    content: "Text coming soon..."
   },
 ];
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [cycleData, setCycleData] = useState({
@@ -63,10 +72,29 @@ export default function Dashboard() {
     ? currentUser.displayName.split(" ")[0].toUpperCase()
     : "SISTER";
 
+  const handleResourceClick = (resource) => {
+    console.log("📍 Dashboard Card Clicked:", resource.title);
+    // Map 'subtitle' to 'type' for ResourceModal compatibility
+    const mappedResource = {
+      ...resource,
+      type: resource.subtitle
+    };
+    setSelectedResource(mappedResource);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setSelectedResource(null);
+    }, 300);
+  };
+
   return (
     <div className="flex flex-col h-full flex-1 bg-[#F2E6EC]">
       {/* Ensure scrollbar-hide if we add a global class, or just normal overflow */}
       <div className="flex-1 overflow-y-auto pb-24 md:pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* ... (rest of the sections remain same until Resources) */}
         <div className="bg-[#2D1B2E] relative overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
@@ -256,7 +284,8 @@ export default function Dashboard() {
             {resources.map((resource, index) => (
               <div
                 key={index}
-                className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform"
+                onClick={() => handleResourceClick(resource)}
+                className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform pointer-events-auto relative z-10"
               >
                 <div>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${resource.bg} ${resource.color}`}>
@@ -273,6 +302,12 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+
+        <ResourceModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          resource={selectedResource} 
+        />
       </div>
     </div>
   );

@@ -43,11 +43,12 @@ export default function Discover() {
   const [nomination, setNomination] = useState({ doctorName: '', clinicName: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // New state for Resource Modal
+  // Modal state management
   const [selectedResource, setSelectedResource] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    console.log("🚀 Discover Component Mounted - Port 5173 Check");
     const unsubscribe = onSnapshot(collection(db, 'specialists'), (snapshot) => {
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -83,15 +84,16 @@ export default function Discover() {
   };
 
   const handleResourceClick = (resource) => {
+    console.log("📍 Card Clicked:", resource.title);
     setSelectedResource(resource);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    // Delay clearing the resource object until animation finishes
+    // Delay clearing the resource object until animation finishes (300ms)
     setTimeout(() => {
-      if (!isModalOpen) setSelectedResource(null);
+      setSelectedResource(null);
     }, 300);
   };
 
@@ -115,33 +117,33 @@ export default function Discover() {
           </div>
         </div>
 
-        {/* Educational Resources Section */}
-        <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60 mb-4 mt-8">
-          Learn & Understand
-        </h2>
-        <div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 px-2 md:px-0" 
-        >
-          {resources.map((res, i) => {
-            const Icon = res.icon;
-            return (
-              <div 
-                key={i} 
-                onClick={() => handleResourceClick(res)}
-                className="bg-white rounded-[20px] p-5 shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer transition-all hover:shadow-md hover:scale-[1.02] active:scale-95 group"
-              >
-                <div className="text-rose-pink group-hover:scale-110 transition-transform">
-                  <Icon size={24} strokeWidth={1.5} />
+        {/* Educational Resources Section - Learn & Understand */}
+        <div className="mt-8">
+          <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60 mb-4 px-2 md:px-0">
+            Learn & Understand
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 px-2 md:px-0">
+            {resources.map((res, i) => {
+              const Icon = res.icon;
+              return (
+                <div 
+                  key={i} 
+                  onClick={() => handleResourceClick(res)}
+                  className="bg-white rounded-[20px] p-5 shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer pointer-events-auto transition-all hover:shadow-md hover:scale-[1.02] active:scale-95 group"
+                >
+                  <div className="text-rose-pink group-hover:scale-110 transition-transform">
+                    <Icon size={24} strokeWidth={1.5} />
+                  </div>
+                  <div className="mt-8">
+                    <h3 className="font-semibold text-dark-plum leading-tight text-[15px]">{res.title}</h3>
+                    <p className="text-[10px] text-rose-pink/60 tracking-[1.5px] uppercase mt-2 font-bold">
+                      {res.type}
+                    </p>
+                  </div>
                 </div>
-                <div className="mt-8">
-                  <h3 className="font-semibold text-dark-plum leading-tight text-[15px]">{res.title}</h3>
-                  <p className="text-[10px] text-rose-pink/60 tracking-[1.5px] uppercase mt-2 font-bold">
-                    {res.type}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         {/* Directory & Filters Section */}
