@@ -50,7 +50,7 @@ export default function Navbar() {
 
           <button 
             onClick={() => setIsProfileOpen(true)}
-            className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
+            className="w-10 h-10 rounded-full bg-rose-pink border border-black/5 flex items-center justify-center text-white font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-rose-pink/90 transition-colors shadow-sm"
           >
             {userInitial}
           </button>
@@ -64,7 +64,7 @@ export default function Navbar() {
         </div>
         <button 
           onClick={() => setIsProfileOpen(true)}
-          className="w-10 h-10 rounded-full bg-[#E8DCE5] border border-black/5 flex items-center justify-center text-dark-plum font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-[#E8DCE5]/80 transition-colors shadow-sm"
+          className="w-10 h-10 rounded-full bg-rose-pink border border-black/5 flex items-center justify-center text-white font-[Jost,sans-serif] font-semibold text-lg cursor-pointer hover:bg-rose-pink/90 transition-colors shadow-sm"
         >
           {userInitial}
         </button>

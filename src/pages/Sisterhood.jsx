@@ -36,19 +36,7 @@ const Sisterhood = () => {
   };
 
   const getAvatarColor = (uid) => {
-    const colors = [
-      'bg-rose-100 text-rose-700',      // Dusty Rose
-      'bg-emerald-100 text-emerald-700', // Sage Green
-      'bg-purple-100 text-purple-700',  // Muted Lavender
-      'bg-slate-200 text-slate-700',    // Slate Blue
-      'bg-amber-100 text-amber-700',     // Soft Amber
-      'bg-teal-100 text-teal-700'        // Soft Teal
-    ];
-    let hash = 0;
-    for (let i = 0; i < uid.length; i++) {
-      hash = uid.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return colors[Math.abs(hash) % colors.length];
+    return 'bg-rose-pink text-white';
   };
 
   const scrollToBottom = () => {
@@ -211,7 +199,7 @@ const Sisterhood = () => {
           <div className="space-y-4">
             {wins.map(win => (
               <div key={win.id} className="bg-white rounded-[24px] p-5 shadow-sm border border-black/5 flex gap-4 items-start animate-in slide-in-from-bottom-4 duration-300">
-                <div className="w-10 h-10 rounded-full bg-rose-pink/10 text-rose-pink font-bold flex items-center justify-center shrink-0 border border-rose-pink/5">
+                <div className="w-10 h-10 rounded-full bg-rose-pink text-white font-semibold flex items-center justify-center shrink-0 shadow-sm">
                   {win.senderInitial}
                 </div>
                 <div className="flex-1">

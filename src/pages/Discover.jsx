@@ -23,7 +23,7 @@ const categories = [
 
 const SpecialistCard = ({ name, specialty, location }) => (
   <div className="bg-white rounded-[24px] p-5 shadow-sm border border-black/5 flex gap-4 items-start hover:shadow-md transition-all group animate-in fade-in zoom-in-95 duration-300">
-    <div className="w-12 h-12 rounded-2xl bg-[#FDE8EE] flex items-center justify-center text-[#D4688A] font-bold text-lg shrink-0 group-hover:scale-110 transition-transform">
+    <div className="w-12 h-12 rounded-2xl bg-rose-pink flex items-center justify-center text-white font-semibold text-lg shrink-0 group-hover:scale-110 transition-transform">
       {name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
     </div>
     <div className="flex-1">
@@ -103,7 +103,7 @@ export default function Discover() {
         
         {/* Header Section */}
         <div className="relative">
-          <button className="md:hidden w-10 h-10 bg-[#E8DCE5] text-dark-plum rounded-full flex items-center justify-center absolute left-0 top-0">
+          <button className="md:hidden w-10 h-10 bg-rose-pink text-white rounded-full flex items-center justify-center absolute left-0 top-0 shadow-sm border border-black/5 hover:bg-rose-pink/90 transition-colors">
             <ChevronLeft size={20} />
           </button>
           

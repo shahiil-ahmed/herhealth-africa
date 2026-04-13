@@ -73,7 +73,7 @@ export default function Profile({ isOpen, onClose }) {
         <div className="flex items-center justify-between px-6 pt-10 pb-6">
           <button 
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-[#E8DCE5] flex items-center justify-center text-dark-plum transition-transform active:scale-95"
+            className="w-10 h-10 rounded-full bg-rose-pink flex items-center justify-center text-white transition-transform active:scale-95 shadow-sm border border-black/5 hover:bg-rose-pink/90"
           >
             <ChevronLeft size={20} />
           </button>

@@ -111,7 +111,7 @@ export default function BookingWizard() {
               <div className="flex items-center justify-center relative h-10 mb-2 md:hidden">
                 <button
                   onClick={() => step > 1 && setStep(step - 1)}
-                  className="bg-[#E8DCE5] text-[#2D1B2E] w-10 h-10 rounded-full flex items-center justify-center shrink-0 absolute left-0 transition-transform active:scale-95"
+                  className="bg-rose-pink text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0 absolute left-0 transition-transform active:scale-95 shadow-sm border border-black/5 hover:bg-rose-pink/90"
                 >
                   <ChevronLeft size={20} />
                 </button>
