@@ -142,7 +142,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 -mt-6 relative z-10 mb-2">
           <Link to="/tracker" className="block no-underline">
             <div className="bg-white rounded-[20px] shadow-md border border-black/5 p-4 md:p-5 flex flex-col gap-[10px] cursor-pointer hover:-translate-y-1 transition-transform">
-               <div className="text-[10px] font-semibold tracking-[1.5px] text-dark-plum/60 uppercase">TODAY'S CHECK-IN</div>
+               <div className="text-[10px] font-semibold tracking-[1.5px] text-dark-plum/60">Today's check-in</div>
                <div className="flex gap-3 items-center">
                  <div className="text-[24px]">📊</div>
                  <div className="text-[12px] text-dark-plum leading-normal max-w-lg">
