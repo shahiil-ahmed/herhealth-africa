@@ -291,11 +291,11 @@ export default function AdminPanel() {
                         <td className="px-6 py-4 border-b border-black/5 text-sm text-[#2D1B2E]/70 whitespace-nowrap">{booking.preferredTime || booking.time}</td>
                         <td className="px-6 py-4 border-b border-black/5 text-sm text-[#2D1B2E]/70">{formatFirestoreDate(booking.createdAt)}</td>
                         <td className="px-6 py-4 border-b border-black/5 text-sm">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            booking.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                            booking.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                            booking.status === 'completed' ? 'bg-purple-100 text-purple-700' :
-                            'bg-gray-100 text-gray-700'
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
+                            booking.status === 'pending' ? 'bg-[#5A8A6A]/10 text-[#5A8A6A] border-[#5A8A6A]/20' :
+                            booking.status === 'confirmed' ? 'bg-[#D4688A]/10 text-[#D4688A] border-[#D4688A]/20' :
+                            booking.status === 'completed' ? 'bg-[#5A8A6A]/5 text-[#5A8A6A]/60 border-[#5A8A6A]/10' :
+                            'bg-gray-100 text-gray-700 border-gray-200'
                           }`}>
                             {(booking.status || 'pending').charAt(0).toUpperCase() + (booking.status || 'pending').slice(1)}
                           </span>

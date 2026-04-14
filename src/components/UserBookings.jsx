@@ -158,10 +158,10 @@ export default function UserBookings() {
                     </h3>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                    className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
                       booking.status?.toLowerCase() === "confirmed"
-                        ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
-                        : "bg-amber-50 text-amber-700 border border-amber-100"
+                        ? "bg-[#D4688A]/10 text-[#D4688A] border-[#D4688A]/20"
+                        : "bg-[#5A8A6A]/10 text-[#5A8A6A] border-[#5A8A6A]/20"
                     }`}
                   >
                     {booking.status?.toLowerCase() === "confirmed" ? "Confirmed" : "Pending"}
@@ -223,10 +223,10 @@ export default function UserBookings() {
                   </h3>
                 </div>
                 <span
-                  className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                  className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
                     booking.status?.toLowerCase() === "completed"
-                      ? "bg-black/5 text-black/40 border border-black/10"
-                      : "bg-red-50 text-red-700 border border-red-100 opacity-60"
+                      ? "bg-[#5A8A6A]/5 text-[#5A8A6A]/60 border-[#5A8A6A]/10"
+                      : "bg-[#D4688A]/5 text-[#D4688A]/60 border-[#D4688A]/10 opacity-60"
                   }`}
                 >
                   {booking.status}
