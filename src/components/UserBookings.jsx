@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { useAuth } from "../context/AuthContext";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import {
   Calendar,
   Clock,
@@ -15,6 +10,8 @@ import {
   History,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const WHATSAPP_NUMBER = "2348000000000"; // REPLACE_WITH_CLIENT_NUMBER
 
 export default function UserBookings() {
   const [bookings, setBookings] = useState([]);
@@ -151,10 +148,16 @@ export default function UserBookings() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <div className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/40 mb-1">
-                      {booking.package}
+                      {(booking.package ||
+                        booking.packageType ||
+                        "NAVIGATION SESSION"
+                      ).toUpperCase()}
                     </div>
                     <h3 className="text-[17px] font-semibold text-[#2D1B2E]">
-                      {booking.fullName}
+                      {booking.userName ||
+                        booking.fullName ||
+                        currentUser?.displayName ||
+                        "Sister"}
                     </h3>
                   </div>
                   <span
@@ -164,7 +167,9 @@ export default function UserBookings() {
                         : "bg-[#5A8A6A]/10 text-[#5A8A6A] border-[#5A8A6A]/20"
                     }`}
                   >
-                    {booking.status?.toLowerCase() === "confirmed" ? "Confirmed" : "Pending"}
+                    {booking.status?.toLowerCase() === "confirmed"
+                      ? "Confirmed"
+                      : "Pending"}
                   </span>
                 </div>
 
@@ -179,18 +184,25 @@ export default function UserBookings() {
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-black/5">
-                    <div className="flex items-start gap-3 bg-[#FFF5F8]/50 p-3 rounded-xl border border-[#D4688A]/5">
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi HerHealth, I have a question about my booking.")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-[#FFF5F8] hover:bg-[#D4688A]/10 p-3 rounded-xl border border-[#D4688A]/10 transition-colors group/wa no-underline"
+                    >
                       <MessageCircle
-                        size={14}
-                        className="text-[#D4688A] mt-0.5 shrink-0"
+                        size={16}
+                        className="text-[#D4688A] shrink-0"
                       />
-                      <p className="text-[11px] leading-relaxed text-[#2D1B2E]/60 italic font-jost">
-                        Reach out via WhatsApp:{" "}
-                        <span className="font-bold text-[#D4688A]">
-                          {booking.whatsapp}
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-bold text-[#D4688A] uppercase tracking-wider">
+                          Reach out on WhatsApp
                         </span>
-                      </p>
-                    </div>
+                        <span className="text-[10px] text-[#2D1B2E]/60 italic">
+                          Tap to chat with us →
+                        </span>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -216,10 +228,16 @@ export default function UserBookings() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <div className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/40 mb-1">
-                    {booking.package}
+                    {(booking.package ||
+                      booking.packageType ||
+                      "NAVIGATION SESSION"
+                    ).toUpperCase()}
                   </div>
                   <h3 className="text-[17px] font-semibold text-[#2D1B2E]">
-                    {booking.fullName}
+                    {booking.userName ||
+                      booking.fullName ||
+                      currentUser?.displayName ||
+                      "Sister"}
                   </h3>
                 </div>
                 <span
