@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import { Video, BookOpen, CheckSquare, Stethoscope, Leaf } from "lucide-react";
+import { Video, BookOpen, CheckSquare, Stethoscope, Leaf, BarChart3 } from "lucide-react";
 import UserBookings from "../components/UserBookings";
 import ResourceModal from "../components/ResourceModal";
 
@@ -144,7 +144,7 @@ export default function Dashboard() {
             <div className="bg-white rounded-[20px] shadow-md border border-black/5 p-4 md:p-5 flex flex-col gap-[10px] cursor-pointer hover:-translate-y-1 transition-transform">
                <div className="text-[10px] font-semibold tracking-[1.5px] text-dark-plum/60">Today's check-in</div>
                <div className="flex gap-3 items-center">
-                 <div className="text-[24px]">📊</div>
+                 <BarChart3 size={24} color="#D4688A" strokeWidth={2.5} />
                  <div className="text-[12px] text-dark-plum leading-normal max-w-lg">
                    Log your symptoms today to build your health picture. <span className="text-rose-pink font-medium">Tap to track →</span>
                  </div>
