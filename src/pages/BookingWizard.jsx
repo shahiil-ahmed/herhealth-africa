@@ -111,7 +111,7 @@ export default function BookingWizard() {
               <div className="flex items-center justify-center relative h-10 mb-2 md:hidden">
                 <button
                   onClick={() => step > 1 && setStep(step - 1)}
-                  className="bg-rose-pink text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0 absolute left-0 transition-transform active:scale-95 shadow-sm border border-black/5 hover:bg-rose-pink/90"
+                  className="bg-transparent text-[#D4688A] w-10 h-10 rounded-full flex items-center justify-center shrink-0 absolute left-0 transition-transform active:scale-95 border border-[#D4688A] hover:bg-[#FFF5F8]"
                 >
                   <ChevronLeft size={20} />
                 </button>
@@ -163,7 +163,7 @@ export default function BookingWizard() {
                   onClick={() => handlePackageSelect("Navigation Session")}
                   className="bg-white rounded-[24px] p-5 md:p-6 border border-black/5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] cursor-pointer hover:border-[#D4688A] hover:shadow-[0_4px_20px_rgba(212,104,138,0.15)] transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-6 group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#FBCFE8] text-[#BE185D] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-[#FFF5F8] text-[#D4688A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-[#D4688A]/5">
                     <ClipboardList className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
@@ -175,7 +175,7 @@ export default function BookingWizard() {
                         <span className="text-[#D4688A] font-bold text-lg">
                           ₦35,000
                         </span>
-                        <span className="bg-[#D1FAE5] text-[#065F46] text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
+                        <span className="bg-[#D4688A] text-white text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
                           Most Popular
                         </span>
                       </div>
@@ -193,7 +193,7 @@ export default function BookingWizard() {
                   onClick={() => handlePackageSelect("Care Bundle")}
                   className="bg-white rounded-[24px] p-5 md:p-6 border border-black/5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] cursor-pointer hover:border-[#D4688A] hover:shadow-[0_4px_20px_rgba(212,104,138,0.15)] transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-6 group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#DDD6FE] text-[#7C3AED] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-[#FFF5F8] text-[#D4688A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-[#D4688A]/5">
                     <Heart className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
@@ -205,7 +205,7 @@ export default function BookingWizard() {
                         <span className="font-bold text-[#2D1B2E] text-lg group-hover:text-[#D4688A] transition-colors">
                           ₦75,000
                         </span>
-                        <span className="bg-[#D1FAE5] text-[#065F46] text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
+                        <span className="bg-[#E8EFE6] text-[#4A6741] text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
                           Save ₦30k
                         </span>
                       </div>
@@ -223,7 +223,7 @@ export default function BookingWizard() {
                   onClick={() => handlePackageSelect("Follow-Up Session")}
                   className="bg-white rounded-[24px] p-5 md:p-6 border border-black/5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] cursor-pointer hover:border-[#D4688A] hover:shadow-[0_4px_20px_rgba(212,104,138,0.15)] transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-6 group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[#A7F3D0] text-[#047857] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-14 h-14 rounded-2xl bg-[#FFF5F8] text-[#D4688A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-[#D4688A]/5">
                     <RefreshCw className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
