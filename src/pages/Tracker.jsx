@@ -97,6 +97,31 @@ export default function Tracker() {
     }
   }, [ratings, mood, energy, notes]);
 
+  const getPhaseInfo = (day) => {
+    if (typeof day !== 'number') return { name: "Set cycle", description: "Log your last period to track your cycle phases" };
+    if (day >= 1 && day <= 5) return { 
+      name: "Menstrual Phase", 
+      description: "Focus on rest and replenishment. Your body is renewing itself." 
+    };
+    if (day >= 6 && day <= 13) return { 
+      name: "Follicular Phase", 
+      description: "Your energy is rising. A great time for new projects and socialising." 
+    };
+    if (day >= 14 && day <= 16) return { 
+      name: "Ovulatory Phase", 
+      description: "You are at your peak vibrancy. Communication and confidence are high." 
+    };
+    if (day >= 17 && day <= 28) return { 
+      name: "Luteal Phase", 
+      description: "Slow down and practice self-care. Your body is preparing for a new cycle." 
+    };
+    if (day > 28) return { 
+      name: "Late/Unknown", 
+      description: "Your cycle is longer than 28 days. Log your period to stay updated." 
+    };
+    return { name: "Phase info", description: "Tracking your cycle..." };
+  };
+
   const calculateCycleDay = (startDate) => {
     if (!startDate) return null;
     
@@ -192,7 +217,7 @@ export default function Tracker() {
           <div className="mb-6 lg:mb-8">
             <h2 className="text-[24px] md:text-[28px] lg:text-[32px] font-[Fraunces,serif] font-light text-[#2D1B2E] mb-2">{today}</h2>
             <p className="text-[13px] md:text-[14px] lg:text-[15px] text-[#2D1B2E]/60 leading-relaxed max-w-xl">
-              Track daily. Your data builds your Medical Summary and gives your doctor the full picture they need to help you.
+              Track daily. Your body is telling a story — this is where you write it down. 🌸
             </p>
           </div>
 
@@ -215,20 +240,24 @@ export default function Tracker() {
                   </div>
                   <div>
                     <h3 className="text-[15px] md:text-base font-semibold text-[#2D1B2E]">
-                      {cycleDay === 'Reset Needed' ? 'Cycle Reset Needed' : cycleDay ? `Day ${cycleDay}` : 'Set your cycle'}
+                      {cycleDay === 'Reset Needed' 
+                        ? 'Cycle Reset Needed' 
+                        : cycleDay 
+                        ? `Day ${cycleDay} — ${getPhaseInfo(cycleDay).name}` 
+                        : 'Set your cycle'}
                     </h3>
                     <p className="text-[13px] md:text-[14px] text-[#2D1B2E]/60 mt-1 leading-relaxed">
                       {cycleDay === 'Reset Needed' 
                         ? 'Your last period was over 35 days ago. Please log your latest cycle.' 
                         : cycleDay 
-                        ? `Your cycle started ${cycleDay - 1} days ago.` 
+                        ? getPhaseInfo(cycleDay).description 
                         : 'Log your last period to track your cycle phases'}
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-3 mt-6">
                   <button onClick={() => setModalMode('log')} className="flex-1 bg-[#FFF5F8] text-[#D4688A] font-medium py-3 rounded-xl flex items-center justify-center text-[13px] md:text-[14px] hover:bg-[#FBCFE8]/50 transition border border-[#D4688A]/10">
-                    <span className="mr-2 text-base">📅</span> Log Period
+                    <span className="mr-2 text-base">📅</span> Log Period Start
                   </button>
                   <button onClick={() => setModalMode('edit')} className="flex-1 bg-[#FFF5F8] text-[#D4688A] font-medium py-3 rounded-xl flex items-center justify-center text-[13px] md:text-[14px] hover:bg-[#FBCFE8]/50 transition border border-[#D4688A]/10">
                     <span className="mr-2 text-base">⚙️</span> Edit Cycle
