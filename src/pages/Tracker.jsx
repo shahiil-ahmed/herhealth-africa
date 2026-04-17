@@ -93,8 +93,7 @@ export default function Tracker() {
     const dateStr = oneWeekAgo.toISOString().split('T')[0];
 
     const q = query(
-      collection(db, 'health_logs'),
-      where('userId', '==', auth.currentUser.uid),
+      collection(db, 'users', auth.currentUser.uid, 'dailyLogs'),
       where('date', '>=', dateStr),
       orderBy('date', 'asc')
     );
@@ -190,11 +189,11 @@ export default function Tracker() {
       : 0;
 
     try {
-      await setDoc(doc(db, 'health_logs', docId), {
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'dailyLogs', todayStr), {
         userId: auth.currentUser.uid,
         date: todayStr,
         mood,
-        energy,
+        energy: Number(energy),
         ratings,
         notes,
         cycleDay: typeof cycleDay === 'number' ? cycleDay : null,
@@ -404,39 +403,48 @@ export default function Tracker() {
                 <div className="text-[20px] md:text-[22px] font-[Fraunces,serif] font-light text-[#2D1B2E] mb-[16px]">
                   This <em className="italic text-[#D4688A]">Week</em>
                 </div>
-                <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
+                <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5 relative min-h-[180px] flex flex-col">
                   <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-8">
-                    Symptom intensity — Last 7 days
+                    Symptom intensity — last 7 days
                   </div>
-                  <div className="flex items-end justify-between h-[110px] px-1 md:px-2 gap-2">
-                    {(() => {
-                      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                      const last7Days = Array.from({ length: 7 }, (_, i) => {
-                        const d = new Date();
-                        d.setDate(d.getDate() - (6 - i));
-                        return d;
-                      });
+                  
+                  {weeklyLogs.length === 0 ? (
+                    <div className="flex-1 flex items-center justify-center">
+                      <p className="text-[13px] text-[#2D1B2E]/40 font-medium italic">No data tracked yet this week</p>
+                    </div>
+                  ) : (
+                    <div className="flex items-end justify-between h-[110px] px-1 md:px-2 gap-2">
+                      {(() => {
+                        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                        const last7Days = Array.from({ length: 7 }, (_, i) => {
+                          const d = new Date();
+                          d.setDate(d.getDate() - (6 - i));
+                          return d;
+                        });
 
-                      return last7Days.map((date, idx) => {
-                        const dateStr = date.toISOString().split('T')[0];
-                        const log = weeklyLogs.find(l => l.date === dateStr);
-                        const intensity = log ? (log.avgIntensity / 5) * 100 : 0;
-                        const isToday = idx === 6;
+                        return last7Days.map((date, idx) => {
+                          const dateStr = date.toISOString().split('T')[0];
+                          const log = weeklyLogs.find(l => l.date === dateStr);
+                          const intensity = log ? (log.avgIntensity / 5) * 100 : 0;
+                          const hasData = !!log;
+                          const isToday = idx === 6;
 
-                        return (
-                          <div key={dateStr} className="flex flex-col items-center gap-2.5 flex-1 group">
-                            <div 
-                              className={`w-full max-w-[14px] md:max-w-[18px] rounded-t-[4px] rounded-b-[2px] transition-all duration-500 group-hover:bg-[#D4688A] ${isToday ? 'bg-[#D4688A] opacity-100' : 'bg-[#E8DCE5] opacity-70'}`} 
-                              style={{ height: `${Math.max(intensity, 8)}px` }}
-                            ></div>
-                            <div className="text-[10px] md:text-[11px] text-[#2D1B2E]/60 font-semibold">
-                              {isToday ? 'Today' : days[date.getDay()]}
+                          return (
+                            <div key={dateStr} className="flex flex-col items-center gap-2.5 flex-1 group">
+                              <div 
+                                className={`w-full max-w-[14px] md:max-w-[18px] rounded-t-[4px] rounded-b-[2px] transition-all duration-500 group-hover:bg-[#D4688A] ${hasData ? 'bg-[#D4688A] opacity-100' : 'bg-[#E8DCE5] opacity-50'}`} 
+                                style={{ height: `${hasData ? intensity : 2}px` }}
+                              ></div>
+                              <div className="text-[10px] md:text-[11px] text-[#2D1B2E]/60 font-semibold">
+                                {isToday ? 'Today' : days[date.getDay()]}
+                              </div>
                             </div>
-                          </div>
-                        );
-                      });
-                    })()}
-                  </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  )}
+                  
                   <div className="mt-6 text-center text-[12px] md:text-[13px] text-[#2D1B2E]/50 italic font-[Jost,sans-serif]">
                     Based on your saved logs. Save daily for better insights.
                   </div>
