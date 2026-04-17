@@ -277,8 +277,8 @@ export default function BookingWizard() {
                   className="bg-[#FFF5F8] border-[1.5px] border-[#D4688A]/20 rounded-[20px] p-4 flex items-center justify-between mb-8 cursor-pointer hover:border-[#D4688A]/40 transition-all group"
                 >
                   <div>
-                    <p className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#D4688A] mb-1">
-                      SELECTED PACKAGE
+                    <p className="text-[10px] font-bold text-[#D4688A] mb-1">
+                      Selected package
                     </p>
                     <p className="font-semibold text-[#2D1B2E] text-[15px]">
                       {bookingData.package}
@@ -292,8 +292,8 @@ export default function BookingWizard() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    FULL NAME <span className="text-[#D4688A]">*</span>
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    Full name <span className="text-[#D4688A]">*</span>
                   </label>
                   <input
                     type="text"
@@ -307,8 +307,8 @@ export default function BookingWizard() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    WHATSAPP NUMBER <span className="text-[#D4688A]">*</span>
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    WhatsApp number <span className="text-[#D4688A]">*</span>
                   </label>
                   <input
                     type="text"
@@ -322,8 +322,8 @@ export default function BookingWizard() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    YOUR MAIN CONCERN
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    Your main concern
                   </label>
                   <div className="flex flex-wrap gap-2 md:gap-3">
                     {[
@@ -355,8 +355,8 @@ export default function BookingWizard() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    PREFERRED SESSION TIME{" "}
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    Preferred session time{" "}
                     <span className="text-[#D4688A]">*</span>
                   </label>
                   <select
@@ -437,8 +437,8 @@ export default function BookingWizard() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    HOW LONG HAVE YOU HAD THESE SYMPTOMS?
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    How long have you had these symptoms?
                   </label>
                   <select
                     value={bookingData.duration}
@@ -460,8 +460,8 @@ export default function BookingWizard() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    HAVE YOU SEEN A DOCTOR ABOUT THIS BEFORE?
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    Have you seen a doctor about this before?
                   </label>
                   <select
                     value={bookingData.seenDoctor}
@@ -486,8 +486,8 @@ export default function BookingWizard() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                    ANYTHING ELSE YOU WANT YOUR NAVIGATOR TO KNOW?
+                  <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
+                    Anything else you want your navigator to know?
                   </label>
                   <textarea
                     value={bookingData.notes}
