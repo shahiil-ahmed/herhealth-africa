@@ -137,12 +137,12 @@ export default function BookingWizard() {
           {step === 1 && (
             <>
               {/* Progress Bar & Step Header */}
-              <div className="h-1.5 w-full bg-[#E8DCE5] mt-6 md:mt-10 rounded-full overflow-hidden">
-                <div className="w-1/3 h-full bg-[#8B5CF6] rounded-full transition-all duration-500"></div>
+              <div className="h-1.5 w-full bg-[#FFF5F8] mt-6 md:mt-10 rounded-full overflow-hidden">
+                <div className="w-1/3 h-full bg-[#D4688A] rounded-full transition-all duration-500"></div>
               </div>
 
-              <p className="uppercase tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
-                STEP 1 OF 3
+              <p className="tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
+                Step 1 of 3
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mt-2 text-[#2D1B2E]">
@@ -251,12 +251,12 @@ export default function BookingWizard() {
           {step === 2 && (
             <>
               {/* Progress Bar & Step Header */}
-              <div className="h-1.5 w-full bg-[#E8DCE5] mt-6 md:mt-10 rounded-full overflow-hidden">
-                <div className="w-2/3 h-full bg-[#8B5CF6] rounded-full transition-all duration-500"></div>
+              <div className="h-1.5 w-full bg-[#FFF5F8] mt-6 md:mt-10 rounded-full overflow-hidden">
+                <div className="w-2/3 h-full bg-[#D4688A] rounded-full transition-all duration-500"></div>
               </div>
 
-              <p className="uppercase tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
-                STEP 2 OF 3
+              <p className="tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
+                Step 2 of 3
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mt-2 text-[#2D1B2E]">
@@ -415,12 +415,12 @@ export default function BookingWizard() {
           {step === 3 && (
             <>
               {/* Progress Bar & Step Header */}
-              <div className="h-1.5 w-full bg-[#E8DCE5] mt-6 md:mt-10 rounded-full overflow-hidden">
-                <div className="w-full h-full bg-[#8B5CF6] rounded-full transition-all duration-500"></div>
+              <div className="h-1.5 w-full bg-[#FFF5F8] mt-6 md:mt-10 rounded-full overflow-hidden">
+                <div className="w-full h-full bg-[#D4688A] rounded-full transition-all duration-500"></div>
               </div>
 
-              <p className="uppercase tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
-                STEP 3 OF 3
+              <p className="tracking-[0.15em] text-[11px] text-[#2D1B2E]/60 mt-5 font-bold">
+                Step 3 of 3
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mt-2 text-[#2D1B2E]">

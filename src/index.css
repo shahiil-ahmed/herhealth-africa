@@ -23,4 +23,6 @@
 
   --shadow-card: 0 4px 24px rgba(14,8,0,0.08);
   --shadow-card-hover: 0 12px 40px rgba(14,8,0,0.14);
+
+  --color-primary: var(--color-rose-pink);
 }
