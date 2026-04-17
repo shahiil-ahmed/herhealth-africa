@@ -70,6 +70,7 @@ export default function Tracker() {
   const [lastPeriodDate, setLastPeriodDate] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSavedToday, setHasSavedToday] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   // Fetch User Profile (Last Period Start)
   useEffect(() => {
@@ -202,6 +203,8 @@ export default function Tracker() {
       });
       
       setHasSavedToday(true);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
     } catch (error) {
       console.error("Error saving log:", error);
     } finally {
@@ -243,8 +246,8 @@ export default function Tracker() {
               
               {/* Cycle Overview */}
               <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
-                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5 uppercase">
-                  CYCLE OVERVIEW
+                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5">
+                  Cycle overview
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-[#D4688A] rounded-xl text-white flex flex-col items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(212,104,138,0.25)]">
@@ -305,22 +308,22 @@ export default function Tracker() {
               
               {/* Mood Selector */}
               <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
-                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5 uppercase">
-                  TODAY'S MOOD
+                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5">
+                  How are you feeling today?
                 </div>
                 <div className="grid grid-cols-5 gap-2">
                   {moodOptions.map((option) => (
                     <div 
                       key={option.label}
                       onClick={() => setMood(option.label)}
-                      className={`flex flex-col items-center justify-center py-3.5 rounded-xl cursor-pointer transition-all duration-200 border ${
+                      className={`flex flex-col items-center justify-center py-3.5 rounded-xl cursor-pointer transition-all duration-300 border ${
                         mood === option.label 
-                          ? 'bg-[#FFF5F8] border-[#D4688A] shadow-sm scale-[1.03]' 
+                          ? 'bg-[#D4688A] border-[#D4688A] shadow-sm scale-[1.03]' 
                           : 'bg-[#FAF9F6] border-transparent hover:bg-white hover:border-[#D4688A]/20'
                       }`}
                     >
-                      <span className="text-2xl mb-1.5">{option.emoji}</span>
-                      <span className={`text-[10px] md:text-[11px] font-medium ${mood === option.label ? 'text-[#D4688A]' : 'text-[#2D1B2E]/60'}`}>
+                      <span className={`text-2xl mb-1.5 transition-colors duration-300 ${mood === option.label ? 'brightness-0 invert' : ''}`}>{option.emoji}</span>
+                      <span className={`text-[10px] md:text-[11px] font-medium transition-colors duration-300 ${mood === option.label ? 'text-white' : 'text-[#2D1B2E]/60'}`}>
                         {option.label}
                       </span>
                     </div>
@@ -330,8 +333,8 @@ export default function Tracker() {
 
               {/* Energy Level */}
               <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
-                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5 uppercase flex justify-between items-center">
-                  <span>ENERGY LEVEL</span>
+                <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-5 flex justify-between items-center">
+                  <span>How is your energy today?</span>
                   <span className="text-[#D4688A] font-bold text-[12px] bg-[#FFF5F8] px-2.5 py-1 rounded-md">{energy}/10</span>
                 </div>
                 <input 
@@ -339,7 +342,10 @@ export default function Tracker() {
                   min="0" max="10" 
                   value={energy} 
                   onChange={(e) => setEnergy(e.target.value)} 
-                  className="w-full h-1.5 bg-[#E8DCE5] rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4688A]/40 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-[#D4688A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110" 
+                  style={{ 
+                    background: `linear-gradient(to right, #D4688A ${energy * 10}%, #FFE8EF ${energy * 10}%)` 
+                  }}
+                  className="w-full h-1.5 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4688A]/40 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-[#D4688A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110" 
                 />
                 <div className="flex justify-between items-center text-[11px] md:text-xs text-[#2D1B2E]/50 font-medium mt-3">
                   <span>Exhausted</span>
@@ -349,38 +355,49 @@ export default function Tracker() {
 
               {/* Notes */}
               <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
-                <label className="text-[11px] font-semibold tracking-wider uppercase text-[#2D1B2E]/60 mb-4 block">
-                  Today's Notes
+                <label className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-4 block">
+                  Today's notes
                 </label>
                 <textarea 
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   className="w-full bg-[#FAF9F6] border border-black/5 rounded-[12px] px-5 py-4 font-[Jost,sans-serif] text-[14px] text-[#2D1B2E] outline-none resize-none min-h-[120px] transition-all duration-200 leading-[1.6] focus:border-[#D4688A] focus:bg-white focus:ring-[3px] focus:ring-[#D4688A]/10"
-                  placeholder="What you ate, activity, stress, sleep, anything that felt different today..."
+                  placeholder="What you ate, how you slept, stress levels, medications, anything that felt different today..."
                 />
               </div>
 
               {/* Save Button */}
-              <button 
-                disabled={isSubmitting}
-                className={`text-white border-none rounded-[16px] px-6 py-4 font-[Jost,sans-serif] text-[15px] font-medium w-full cursor-pointer transition-all duration-250 tracking-[0.3px] relative overflow-hidden shadow-sm hover:-translate-y-[1px] flex items-center justify-center gap-3 ${
-                  isSubmitting ? 'bg-[#D4688A] opacity-70 cursor-wait' :
-                  hasSavedToday ? 'bg-[#059669] opacity-90 shadow-md ring-2 ring-[#059669]/20' : 
-                  'bg-[#D4688A] hover:bg-[#BE185D] hover:shadow-[0_8px_24px_rgba(212,104,138,0.35)]'
-                }`}
-                onClick={saveLog}
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Saving...
-                  </>
-                ) : hasSavedToday ? (
-                  '✓ Logged for Today'
-                ) : (
-                  "Save Today's Log ✓"
+              <div className="relative">
+                <button 
+                  disabled={isSubmitting}
+                  className={`text-white border-none rounded-[16px] px-6 py-4 font-[Jost,sans-serif] text-[15px] font-medium w-full cursor-pointer transition-all duration-250 tracking-[0.3px] relative overflow-hidden shadow-sm hover:-translate-y-[1px] flex items-center justify-center gap-3 ${
+                    isSubmitting ? 'bg-[#D4688A] opacity-70 cursor-wait' :
+                    hasSavedToday ? 'bg-[#059669] opacity-90 shadow-md ring-2 ring-[#059669]/20' : 
+                    'bg-[#D4688A] hover:bg-[#BE185D] hover:shadow-[0_8px_24px_rgba(212,104,138,0.35)]'
+                  }`}
+                  onClick={saveLog}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : hasSavedToday ? (
+                    '✓ Logged for Today'
+                  ) : (
+                    "Save Today's Log ✓"
+                  )}
+                </button>
+
+                {/* Success Toast */}
+                {showToast && (
+                  <div className="absolute -top-14 left-0 right-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="bg-[#FFF5F8] border border-[#D4688A]/20 text-[#D4688A] text-[13px] font-medium px-4 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2">
+                      Today's log saved. Keep showing up for yourself. 🌸
+                    </div>
+                  </div>
                 )}
-              </button>
+              </div>
 
               {/* Weekly Chart */}
               <div className="mt-4 md:mt-6 pb-2">
@@ -388,8 +405,8 @@ export default function Tracker() {
                   This <em className="italic text-[#D4688A]">Week</em>
                 </div>
                 <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
-                  <div className="text-[11px] font-semibold tracking-wider uppercase text-[#2D1B2E]/60 mb-8">
-                    Symptom Intensity — Last 7 Days
+                  <div className="text-[11px] font-semibold tracking-wider text-[#2D1B2E]/60 mb-8">
+                    Symptom intensity — Last 7 days
                   </div>
                   <div className="flex items-end justify-between h-[110px] px-1 md:px-2 gap-2">
                     {(() => {
