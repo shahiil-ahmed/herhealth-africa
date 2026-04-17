@@ -36,7 +36,7 @@ export default function BookingWizard() {
   const handleContinue = () => {
     if (!bookingData.fullName.trim() || !bookingData.whatsapp.trim() || !bookingData.preferredTime) {
       setError(
-        "Please fill in your Full Name, WhatsApp Number, and preferred Time slot.",
+        "Almost there — please fill in your name, WhatsApp number and preferred time. 🌸",
       );
       return;
     }
@@ -345,7 +345,7 @@ export default function BookingWizard() {
                         className={`rounded-full px-4 py-2 text-sm cursor-pointer transition-all ${
                           bookingData.concern === item
                             ? "bg-[#D4688A] text-white border-transparent shadow-md"
-                            : "bg-white border-black/10 text-[#2D1B2E]/70 hover:border-[#D4688A]/50 border-[1.5px]"
+                            : "bg-[#FFF5F8]/40 border-[#D4688A]/10 text-[#2D1B2E]/70 hover:border-[#D4688A]/30 border-[1.5px]"
                         }`}
                       >
                         {item}
@@ -369,17 +369,17 @@ export default function BookingWizard() {
                     <option value="" disabled>
                       Choose a time slot
                     </option>
-                    <option value="Weekday Morning (9am - 12pm)">
-                      Weekday Morning (9am - 12pm)
+                    <option value="Weekday Morning">
+                      Weekday Morning
                     </option>
-                    <option value="Weekday Afternoon (1pm - 4pm)">
-                      Weekday Afternoon (1pm - 4pm)
+                    <option value="Weekday Afternoon">
+                      Weekday Afternoon
                     </option>
-                    <option value="Weekday Evening (5pm - 7pm)">
-                      Weekday Evening (5pm - 7pm)
+                    <option value="Weekday Evening">
+                      Weekday Evening
                     </option>
-                    <option value="Saturday Morning (9am - 12pm)">
-                      Saturday Morning (9am - 12pm)
+                    <option value="Saturday Morning">
+                      Saturday Morning
                     </option>
                   </select>
                 </div>
@@ -396,7 +396,7 @@ export default function BookingWizard() {
                       setError("");
                       setStep(1);
                     }}
-                    className="bg-white border-[1.5px] border-black/10 text-[#2D1B2E] rounded-[16px] py-4 sm:px-8 font-medium text-[15px] hover:bg-[#FAF9F6] transition-colors"
+                    className="bg-[#FFF5F8] text-[#D4688A] rounded-[16px] py-4 sm:px-8 font-medium text-[15px] hover:bg-[#FAF0F4] transition-colors"
                   >
                     Back
                   </button>
@@ -506,7 +506,7 @@ export default function BookingWizard() {
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     onClick={() => setStep(2)}
-                    className="bg-white border-[1.5px] border-black/10 text-[#2D1B2E] rounded-[16px] py-4 sm:px-8 font-medium text-[15px] hover:bg-[#FAF9F6] transition-colors"
+                    className="bg-[#FFF5F8] text-[#D4688A] rounded-[16px] py-4 sm:px-8 font-medium text-[15px] hover:bg-[#FAF0F4] transition-colors"
                   >
                     Back
                   </button>
@@ -615,8 +615,8 @@ export default function BookingWizard() {
                       Safe & Confidential
                     </h4>
                     <p className="text-sm text-[#2D1B2E]/70 mt-1 leading-relaxed">
-                      Your health data is entirely yours. We provide a
-                      judgment-free space to discuss your body.
+                      HerHealth is a private, secure space where your information
+                      is never shared without your consent.
                     </p>
                   </div>
                 </li>
