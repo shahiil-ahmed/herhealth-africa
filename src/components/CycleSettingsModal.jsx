@@ -22,7 +22,7 @@ function Stepper({ label, description, value, min, max, onChange }) {
           <button 
             onClick={decrement}
             disabled={value <= min}
-            className="w-10 h-10 rounded-xl bg-[#FAF9F6] flex items-center justify-center text-dark-plum hover:bg-rose-pink hover:text-white transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+            className="w-11 h-11 rounded-xl bg-[#FAF9F6] flex items-center justify-center text-dark-plum hover:bg-rose-pink hover:text-white transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
           >
             <Minus size={18} />
           </button>
@@ -30,7 +30,7 @@ function Stepper({ label, description, value, min, max, onChange }) {
           <button 
             onClick={increment}
             disabled={value >= max}
-            className="w-10 h-10 rounded-xl bg-[#FAF9F6] flex items-center justify-center text-dark-plum hover:bg-dark-plum hover:text-white transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+            className="w-11 h-11 rounded-xl bg-[#FAF9F6] flex items-center justify-center text-dark-plum hover:bg-dark-plum hover:text-white transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
           >
             <Plus size={18} />
           </button>
@@ -107,7 +107,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-lg font-semibold leading-tight">Cycle Settings</h2>
-              <p className="text-white/60 text-[11px] uppercase tracking-wider font-medium">Predictive accuracy</p>
+              <p className="text-white/60 text-[11px] tracking-wider font-medium">Predictive accuracy</p>
             </div>
           </div>
           <button 
@@ -125,7 +125,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
 
           <div className="bg-[#FAF9F6] rounded-[24px] p-5 border border-black/5">
             <Stepper 
-              label="Period Length"
+              label="Period length"
               description="How many days does your period usually last?"
               value={periodLength}
               min={1}
@@ -133,7 +133,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
               onChange={setPeriodLength}
             />
             <Stepper 
-              label="Cycle Length"
+              label="Cycle length"
               description="How many days is your full cycle?"
               value={cycleLength}
               min={21}
@@ -146,7 +146,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
             <button 
               disabled={isSaving || showSuccess}
               onClick={handleSave}
-              className={`w-full rounded-2xl py-4 text-sm font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 group shadow-lg ${
+              className={`w-full rounded-2xl py-4 text-sm font-bold tracking-widest transition-all flex items-center justify-center gap-2 group shadow-lg ${
                 showSuccess 
                 ? 'bg-emerald-500 text-white shadow-emerald-500/20' 
                 : 'bg-rose-pink text-white shadow-rose-pink/20 hover:bg-[#BE185D] disabled:opacity-50'
@@ -155,10 +155,10 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
               {showSuccess ? (
                 <>
                   <Check size={18} className="animate-in zoom-in" />
-                  Calculations Updated
+                  Cycle settings saved 🌸
                 </>
               ) : (
-                isSaving ? 'Updating...' : 'Save Settings'
+                isSaving ? 'Updating...' : 'Save settings'
               )}
             </button>
           </div>
