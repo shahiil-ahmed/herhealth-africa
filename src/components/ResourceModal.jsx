@@ -51,8 +51,8 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
         {/* Header */}
         <div className="px-6 pb-4 flex justify-between items-start">
           <div className="pt-2">
-            <span className="text-[10px] font-bold text-rose-pink uppercase tracking-[2px]">
-              {activeResource.type || 'GUIDE'}
+            <span className="text-[10px] font-bold text-rose-pink tracking-[1px]">
+              {activeResource.type || 'Guide'}
             </span>
             <h2 className="text-2xl md:text-3xl font-medium text-dark-plum mt-1 leading-tight">
               {activeResource.title}

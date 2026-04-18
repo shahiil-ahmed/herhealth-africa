@@ -1,16 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send } from 'lucide-react';
+import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send, PlayCircle, HelpCircle, FileText, CheckSquare, ChevronRight } from 'lucide-react';
 import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import ResourceModal from '../components/ResourceModal';
 
 const resources = [
-  { title: "What Are Fibroids?", type: "WHITEBOARD VIDEO", icon: Video, content: "Text coming soon..." },
-  { title: "Endometriosis: The 7-Year Wait", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
-  { title: "Questions to Ask Your Gynaecologist", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
-  { title: "PCOS: Beyond the Name", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
-  { title: "Fertility Myths vs Facts", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." },
-  { title: "Period Poverty in Africa", type: "GUIDE", icon: BookOpen, content: "Text coming soon..." }
+  { 
+    title: "What Are Fibroids?", 
+    type: "Whiteboard video", 
+    icon: PlayCircle, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  },
+  { 
+    title: "Endometriosis: The 7-Year Wait", 
+    type: "Guide", 
+    icon: BookOpen, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  },
+  { 
+    title: "Questions to Ask Your Gynaecologist", 
+    type: "Guide", 
+    icon: HelpCircle, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  },
+  { 
+    title: "PCOS: Beyond the Name", 
+    type: "Guide", 
+    icon: FileText, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  },
+  { 
+    title: "Fertility Myths vs Facts", 
+    type: "Guide", 
+    icon: CheckSquare, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  },
+  { 
+    title: "Period Poverty in Africa", 
+    type: "Guide", 
+    icon: BookOpen, 
+    description: "Click to learn more about this topic and find helpful health navigation resources.",
+    content: "Text coming soon..." 
+  }
 ];
 
 const categories = [
@@ -119,8 +155,8 @@ export default function Discover() {
 
         {/* Educational Resources Section - Learn & Understand */}
         <div className="mt-8">
-          <h2 className="text-[11px] font-bold tracking-[1.5px] uppercase text-dark-plum/60 mb-4 px-2 md:px-0">
-            Learn & Understand
+          <h2 className="text-[11px] font-bold tracking-[1.5px] text-dark-plum/60 mb-4 px-2 md:px-0">
+            Learn & understand
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 px-2 md:px-0">
             {resources.map((res, i) => {
@@ -129,14 +165,21 @@ export default function Discover() {
                 <div 
                   key={i} 
                   onClick={() => handleResourceClick(res)}
-                  className="bg-white rounded-[20px] p-5 shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer pointer-events-auto transition-all hover:shadow-md hover:scale-[1.02] active:scale-95 group"
+                  className="bg-white rounded-[20px] p-6 shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer pointer-events-auto transition-all hover:bg-[#FFF5F8] hover:shadow-md hover:scale-[1.01] active:scale-95 group relative overflow-hidden"
                 >
-                  <div className="text-rose-pink group-hover:scale-110 transition-transform">
-                    <Icon size={24} strokeWidth={1.5} />
+                  <div className="flex justify-between items-start">
+                    <div className="text-rose-pink group-hover:scale-110 transition-transform">
+                      <Icon size={24} strokeWidth={1.5} />
+                    </div>
+                    <ChevronRight size={18} className="text-rose-pink/40 group-hover:text-rose-pink transition-colors" />
                   </div>
+                  
                   <div className="mt-8">
                     <h3 className="font-semibold text-dark-plum leading-tight text-[15px]">{res.title}</h3>
-                    <p className="text-[10px] text-rose-pink/60 tracking-[1.5px] uppercase mt-2 font-bold">
+                    <p className="text-[11px] text-dark-plum/50 mt-1 line-clamp-2">
+                      {res.description}
+                    </p>
+                    <p className="text-[10px] text-rose-pink tracking-tight mt-3 font-bold">
                       {res.type}
                     </p>
                   </div>
