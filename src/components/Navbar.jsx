@@ -38,12 +38,12 @@ export default function Navbar() {
               <div 
                 key={i} 
                 onClick={() => navigate(item.path)}
-                className={`flex items-center gap-2 cursor-pointer transition-colors font-[Jost,sans-serif] font-semibold tracking-wider text-[13px] capitalize ${
+                className={`flex items-center gap-2 cursor-pointer transition-colors font-semibold text-[13px] ${
                   isActive ? 'text-rose-pink' : 'text-dark-plum/60 hover:text-dark-plum'
                 }`}
               >
-                <item.icon size={18} className="mb-0.5" />
-                <span>{item.label}</span>
+                <item.icon size={18} className="mb-0.5" strokeWidth={isActive ? 2.5 : 2} />
+                <span className="capitalize">{item.label}</span>
               </div>
             );
           })}
@@ -82,10 +82,10 @@ export default function Navbar() {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center gap-1.5 cursor-pointer group"
               >
-                <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-rose-pink/10 text-rose-pink' : 'text-dark-plum/40 group-hover:bg-base-white group-hover:text-dark-plum/80'}`}>
-                  <item.icon size={18} />
+                <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-rose-pink/10 text-rose-pink' : 'text-dark-plum/40 group-hover:text-dark-plum/60'}`}>
+                  <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
                 </div>
-                <span className={`text-[9px] font-semibold tracking-wider transition-colors capitalize ${isActive ? 'text-rose-pink' : 'text-dark-plum/40 group-hover:text-dark-plum/80'}`}>
+                <span className={`text-[9px] transition-colors capitalize ${isActive ? 'text-rose-pink font-bold' : 'text-dark-plum/40 font-medium'}`}>
                   {item.label}
                 </span>
               </div>

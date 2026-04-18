@@ -24,18 +24,18 @@ export default function PrivacyDataModal({ isOpen, onClose }) {
     const batch = writeBatch(db);
 
     try {
-      // 1. Queue deletion for 'user_profiles'
-      batch.delete(doc(db, 'user_profiles', userId));
+      // 1. Delete user profile document
+      batch.delete(doc(db, 'users', userId, 'profile', 'data'));
 
-      // 2. Fetch and queue deletion for 'health_logs'
-      const logsQuery = query(collection(db, 'health_logs'), where('userId', '==', userId));
+      // 2. Clear user daily logs
+      const logsQuery = query(collection(db, 'users', userId, 'dailyLogs'));
       const logsSnapshot = await getDocs(logsQuery);
       logsSnapshot.forEach((doc) => {
         batch.delete(doc.ref);
       });
 
-      // 3. Fetch and queue deletion for 'bookings'
-      const bookingsQuery = query(collection(db, 'bookings'), where('userId', '==', userId));
+      // 3. Clear user bookings
+      const bookingsQuery = query(collection(db, 'users', userId, 'bookings'));
       const bookingsSnapshot = await getDocs(bookingsQuery);
       bookingsSnapshot.forEach((doc) => {
         batch.delete(doc.ref);
@@ -72,7 +72,7 @@ export default function PrivacyDataModal({ isOpen, onClose }) {
       />
       
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-md bg-petal rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         <div className="bg-dark-plum p-6 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-pink flex items-center justify-center">
@@ -80,7 +80,7 @@ export default function PrivacyDataModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-lg font-semibold leading-tight">Privacy & Data</h2>
-              <p className="text-white/60 text-[11px] uppercase tracking-wider font-medium">Your data integrity</p>
+              <p className="text-white/60 text-[11px] tracking-wider font-medium">Your data integrity</p>
             </div>
           </div>
           {!showSuccess && (
@@ -135,9 +135,9 @@ export default function PrivacyDataModal({ isOpen, onClose }) {
               <div className="pt-4 border-t border-black/5">
                 <button 
                   onClick={() => setShowConfirm(true)}
-                  className="w-full text-rose-pink hover:bg-rose-pink/5 py-4 rounded-2xl text-sm font-bold uppercase tracking-widest border border-rose-pink/20 transition-all active:scale-[0.98]"
+                  className="w-full text-rose-pink hover:bg-rose-pink/5 py-4 rounded-2xl text-sm font-bold tracking-widest border border-rose-pink/20 transition-all active:scale-[0.98]"
                 >
-                  Request Data Deletion
+                  Request data deletion
                 </button>
               </div>
             </div>
@@ -168,16 +168,16 @@ export default function PrivacyDataModal({ isOpen, onClose }) {
               <div className="pt-4 grid grid-cols-2 gap-3">
                 <button 
                   onClick={() => setShowConfirm(false)}
-                  className="bg-[#FAF9F6] text-dark-plum/60 py-4 rounded-2xl text-[13px] font-bold uppercase tracking-widest hover:bg-white border border-black/5 transition-all"
+                  className="bg-petal text-dark-plum/60 py-4 rounded-2xl text-[13px] font-bold tracking-widest hover:bg-white border border-black/5 transition-all"
                 >
                   Back
                 </button>
                 <button 
                   disabled={!understandChecked || isDeleting}
                   onClick={handleDeleteData}
-                  className="bg-rose-pink text-white py-4 rounded-2xl text-[13px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#BE185D] shadow-lg shadow-rose-pink/20 disabled:opacity-30 disabled:pointer-events-none transition-all"
+                  className="bg-rose-pink text-white py-4 rounded-2xl text-[13px] font-bold tracking-widest flex items-center justify-center gap-2 hover:bg-[#BE185D] shadow-lg shadow-rose-pink/20 disabled:opacity-30 disabled:pointer-events-none transition-all"
                 >
-                  {isDeleting ? 'Wiping...' : 'Delete My Data'}
+                  {isDeleting ? 'Wiping...' : 'Delete my data'}
                 </button>
               </div>
             </div>

@@ -24,7 +24,7 @@ export default function Profile({ isOpen, onClose }) {
   useEffect(() => {
     if (!currentUser) return;
 
-    const unsubscribe = onSnapshot(doc(db, 'user_profiles', currentUser.uid), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, 'users', currentUser.uid, 'profile', 'data'), (doc) => {
       if (doc.exists()) {
         setProfileData(doc.data());
       }
@@ -68,7 +68,7 @@ export default function Profile({ isOpen, onClose }) {
       
       {/* Side Drawer Panel */}
       <div 
-        className={`fixed top-0 right-0 h-full w-full max-w-md pb-24 bg-base-white font-[Jost,sans-serif] shadow-[-10px_0_40px_rgba(0,0,0,0.08)] overflow-y-auto overscroll-contain transform-gpu [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transform transition-transform duration-300 ease-in-out z-[100] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      className={`fixed top-0 right-0 h-full w-full max-w-md pb-24 bg-petal font-[Jost,sans-serif] shadow-[-10px_0_40px_rgba(0,0,0,0.08)] overflow-y-auto overscroll-contain transform-gpu [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transform transition-transform duration-300 ease-in-out z-[100] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex items-center justify-between px-6 pt-10 pb-6">
           <button 
@@ -105,7 +105,7 @@ export default function Profile({ isOpen, onClose }) {
             ].map((stat, i) => (
               <div key={i} className="bg-white rounded-[20px] p-4 text-center shadow-sm border border-black/5 flex flex-col items-center justify-center">
                 <div className="text-2xl font-bold text-rose-pink font-[Fraunces,serif]">{stat.value}</div>
-                <div className="text-[10px] uppercase tracking-wider text-dark-plum font-medium mt-1 leading-tight">
+                <div className="text-[10px] tracking-wider text-dark-plum font-medium mt-1 leading-tight">
                   {stat.label}
                 </div>
               </div>

@@ -141,7 +141,7 @@ const Sisterhood = () => {
 
   if (activeCircle === null) {
     return (
-      <div className="min-h-screen bg-[#F2E6EC] pb-40 px-4 pt-8 max-w-2xl mx-auto animate-in fade-in duration-500">
+      <div className="min-h-screen bg-petal pb-40 px-4 pt-8 max-w-2xl mx-auto animate-in fade-in duration-500">
         <header className="mb-8">
           <h1 className="text-3xl font-medium text-dark-plum mb-2">
             The <span className="italic text-rose-pink font-[Fraunces,serif]">Sisterhood</span>
@@ -226,8 +226,8 @@ const Sisterhood = () => {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] bg-[#FAF9F6] max-w-2xl mx-auto w-full relative">
-      <div className="sticky top-0 z-50 bg-[#FAF9F6]/90 backdrop-blur-xl border-b border-black/5 px-4 py-4 flex items-center gap-4">
+    <div className="flex flex-col h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] bg-petal max-w-2xl mx-auto w-full relative">
+      <div className="sticky top-0 z-50 bg-petal/90 backdrop-blur-xl border-b border-black/5 px-4 py-4 flex items-center gap-4">
         <button 
           onClick={() => setActiveCircle(null)}
           className="bg-dark-plum/5 text-dark-plum w-10 h-10 rounded-full flex items-center justify-center hover:bg-dark-plum/10 transition-colors"
@@ -236,7 +236,7 @@ const Sisterhood = () => {
         </button>
         <div className="flex flex-col">
           <h2 className="text-[15px] font-bold text-dark-plum leading-tight">{activeCircle.name}</h2>
-          <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Live Community</span>
+          <span className="text-[10px] text-emerald-600 font-bold tracking-wider">Live community</span>
         </div>
       </div>
 
@@ -287,7 +287,7 @@ const Sisterhood = () => {
       </div>
 
       <div className="p-4 bg-white border-t border-black/5 pb-24 md:pb-6">
-        <form onSubmit={handleSendMessage} className="flex items-center gap-2 bg-[#FAF9F6] border border-black/10 rounded-full p-2 pr-2">
+        <form onSubmit={handleSendMessage} className="flex items-center gap-2 bg-petal border border-black/10 rounded-full p-2 pr-2">
           <input 
             type="text"
             value={newMessage}

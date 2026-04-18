@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { updateProfile } from 'firebase/auth';
+import { db } from '../firebase/firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -25,6 +27,13 @@ export default function Auth() {
       } else {
         const userCred = await signup(email, password);
         await updateProfile(userCred.user, { displayName: name });
+        // Create initial user profile in the correct isolated path
+        await setDoc(doc(db, 'users', userCred.user.uid, 'profile', 'data'), {
+          name,
+          email,
+          createdAt: new Date(),
+          onboardingComplete: false
+        });
       }
       navigate('/dashboard');
     } catch (err) {
@@ -35,7 +44,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#F2E6EC]">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-petal">
       
       <div className="w-full max-w-md bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 p-8 md:p-10">
         
@@ -66,7 +75,7 @@ export default function Auth() {
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <div>
-              <label className="text-[10px] font-semibold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">Full Name</label>
+              <label className="text-[10px] font-semibold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">Full name</label>
               <input 
                 type="text" 
                 value={name}
@@ -78,7 +87,7 @@ export default function Auth() {
           )}
           
           <div>
-            <label className="text-[10px] font-semibold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">Email Address</label>
+            <label className="text-[10px] font-semibold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">Email address</label>
             <input 
               type="email" 
               required
@@ -90,7 +99,7 @@ export default function Auth() {
           </div>
           
           <div>
-            <label className="text-[10px] font-semibold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">Password</label>
+            <label className="text-[10px] font-semibold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">Password</label>
             <input 
               type="password" 
               required

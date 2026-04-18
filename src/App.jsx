@@ -16,7 +16,7 @@ import { Outlet } from 'react-router-dom';
 
 function AuthenticatedLayout() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF9F6]">
+    <div className="flex flex-col min-h-screen bg-petal">
       <Navbar />
       <div className="flex-1 flex flex-col items-stretch [&>div]:flex-1">
         <Outlet />

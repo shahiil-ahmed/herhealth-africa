@@ -134,7 +134,7 @@ export default function Discover() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2E6EC] pb-24 px-4 pt-6">
+    <div className="min-h-screen bg-petal pb-24 px-4 pt-6">
       <div className="max-w-6xl mx-auto px-2 md:px-0">
         
         {/* Header Section */}
@@ -249,7 +249,7 @@ export default function Discover() {
         <div className="mt-16 bg-white rounded-[32px] shadow-sm border border-black/5 relative overflow-hidden text-center md:text-left transition-all duration-500 min-h-[200px]">
           {/* Success Banner */}
           <div 
-            className={`absolute top-0 left-0 right-0 w-full bg-emerald-500 text-white text-[10px] md:text-xs py-4 px-6 font-bold uppercase tracking-[2px] transition-all duration-500 z-20 rounded-t-[32px] flex items-center justify-center md:justify-start ${
+            className={`absolute top-0 left-0 right-0 w-full bg-emerald-500 text-white text-[10px] md:text-xs py-4 px-6 font-bold tracking-[2px] transition-all duration-500 z-20 rounded-t-[32px] flex items-center justify-center md:justify-start ${
               isNominationSubmitted ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
             }`}
           >
@@ -289,7 +289,7 @@ export default function Discover() {
                 <button 
                   disabled={isSubmitting}
                   type="submit"
-                  className="w-full bg-rose-pink text-white rounded-xl px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#BE185D] transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                  className="w-full bg-rose-pink text-white rounded-xl px-6 py-4 text-sm font-bold tracking-widest hover:bg-[#BE185D] transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
                 >
                   {isSubmitting ? 'Submitting...' : (
                     <>

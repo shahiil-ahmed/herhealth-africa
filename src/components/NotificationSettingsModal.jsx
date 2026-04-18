@@ -40,7 +40,7 @@ export default function NotificationSettingsModal({ isOpen, onClose }) {
 
   const fetchPreferences = async () => {
     try {
-      const userDoc = await getDoc(doc(db, 'user_profiles', auth.currentUser.uid));
+      const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'));
       if (userDoc.exists() && userDoc.data().notifications) {
         setPreferences(userDoc.data().notifications);
       } else {
@@ -61,7 +61,7 @@ export default function NotificationSettingsModal({ isOpen, onClose }) {
     setIsSaving(true);
     
     try {
-      await setDoc(doc(db, 'user_profiles', auth.currentUser.uid), {
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
         notifications: preferences,
         updatedAt: new Date()
       }, { merge: true });
@@ -89,15 +89,15 @@ export default function NotificationSettingsModal({ isOpen, onClose }) {
       />
       
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-md bg-petal rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         <div className="bg-dark-plum p-6 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-pink flex items-center justify-center">
               <Bell size={20} />
             </div>
             <div>
-              <h2 className="text-lg font-semibold leading-tight">Notification Preferences</h2>
-              <p className="text-white/60 text-[11px] uppercase tracking-wider font-medium">Customize your alerts</p>
+              <h2 className="text-lg font-semibold leading-tight">Notification preferences</h2>
+              <p className="text-white/60 text-[11px] tracking-wider font-medium">Customize your alerts</p>
             </div>
           </div>
           <button 
@@ -134,7 +134,7 @@ export default function NotificationSettingsModal({ isOpen, onClose }) {
             <button 
               disabled={isSaving || showSuccess}
               onClick={handleSave}
-              className={`w-full rounded-2xl py-4 text-sm font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 group shadow-lg ${
+              className={`w-full rounded-2xl py-4 text-sm font-bold tracking-widest transition-all flex items-center justify-center gap-2 group shadow-lg ${
                 showSuccess 
                 ? 'bg-emerald-500 text-white shadow-emerald-500/20' 
                 : 'bg-rose-pink text-white shadow-rose-pink/20 hover:bg-[#BE185D] disabled:opacity-50'
@@ -143,10 +143,10 @@ export default function NotificationSettingsModal({ isOpen, onClose }) {
               {showSuccess ? (
                 <>
                   <Check size={18} className="animate-in zoom-in" />
-                  Preferences Saved
+                  Preferences saved
                 </>
               ) : (
-                isSaving ? 'Saving...' : 'Save Preferences'
+                isSaving ? 'Saving...' : 'Save preferences'
               )}
             </button>
           </div>

@@ -76,7 +76,7 @@ export default function Tracker() {
   useEffect(() => {
     if (!auth.currentUser) return;
     
-    const unsubscribe = onSnapshot(doc(db, 'user_profiles', auth.currentUser.uid), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), (doc) => {
       if (doc.exists()) {
         setUserProfile(doc.data());
       }
@@ -159,7 +159,7 @@ export default function Tracker() {
     
     setIsSubmitting(true);
     try {
-      await setDoc(doc(db, 'user_profiles', auth.currentUser.uid), {
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
         lastPeriodStart: Timestamp.fromDate(new Date(lastPeriodDate)),
         updatedAt: serverTimestamp()
       }, { merge: true });
@@ -226,7 +226,7 @@ export default function Tracker() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F2E6EC]">
+    <div className="flex flex-col min-h-screen bg-petal">
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 md:px-8 lg:px-10 pt-8 pb-[90px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <div className="max-w-6xl mx-auto w-full">
@@ -250,7 +250,7 @@ export default function Tracker() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-[#D4688A] rounded-xl text-white flex flex-col items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(212,104,138,0.25)]">
-                    <span className="text-[9px] uppercase font-bold tracking-wider opacity-90 mt-0.5">Day</span>
+                    <span className="text-[9px] font-bold tracking-wider opacity-90 mt-0.5">Day</span>
                     <span className="text-xl font-bold leading-none mt-0.5">
                       {typeof cycleDay === 'number' ? cycleDay : '-'}
                     </span>
@@ -274,10 +274,10 @@ export default function Tracker() {
                 </div>
                 <div className="flex gap-3 mt-6">
                   <button onClick={() => setModalMode('log')} className="flex-1 bg-[#FFF5F8] text-[#D4688A] font-medium py-3 rounded-xl flex items-center justify-center text-[13px] md:text-[14px] hover:bg-[#FBCFE8]/50 transition border border-[#D4688A]/10">
-                    <span className="mr-2 text-base">📅</span> Log Period Start
+                    <span className="mr-2 text-base">📅</span> Log period start
                   </button>
                   <button onClick={() => setModalMode('edit')} className="flex-1 bg-[#FFF5F8] text-[#D4688A] font-medium py-3 rounded-xl flex items-center justify-center text-[13px] md:text-[14px] hover:bg-[#FBCFE8]/50 transition border border-[#D4688A]/10">
-                    <span className="mr-2 text-base">⚙️</span> Edit Cycle
+                    <span className="mr-2 text-base">⚙️</span> Edit cycle
                   </button>
                 </div>
               </div>
@@ -479,8 +479,8 @@ export default function Tracker() {
             </p>
 
             <div className="mb-4">
-              <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                LAST PERIOD START DATE
+              <label className="text-[10px] font-bold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">
+                Last period start date
               </label>
               <input 
                 type="date" 
@@ -492,8 +492,8 @@ export default function Tracker() {
             
             <div className="flex gap-4 mb-5">
               <div className="flex-1">
-                <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                  AVG CYCLE (DAYS)
+                <label className="text-[10px] font-bold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">
+                  Avg cycle (days)
                 </label>
                 <input 
                   type="number" 
@@ -503,8 +503,8 @@ export default function Tracker() {
                 />
               </div>
               <div className="flex-1">
-                <label className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/60 mb-2 block">
-                  AVG PERIOD (DAYS)
+                <label className="text-[10px] font-bold tracking-[1.2px] text-[#2D1B2E]/60 mb-2 block">
+                  Avg period (days)
                 </label>
                 <input 
                   type="number" 

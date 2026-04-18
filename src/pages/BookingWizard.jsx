@@ -56,7 +56,7 @@ export default function BookingWizard() {
     setError("");
 
     try {
-      const bookingsRef = collection(db, "bookings");
+      const bookingsRef = collection(db, "users", auth.currentUser.uid, "bookings");
       await addDoc(bookingsRef, {
         ...bookingData,
         userId: auth.currentUser.uid,
@@ -86,7 +86,7 @@ export default function BookingWizard() {
 
   return (
     /* Outer background filling the screen */
-    <div className="min-h-screen bg-[#FAF9F6] px-4 pt-6 pb-32 md:p-8 lg:p-12">
+    <div className="min-h-screen bg-petal px-4 pt-6 pb-32 md:p-8 lg:p-12">
       {/* Main Split-Card Container */}
       <div className="w-full max-w-6xl mx-auto bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 overflow-hidden flex flex-col lg:flex-row">
         {/* ========================================= */}
@@ -175,8 +175,8 @@ export default function BookingWizard() {
                         <span className="text-[#D4688A] font-bold text-lg">
                           ₦35,000
                         </span>
-                        <span className="bg-[#D4688A] text-white text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
-                          Most Popular
+                        <span className="bg-[#D4688A] text-white text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold">
+                          Most popular
                         </span>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function BookingWizard() {
                         <span className="font-bold text-[#2D1B2E] text-lg group-hover:text-[#D4688A] transition-colors">
                           ₦75,000
                         </span>
-                        <span className="bg-[#E8EFE6] text-[#4A6741] text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">
+                        <span className="bg-[#E8EFE6] text-[#4A6741] text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold">
                           Save ₦30k
                         </span>
                       </div>

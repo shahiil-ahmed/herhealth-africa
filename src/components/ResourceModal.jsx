@@ -39,7 +39,7 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
 
       {/* Modal Sheet */}
       <div 
-        className={`relative z-100 w-full max-w-2xl bg-[#FEF2F4] rounded-t-[32px] shadow-2xl transition-transform duration-300 transform flex flex-col max-h-[85vh] ${
+        className={`relative z-100 w-full max-w-2xl bg-petal rounded-t-[32px] shadow-2xl transition-transform duration-300 transform flex flex-col max-h-[85vh] ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -81,12 +81,12 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
         </div>
 
         {/* Footer with CTA */}
-        <div className="p-6 bg-gradient-to-t from-[#FEF2F4] via-[#FEF2F4] to-transparent">
+        <div className="p-6 bg-gradient-to-t from-petal via-petal to-transparent">
           <button 
             onClick={onClose}
-            className="w-full bg-dark-plum text-white rounded-2xl py-4 font-bold uppercase tracking-widest hover:bg-[#1A101B] transition-all shadow-lg active:scale-[0.98]"
+            className="w-full bg-dark-plum text-white rounded-2xl py-4 font-bold tracking-widest hover:bg-[#1A101B] transition-all shadow-lg active:scale-[0.98]"
           >
-            Got it! Back to Dashboard
+            Got it! Back to dashboard
           </button>
         </div>
       </div>

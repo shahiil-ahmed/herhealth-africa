@@ -54,7 +54,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
 
   const fetchCycleSettings = async () => {
     try {
-      const userDoc = await getDoc(doc(db, 'user_profiles', auth.currentUser.uid));
+      const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'));
       if (userDoc.exists()) {
         const data = userDoc.data();
         setPeriodLength(data.periodLength || 5);
@@ -70,7 +70,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
     setIsSaving(true);
     
     try {
-      await setDoc(doc(db, 'user_profiles', auth.currentUser.uid), {
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
         periodLength: Math.round(periodLength),
         cycleLength: Math.round(cycleLength),
         updatedAt: new Date()
@@ -99,7 +99,7 @@ export default function CycleSettingsModal({ isOpen, onClose }) {
       />
       
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-md bg-petal rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         <div className="bg-dark-plum p-6 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-pink flex items-center justify-center">

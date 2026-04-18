@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const WHATSAPP_NUMBER = "2348000000000"; // REPLACE_WITH_CLIENT_NUMBER
+const WHATSAPP_NUMBER = "+2349029910958";
 
 export default function UserBookings() {
   const [bookings, setBookings] = useState([]);
@@ -24,10 +24,7 @@ export default function UserBookings() {
     if (!currentUser) return;
 
     setLoading(true);
-    const q = query(
-      collection(db, "bookings"),
-      where("userId", "==", currentUser.uid),
-    );
+    const q = query(collection(db, "users", currentUser.uid, "bookings"));
 
     const unsubscribe = onSnapshot(
       q,
@@ -147,11 +144,10 @@ export default function UserBookings() {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <div className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/40 mb-1">
-                      {(booking.package ||
+                    <div className="text-[10px] font-bold tracking-[1.2px] text-[#2D1B2E]/40 mb-1">
+                      {booking.package ||
                         booking.packageType ||
-                        "NAVIGATION SESSION"
-                      ).toUpperCase()}
+                        "Navigation session"}
                     </div>
                     <h3 className="text-[17px] font-semibold text-[#2D1B2E]">
                       {booking.userName ||
@@ -161,7 +157,7 @@ export default function UserBookings() {
                     </h3>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
+                    className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider border ${
                       booking.status?.toLowerCase() === "confirmed"
                         ? "bg-[#D4688A]/10 text-[#D4688A] border-[#D4688A]/20"
                         : "bg-[#5A8A6A]/10 text-[#5A8A6A] border-[#5A8A6A]/20"
@@ -195,7 +191,7 @@ export default function UserBookings() {
                         className="text-[#D4688A] shrink-0"
                       />
                       <div className="flex flex-col">
-                        <span className="text-[11px] font-bold text-[#D4688A] uppercase tracking-wider">
+                        <span className="text-[11px] font-bold text-[#D4688A] tracking-wider">
                           Reach out on WhatsApp
                         </span>
                         <span className="text-[10px] text-[#2D1B2E]/60 italic">
@@ -227,11 +223,10 @@ export default function UserBookings() {
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <div className="text-[10px] font-bold tracking-[1.2px] uppercase text-[#2D1B2E]/40 mb-1">
-                    {(booking.package ||
+                  <div className="text-[10px] font-bold tracking-[1.2px] text-[#2D1B2E]/40 mb-1">
+                    {booking.package ||
                       booking.packageType ||
-                      "NAVIGATION SESSION"
-                    ).toUpperCase()}
+                      "Navigation session"}
                   </div>
                   <h3 className="text-[17px] font-semibold text-[#2D1B2E]">
                     {booking.userName ||
@@ -241,7 +236,7 @@ export default function UserBookings() {
                   </h3>
                 </div>
                 <span
-                  className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
+                  className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider border ${
                     booking.status?.toLowerCase() === "completed"
                       ? "bg-[#5A8A6A]/5 text-[#5A8A6A]/60 border-[#5A8A6A]/10"
                       : "bg-[#D4688A]/5 text-[#D4688A]/60 border-[#D4688A]/10 opacity-60"

@@ -9,47 +9,47 @@ const resources = [
   {
     icon: Video,
     title: "What Are Fibroids? Explained Simply",
-    subtitle: "WHITEBOARD VIDEO",
+    subtitle: "Whiteboard video",
     color: "text-[#D4688A]",
     bg: "bg-[#D4688A]/10",
     content: "Text coming soon..."
   },
   {
     icon: BookOpen,
-    title: "Endometriosis: The 7-Year Wait",
-    subtitle: "GUIDE",
+    title: "Endometriosis: The 7-year wait",
+    subtitle: "Guide",
     color: "text-[#8B5CF6]",
     bg: "bg-[#8B5CF6]/10",
     content: "Text coming soon..."
   },
   {
     icon: CheckSquare,
-    title: "Doctor Visit Prep Checklist",
-    subtitle: "FREE TOOL",
+    title: "Doctor visit prep checklist",
+    subtitle: "Free tool",
     color: "text-[#065F46]",
     bg: "bg-[#065F46]/10",
     content: "Text coming soon..."
   },
   {
     icon: Stethoscope,
-    title: "Questions to Ask Your Gynaecologist",
-    subtitle: "GUIDE",
+    title: "Questions to ask your gynaecologist",
+    subtitle: "Guide",
     color: "text-[#D4688A]",
     bg: "bg-[#D4688A]/10",
     content: "Text coming soon..."
   },
   {
     icon: Leaf,
-    title: "Anti-Inflammatory Food Guide for Nigerian Women",
-    subtitle: "NUTRITION",
+    title: "Anti-inflammatory food guide for Nigerian women",
+    subtitle: "Nutrition",
     color: "text-[#065F46]",
     bg: "bg-[#065F46]/10",
     content: "Text coming soon..."
   },
   {
     icon: Video,
-    title: "Cycle Charting: A Practical Guide",
-    subtitle: "WHITEBOARD VIDEO",
+    title: "Cycle charting: A practical guide",
+    subtitle: "Whiteboard video",
     color: "text-[#8B5CF6]",
     bg: "bg-[#8B5CF6]/10",
     content: "Text coming soon..."
@@ -67,10 +67,10 @@ export default function Dashboard() {
     day: 8,
   });
 
-  // Get first name or default to 'SISTER', all caps
+  // Get first name or default to 'Sister'
   const userName = currentUser?.displayName
-    ? currentUser.displayName.split(" ")[0].toUpperCase()
-    : "SISTER";
+    ? currentUser.displayName.split(" ")[0]
+    : "Sister";
 
   const handleResourceClick = (resource) => {
     console.log("📍 Dashboard Card Clicked:", resource.title);
@@ -91,7 +91,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col h-full flex-1 bg-[#F2E6EC]">
+    <div className="flex flex-col h-full flex-1 bg-petal">
       {/* Ensure scrollbar-hide if we add a global class, or just normal overflow */}
       <div className="flex-1 overflow-y-auto pb-24 md:pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {/* ... (rest of the sections remain same until Resources) */}
@@ -106,8 +106,8 @@ export default function Dashboard() {
 
           <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-12">
             <div className="flex justify-between items-start relative z-20">
-              <div className="text-[11px] tracking-[2px] uppercase text-white/35 mb-3">
-                WELCOME BACK, {userName} ✦
+              <div className="text-[11px] tracking-[2px] text-white/35 mb-3">
+                Welcome back, {userName} ✦
               </div>
             </div>
 
@@ -303,7 +303,7 @@ export default function Dashboard() {
                     {resource.title}
                   </div>
                 </div>
-                <div className="text-gray-400 uppercase text-[10px] tracking-wider mt-2 font-semibold">
+                <div className="text-gray-400 text-[10px] tracking-wider mt-2 font-semibold">
                   {resource.subtitle}
                 </div>
               </div>

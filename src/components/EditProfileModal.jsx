@@ -18,7 +18,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
   const fetchUserData = async () => {
     try {
-      const userDoc = await getDoc(doc(db, 'user_profiles', auth.currentUser.uid));
+      const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'));
       if (userDoc.exists()) {
         const data = userDoc.data();
         setFullName(data.fullName || auth.currentUser.displayName || '');
@@ -42,8 +42,8 @@ export default function EditProfileModal({ isOpen, onClose }) {
     setError('');
 
     try {
-      // 1. Update Firestore (using setDoc with merge: true to handle missing docs)
-      await setDoc(doc(db, 'user_profiles', auth.currentUser.uid), {
+      // 1. Update Firestore
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
         fullName: fullName.trim(),
         healthGoals: healthGoals.trim(),
         updatedAt: new Date()
@@ -76,15 +76,15 @@ export default function EditProfileModal({ isOpen, onClose }) {
       />
       
       {/* Modal Content */}
-      <div className="relative w-full max-w-lg bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-lg bg-petal rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         <div className="bg-dark-plum p-6 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-pink flex items-center justify-center">
               <User size={20} />
             </div>
             <div>
-              <h2 className="text-lg font-semibold leading-tight">Edit Profile</h2>
-              <p className="text-white/60 text-[11px] uppercase tracking-wider font-medium">Update your details</p>
+              <h2 className="text-lg font-semibold leading-tight">Edit profile</h2>
+              <p className="text-white/60 text-[11px] tracking-wider font-medium">Update your details</p>
             </div>
           </div>
           <button 
@@ -104,7 +104,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[11px] uppercase tracking-widest text-dark-plum/60 font-bold ml-1">Full Name</label>
+              <label className="text-[11px] tracking-widest text-dark-plum/60 font-bold ml-1">Full name</label>
               <div className="relative">
                 <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-plum/30" />
                 <input 
@@ -119,7 +119,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
             </div>
 
             <div className="space-y-1.5 opacity-60">
-              <label className="text-[11px] uppercase tracking-widest text-dark-plum/60 font-bold ml-1">Email (Read-only)</label>
+              <label className="text-[11px] tracking-widest text-dark-plum/60 font-bold ml-1">Email address (Read-only)</label>
               <div className="relative">
                 <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-plum/30" />
                 <input 
@@ -132,7 +132,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[11px] uppercase tracking-widest text-dark-plum/60 font-bold ml-1">Health Goals</label>
+              <label className="text-[11px] tracking-widest text-dark-plum/60 font-bold ml-1">Health goals</label>
               <div className="relative">
                 <Sparkles size={18} className="absolute left-4 top-4 text-dark-plum/30" />
                 <textarea 
@@ -149,10 +149,10 @@ export default function EditProfileModal({ isOpen, onClose }) {
             <button 
               disabled={isSaving}
               type="submit"
-              className="w-full bg-rose-pink text-white rounded-2xl py-4 text-sm font-bold uppercase tracking-widest shadow-lg shadow-rose-pink/20 hover:bg-[#BE185D] transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
+              className="w-full bg-rose-pink text-white rounded-2xl py-4 text-sm font-bold tracking-widest shadow-lg shadow-rose-pink/20 hover:bg-[#BE185D] transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
             >
               <Save size={18} className="group-hover:scale-110 transition-transform" />
-              {isSaving ? 'Saving Changes...' : 'Save Changes'}
+              {isSaving ? 'Saving changes...' : 'Save changes'}
             </button>
           </div>
         </form>

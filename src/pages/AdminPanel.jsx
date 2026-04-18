@@ -10,7 +10,8 @@ import {
   updateDoc, 
   deleteDoc, 
   addDoc, 
-  serverTimestamp 
+  serverTimestamp,
+  collectionGroup 
 } from 'firebase/firestore';
 
 export default function AdminPanel() {
@@ -27,9 +28,9 @@ export default function AdminPanel() {
     category: 'Gynaecology'
   });
 
-  // Fetch Bookings Real-time
+  // Fetch Bookings Real-time (using collectionGroup to see all user bookings)
   useEffect(() => {
-    const q = query(collection(db, 'bookings'), orderBy('createdAt', 'desc'));
+    const q = query(collectionGroup(db, 'bookings'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const bookingsData = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -156,10 +157,10 @@ export default function AdminPanel() {
   ];
 
   return (
-    <div className="flex h-screen bg-[#FAF9F6] font-[Jost,sans-serif] text-[#2D1B2E]">
+    <div className="flex h-screen bg-petal font-[Nunito,sans-serif] text-[#2D1B2E]">
       <div className="w-64 bg-white border-r border-black/5 flex flex-col">
         <div className="p-6 border-b border-black/5 flex items-center gap-2">
-          <h1 className="text-xl font-bold">Her<span className="italic font-[Fraunces,serif] font-normal">Health</span> Admin</h1>
+          <h1 className="text-xl font-bold">Her<span className="italic font-[Playfair Display] font-normal">Health</span> admin</h1>
         </div>
         <nav className="flex-1 py-6">
           <div className="flex flex-col gap-1">
@@ -169,7 +170,7 @@ export default function AdminPanel() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-3 px-6 py-3 text-sm transition-all ${
                   activeTab === tab.id
-                    ? 'bg-[#FDE8EE] text-[#D4688A] font-medium border-r-4 border-[#D4688A]'
+                    ? 'bg-[#D4688A]/10 text-[#D4688A] font-medium border-r-4 border-[#D4688A]'
                     : 'text-[#2D1B2E]/60 hover:bg-gray-50'
                 }`}
               >
@@ -245,9 +246,9 @@ export default function AdminPanel() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Name</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Email</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Date Joined</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Name</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Email</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Date joined</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -275,12 +276,12 @@ export default function AdminPanel() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Patient Name</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Package</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Pref. Time</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Booked On</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Status</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Actions</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Patient name</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Package</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Pref. time</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Booked on</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Status</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -380,10 +381,10 @@ export default function AdminPanel() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Doctor Name</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Clinic/Hospital</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Submitted</th>
-                      <th className="text-xs font-semibold uppercase text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50 text-right">Actions</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Doctor name</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Clinic/hospital</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50">Submitted</th>
+                      <th className="text-xs font-semibold text-[#2D1B2E]/50 border-b border-black/5 px-6 py-4 bg-gray-50/50 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
