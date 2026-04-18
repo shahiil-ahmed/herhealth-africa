@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Profile from '../pages/Profile';
+import { Home, Calendar, Activity, Search, Heart } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -14,11 +15,11 @@ export default function Navbar() {
   const userInitial = userName[0]?.toUpperCase() || 'S';
 
   const navItems = [
-    { icon: '🏠', label: 'HOME', path: '/dashboard' },
-    { icon: '📋', label: 'BOOK', path: '/booking' },
-    { icon: '📈', label: 'TRACK', path: '/tracker' },
-    { icon: '🏥', label: 'DISCOVER', path: '/discover' },
-    { icon: '💜', label: 'SISTERHOOD', path: '/sisterhood' },
+    { icon: Home, label: 'home', path: '/dashboard' },
+    { icon: Calendar, label: 'book', path: '/booking' },
+    { icon: Activity, label: 'track', path: '/tracker' },
+    { icon: Search, label: 'discover', path: '/discover' },
+    { icon: Heart, label: 'sisterhood', path: '/sisterhood' },
   ];
 
   return (
@@ -37,11 +38,11 @@ export default function Navbar() {
               <div 
                 key={i} 
                 onClick={() => navigate(item.path)}
-                className={`flex items-center gap-2 cursor-pointer transition-colors font-[Jost,sans-serif] font-semibold tracking-wider text-[13px] ${
+                className={`flex items-center gap-2 cursor-pointer transition-colors font-[Jost,sans-serif] font-semibold tracking-wider text-[13px] capitalize ${
                   isActive ? 'text-rose-pink' : 'text-dark-plum/60 hover:text-dark-plum'
                 }`}
               >
-                <span className="text-[18px] leading-none mb-0.5">{item.icon}</span>
+                <item.icon size={18} className="mb-0.5" />
                 <span>{item.label}</span>
               </div>
             );
@@ -81,10 +82,10 @@ export default function Navbar() {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center gap-1.5 cursor-pointer group"
               >
-                <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-[#E8DCE5] text-dark-plum' : 'text-dark-plum/40 group-hover:bg-base-white group-hover:text-dark-plum/80'}`}>
-                  <span className="text-[18px] leading-none">{item.icon}</span>
+                <div className={`w-12 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-rose-pink/10 text-rose-pink' : 'text-dark-plum/40 group-hover:bg-base-white group-hover:text-dark-plum/80'}`}>
+                  <item.icon size={18} />
                 </div>
-                <span className={`text-[9px] font-semibold tracking-wider transition-colors ${isActive ? 'text-dark-plum' : 'text-dark-plum/40 group-hover:text-dark-plum/80'}`}>
+                <span className={`text-[9px] font-semibold tracking-wider transition-colors capitalize ${isActive ? 'text-rose-pink' : 'text-dark-plum/40 group-hover:text-dark-plum/80'}`}>
                   {item.label}
                 </span>
               </div>

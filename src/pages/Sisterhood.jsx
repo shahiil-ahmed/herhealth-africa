@@ -141,7 +141,7 @@ const Sisterhood = () => {
 
   if (activeCircle === null) {
     return (
-      <div className="min-h-screen bg-[#F2E6EC] pb-32 px-4 pt-8 max-w-2xl mx-auto animate-in fade-in duration-500">
+      <div className="min-h-screen bg-[#F2E6EC] pb-40 px-4 pt-8 max-w-2xl mx-auto animate-in fade-in duration-500">
         <header className="mb-8">
           <h1 className="text-3xl font-medium text-dark-plum mb-2">
             The <span className="italic text-rose-pink font-[Fraunces,serif]">Sisterhood</span>
@@ -162,6 +162,7 @@ const Sisterhood = () => {
                   <Icon size={28} strokeWidth={1.5} />
                 </div>
                 <span className="font-bold text-dark-plum text-[13px] tracking-tight leading-tight">{circle.name}</span>
+                <p className="text-[10px] text-dark-plum/40 mt-1">0 women · Be the first to post</p>
               </div>
             );
           })}
@@ -170,7 +171,7 @@ const Sisterhood = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-[11px] font-bold tracking-[2px] text-dark-plum/40 flex items-center gap-2">
-              <Trophy size={14} className="text-rose-pink" /> Community wins
+              <Trophy size={14} className="text-rose-pink" /> Community wins 🏆
             </h2>
           </div>
 
