@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send, PlayCircle, HelpCircle, FileText, CheckSquare, ChevronRight } from 'lucide-react';
+import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send, PlayCircle, HelpCircle, FileText, CheckSquare, ChevronRight, Stethoscope } from 'lucide-react';
 import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import ResourceModal from '../components/ResourceModal';
@@ -58,14 +58,14 @@ const categories = [
 ];
 
 const SpecialistCard = ({ name, specialty, location }) => (
-  <div className="bg-white rounded-[24px] p-5 shadow-sm border border-black/5 flex gap-4 items-start hover:shadow-md transition-all group animate-in fade-in zoom-in-95 duration-300">
+  <div className="bg-white rounded-[24px] p-5 shadow-sm border border-[#FFE8EF] flex gap-4 items-start hover:shadow-md transition-all group animate-in fade-in zoom-in-95 duration-300">
     <div className="w-12 h-12 rounded-2xl bg-rose-pink flex items-center justify-center text-white font-semibold text-lg shrink-0 group-hover:scale-110 transition-transform">
-      {name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+      <Stethoscope size={24} strokeWidth={1.5} />
     </div>
     <div className="flex-1">
       <h3 className="font-semibold text-dark-plum text-[15px]">{name}</h3>
-      <p className="text-xs text-rose-pink font-bold mt-0.5 uppercase tracking-wide">{specialty}</p>
-      <div className="flex items-center gap-1.5 mt-3 text-dark-plum/40 text-[10px] font-bold uppercase tracking-wider">
+      <p className="text-xs text-rose-pink font-bold mt-0.5 tracking-wide">{specialty}</p>
+      <div className="flex items-center gap-1.5 mt-3 text-dark-plum/40 text-[10px] font-bold tracking-wider">
         <MapPin size={12} className="text-rose-pink/50" /> {location}
       </div>
     </div>
@@ -191,18 +191,18 @@ export default function Discover() {
 
         {/* Directory & Filters Section */}
         <div className="flex flex-col items-start mt-20 mb-10 px-4 md:px-0">
-          <h2 className="text-[11px] font-bold tracking-[2px] uppercase text-dark-plum/60 mb-6">
-            Specialist Directory
+          <h2 className="text-[11px] font-bold tracking-[2px] text-dark-plum/60 mb-6 px-1">
+            Specialist directory
           </h2>
           
-          <div className="flex flex-nowrap overflow-x-auto justify-start gap-3 w-full pb-4 scrollbar-hide [&::-webkit-scrollbar]:hidden px-2 md:px-0">
+          <div className="flex flex-nowrap overflow-x-auto justify-start gap-3 w-full pb-4 scrollbar-hide [&::-webkit-scrollbar]:hidden px-1">
             {['All', 'Lagos', 'Abuja', 'Online'].map(loc => (
               <button
                 key={loc}
                 onClick={() => setActiveLocation(loc)}
-                className={`rounded-full px-6 py-2.5 text-[12px] font-bold tracking-wide uppercase transition-all whitespace-nowrap ${
+                className={`rounded-full px-6 py-2.5 text-[12px] font-bold tracking-wide transition-all whitespace-nowrap ${
                   activeLocation === loc 
-                    ? 'bg-dark-plum text-white shadow-md' 
+                    ? 'bg-rose-pink text-white shadow-md' 
                     : 'bg-white/50 border border-black/5 text-dark-plum/60 hover:bg-white hover:text-dark-plum'
                 }`}
               >
@@ -227,17 +227,17 @@ export default function Discover() {
             }
 
             return (
-              <div key={i} className="bg-white/40 backdrop-blur-sm rounded-[24px] p-5 border border-dashed border-rose-pink/20 flex gap-4 items-start group hover:bg-white/60 transition-colors min-h-[160px]">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 grayscale opacity-50 ${cat.iconBg}`}>
-                  {cat.icon}
+              <div key={i} className="bg-white/40 backdrop-blur-sm rounded-[24px] p-5 border border-[#FFE8EF] flex gap-4 items-start group hover:bg-white/60 transition-colors min-h-[160px]">
+                <div className="w-12 h-12 rounded-2xl bg-rose-pink flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                  <Stethoscope size={24} strokeWidth={1.5} />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-dark-plum opacity-60 text-[15px]">{cat.name}</h3>
-                  <p className="text-[11px] text-dark-plum/40 mt-1.5 leading-relaxed italic">
-                    Vetting top specialists in this field for {activeLocation === 'All' ? 'Nigeria' : activeLocation}...
+                  <p className="text-[11px] text-dark-plum/40 mt-1.5 leading-relaxed">
+                    We are personally vetting every specialist before they appear here.
                   </p>
-                  <div className="bg-rose-pink/5 text-rose-pink text-[9px] px-2 py-1 rounded-md font-bold uppercase tracking-widest flex items-center gap-1.5 mt-3 w-fit border border-rose-pink/10">
-                    <Clock size={10} /> Vetting
+                  <div className="bg-rose-pink/5 text-rose-pink text-[9px] px-2 py-1 rounded-md font-bold tracking-widest flex items-center gap-1.5 mt-3 w-fit border border-rose-pink/10">
+                    <span>⏳ Vetting in progress</span>
                   </div>
                 </div>
               </div>
