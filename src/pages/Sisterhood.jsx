@@ -23,10 +23,10 @@ const Sisterhood = () => {
   const messagesEndRef = useRef(null);
 
   const circles = [
-    { id: 'anti-inflammatory', name: 'Anti-Inflammatory Living', icon: Leaf, bg: 'bg-emerald-100/50', color: 'text-emerald-700' },
-    { id: 'movement', name: 'Movement and Energy', icon: Activity, bg: 'bg-orange-100/50', color: 'text-orange-700' },
-    { id: 'rest', name: 'Rest and Stress', icon: Moon, bg: 'bg-purple-100/50', color: 'text-purple-700' },
-    { id: 'cycle', name: 'Cycle Awareness', icon: RefreshCw, bg: 'bg-pink-100/50', color: 'text-pink-700' }
+    { id: 'anti-inflammatory', name: 'Anti-inflammatory living', icon: Leaf, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'fatigue', name: 'Energy and fatigue', icon: Activity, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'rest', name: 'Rest and stress', icon: Moon, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'cycle', name: 'Cycle awareness', icon: RefreshCw, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' }
   ];
 
   const getUserInitial = () => {
@@ -156,12 +156,12 @@ const Sisterhood = () => {
               <div 
                 key={circle.id}
                 onClick={() => setActiveCircle(circle)}
-                className="bg-white rounded-[28px] p-6 shadow-sm border border-black/5 flex flex-col items-center text-center cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all active:scale-95 group"
+                className="bg-white rounded-[28px] p-6 shadow-sm border border-black/5 flex flex-col items-center text-center cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all active:scale-95 group"
               >
                 <div className={`w-14 h-14 rounded-2xl ${circle.bg} ${circle.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                   <Icon size={28} strokeWidth={1.5} />
                 </div>
-                <span className="font-bold text-dark-plum text-xs tracking-tight leading-tight">{circle.name}</span>
+                <span className="font-bold text-dark-plum text-[13px] tracking-tight leading-tight">{circle.name}</span>
               </div>
             );
           })}
@@ -169,8 +169,8 @@ const Sisterhood = () => {
 
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-[11px] font-bold tracking-[2px] uppercase text-dark-plum/40 flex items-center gap-2">
-              <Trophy size={14} className="text-rose-pink" /> Community Wins
+            <h2 className="text-[11px] font-bold tracking-[2px] text-dark-plum/40 flex items-center gap-2">
+              <Trophy size={14} className="text-rose-pink" /> Community wins
             </h2>
           </div>
 
