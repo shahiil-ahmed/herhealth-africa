@@ -73,7 +73,6 @@ const SpecialistCard = ({ name, specialty, location }) => (
 );
 
 export default function Discover() {
-  const [activeLocation, setActiveLocation] = useState('All');
   const [specialists, setSpecialists] = useState([]);
   const [isNominationSubmitted, setIsNominationSubmitted] = useState(false);
   const [nomination, setNomination] = useState({ doctorName: '', clinicName: '' });
@@ -189,35 +188,18 @@ export default function Discover() {
           </div>
         </div>
 
-        {/* Directory & Filters Section */}
-        <div className="flex flex-col items-start mt-20 mb-10 px-4 md:px-0">
-          <h2 className="text-[11px] font-bold tracking-[2px] text-dark-plum/60 mb-6 px-1">
+        {/* Directory Section */}
+        <div className="flex flex-col items-start mt-16 mb-6 px-4 md:px-0">
+          <h2 className="text-[11px] font-bold tracking-[2px] text-dark-plum/60 px-1">
             Specialist directory
           </h2>
-          
-          <div className="flex flex-nowrap overflow-x-auto justify-start gap-3 w-full pb-4 scrollbar-hide [&::-webkit-scrollbar]:hidden px-1">
-            {['All', 'Lagos', 'Abuja', 'Online'].map(loc => (
-              <button
-                key={loc}
-                onClick={() => setActiveLocation(loc)}
-                className={`rounded-full px-6 py-2.5 text-[12px] font-bold tracking-wide transition-all whitespace-nowrap ${
-                  activeLocation === loc 
-                    ? 'bg-rose-pink text-white shadow-md' 
-                    : 'bg-white/50 border border-black/5 text-dark-plum/60 hover:bg-white hover:text-dark-plum'
-                }`}
-              >
-                {loc}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Dynamic Category Sections */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 md:gap-y-6">
           {categories.map((cat, i) => {
             const matchedSpecialists = specialists.filter(s => 
-              s.category === cat.name && 
-              (activeLocation === 'All' || s.location === activeLocation)
+              s.category === cat.name
             );
 
             if (matchedSpecialists.length > 0) {
