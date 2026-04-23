@@ -23,7 +23,7 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 
-function RatingRow({ label, icon: Icon, value, onChange }) {
+function RatingRow({ label, icon: Icon, value, onChange, readOnly = false }) {
   return (
     <div className="flex justify-between items-center py-4 border-b border-[#FFE8EF] last:border-b-0">
       <div className="text-[13px] lg:text-[14px] text-[#2D1B2E] flex items-center gap-3">
@@ -36,11 +36,13 @@ function RatingRow({ label, icon: Icon, value, onChange }) {
         {[1, 2, 3, 4, 5].map((level) => (
           <div
             key={level}
-            onClick={() => onChange(level)}
-            className={`w-[13px] h-[13px] rounded-full cursor-pointer transition-all duration-150 ${
+            onClick={() => !readOnly && onChange(level)}
+            className={`w-[13px] h-[13px] rounded-full transition-all duration-150 ${
+              readOnly ? 'cursor-default' : 'cursor-pointer'
+            } ${
               level <= value 
                 ? 'bg-[#D4688A] scale-110 shadow-sm' 
-                : 'bg-[#D4688A]/40 hover:bg-[#D4688A]/60'
+                : 'bg-[#D4688A]/40' + (!readOnly ? ' hover:bg-[#D4688A]/60' : '')
             }`}
           />
         ))}
@@ -55,7 +57,6 @@ export default function Tracker() {
     bleeding: 0,
     bloating: 0,
     fatigue: 0,
-    mood: 0,
     nausea: 0,
     hotFlashes: 0,
     brainFog: 0,
@@ -285,19 +286,18 @@ export default function Tracker() {
               {/* Symptoms List */}
               <div className="bg-white rounded-[16px] p-5 md:p-6 shadow-sm border border-black/5">
                 <div className="text-[11px] font-bold tracking-wider text-[#2D1B2E]/60 mb-5">
-                  Today's symptoms — tap dots to rate 1 to 5
+                  Today's symptoms
                 </div>
                 
-                <RatingRow label="Pelvic Pain" icon={Activity} value={ratings.pelvicPain} onChange={(v) => updateRating('pelvicPain', v)} />
-                <RatingRow label="Bleeding" icon={Droplets} value={ratings.bleeding} onChange={(v) => updateRating('bleeding', v)} />
-                <RatingRow label="Bloating" icon={Wind} value={ratings.bloating} onChange={(v) => updateRating('bloating', v)} />
-                <RatingRow label="Fatigue" icon={BatteryLow} value={ratings.fatigue} onChange={(v) => updateRating('fatigue', v)} />
-                <RatingRow label="Mood" icon={Heart} value={ratings.mood} onChange={(v) => updateRating('mood', v)} />
+                <RatingRow label="Pelvic Pain" icon={Activity} value={ratings.pelvicPain} onChange={(v) => updateRating('pelvicPain', v)} readOnly={true} />
+                <RatingRow label="Bleeding" icon={Droplets} value={ratings.bleeding} onChange={(v) => updateRating('bleeding', v)} readOnly={true} />
+                <RatingRow label="Bloating" icon={Wind} value={ratings.bloating} onChange={(v) => updateRating('bloating', v)} readOnly={true} />
+                <RatingRow label="Fatigue" icon={BatteryLow} value={ratings.fatigue} onChange={(v) => updateRating('fatigue', v)} readOnly={true} />
                 
-                <RatingRow label="Nausea" icon={GlassWater} value={ratings.nausea} onChange={(v) => updateRating('nausea', v)} />
-                <RatingRow label="Hot Flashes" icon={Thermometer} value={ratings.hotFlashes} onChange={(v) => updateRating('hotFlashes', v)} />
-                <RatingRow label="Brain Fog" icon={Cloud} value={ratings.brainFog} onChange={(v) => updateRating('brainFog', v)} />
-                <RatingRow label="Back Pain" icon={Zap} value={ratings.backPain} onChange={(v) => updateRating('backPain', v)} />
+                <RatingRow label="Nausea" icon={GlassWater} value={ratings.nausea} onChange={(v) => updateRating('nausea', v)} readOnly={true} />
+                <RatingRow label="Hot Flashes" icon={Thermometer} value={ratings.hotFlashes} onChange={(v) => updateRating('hotFlashes', v)} readOnly={true} />
+                <RatingRow label="Brain Fog" icon={Cloud} value={ratings.brainFog} onChange={(v) => updateRating('brainFog', v)} readOnly={true} />
+                <RatingRow label="Back Pain" icon={Zap} value={ratings.backPain} onChange={(v) => updateRating('backPain', v)} readOnly={true} />
               </div>
 
             </div>
