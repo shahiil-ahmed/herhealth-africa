@@ -12,6 +12,7 @@ import {
   doc, 
   arrayUnion 
 } from 'firebase/firestore';
+import Linkify from '../components/Linkify';
 
 const Sisterhood = () => {
   const [activeCircle, setActiveCircle] = useState(null);
@@ -204,7 +205,9 @@ const Sisterhood = () => {
                   {win.senderInitial}
                 </div>
                 <div className="flex-1">
-                  <p className="text-[14px] text-dark-plum leading-relaxed">{win.text}</p>
+                  <p className="text-[14px] text-dark-plum leading-relaxed">
+                    <Linkify text={win.text} />
+                  </p>
                   <button 
                     onClick={() => handleCelebrate(win.id)}
                     className={`flex items-center gap-1.5 text-[10px] mt-3 font-bold px-3 py-1.5 rounded-full transition-all ${
@@ -269,7 +272,7 @@ const Sisterhood = () => {
                       ? 'bg-rose-pink text-white rounded-[20px] rounded-br-none' 
                       : 'bg-white text-dark-plum border border-black/5 rounded-[20px] rounded-bl-none'
                   }`}>
-                    {msg.text}
+                    <Linkify text={msg.text} />
                   </div>
                   
                   {/* Subtle Timestamp - only on the last message of a streak or if needed for every message */}

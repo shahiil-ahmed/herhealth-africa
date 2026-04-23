@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Video, BookOpen, CheckSquare, Stethoscope, Leaf, BarChart3, ClipboardList, Activity, Heart } from "lucide-react";
 import UserBookings from "../components/UserBookings";
 import ResourceModal from "../components/ResourceModal";
+import Linkify from "../components/Linkify";
 
 const resources = [
   {
@@ -146,7 +147,7 @@ export default function Dashboard() {
                <div className="flex gap-3 items-center">
                  <BarChart3 size={24} color="#D4688A" strokeWidth={2.5} />
                  <div className="text-[12px] text-dark-plum leading-normal max-w-lg">
-                   Log your symptoms today to build your health picture. <span className="text-rose-pink font-medium">Tap to track →</span>
+                   <Linkify text="Log your symptoms today to build your health picture." /> <span className="text-rose-pink font-medium">Tap to track →</span>
                  </div>
                </div>
             </div>

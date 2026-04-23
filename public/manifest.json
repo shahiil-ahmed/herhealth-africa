@@ -1,0 +1,16 @@
+{
+  "name": "Her Health Africa",
+  "short_name": "HerHealth",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF9FA",
+  "theme_color": "#D4688A",
+  "description": "HerHealth Africa: Navigation and advocacy support for women's health.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

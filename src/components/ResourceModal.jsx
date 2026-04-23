@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import Linkify from './Linkify';
 
 const ResourceModal = ({ isOpen, onClose, resource }) => {
   const [activeResource, setActiveResource] = useState(null);
@@ -70,7 +71,7 @@ const ResourceModal = ({ isOpen, onClose, resource }) => {
         <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
           <div className="prose prose-sm max-w-none text-dark-plum/80 leading-relaxed space-y-4">
             <p className="text-base">
-              {activeResource.content || "Text coming soon..."}
+              <Linkify text={activeResource.content || "Text coming soon..."} />
             </p>
             {/* Placeholder for more content to demonstrate scrolling */}
             <div className="h-4" />
