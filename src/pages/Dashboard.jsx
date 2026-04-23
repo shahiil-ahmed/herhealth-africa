@@ -105,7 +105,7 @@ export default function Dashboard() {
             }}
           />
 
-          <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-12">
+          <div className="max-w-7xl mx-auto w-full px-4 md:px-8 pt-12 pb-10">
             <div className="flex justify-between items-start relative z-20">
               <div className="text-[11px] tracking-[2px] text-white/35 mb-3">
                 Welcome back, {userName} ✦
@@ -119,23 +119,11 @@ export default function Dashboard() {
               <em className="italic text-[#D4688A]">finally</em> understood.
             </div>
 
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-6 md:mb-10 relative z-10">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 relative z-10">
               <span className="w-2 h-2 rounded-full bg-[#D4688A] animate-pulse"></span>
               <span className="text-[12px] font-medium text-white/80 tracking-wide">
                 Currently in: {cycleData.phase} • Day {cycleData.day}
               </span>
-            </div>
-
-            <div className="flex gap-2 relative z-10 flex-wrap md:mt-2">
-              <div className="bg-white/5 border border-white/10 rounded-[20px] px-[14px] py-[7px] text-[12px] text-white/60 flex items-center gap-[6px]">
-                <span className="text-[14px]">🌸</span> Health Navigation
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-[20px] px-[14px] py-[7px] text-[12px] text-white/60 flex items-center gap-[6px]">
-                <span className="text-[14px]">🏥</span> Vetted Specialists
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-[20px] px-[14px] py-[7px] text-[12px] text-white/60 flex items-center gap-[6px]">
-                <span className="text-[14px]">💜</span> Community
-              </div>
             </div>
           </div>
         </div>
