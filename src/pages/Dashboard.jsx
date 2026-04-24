@@ -154,7 +154,7 @@ export default function Dashboard() {
                  </div>
                  <div className="relative z-10">
                    <div className="text-[13px] font-semibold leading-[1.3] text-white">
-                     Book Session
+                     Book session
                    </div>
                    <div className="text-[11px] mt-[3px] leading-[1.4] text-white/70">
                      Start your navigation journey
@@ -168,14 +168,14 @@ export default function Dashboard() {
                  <div className="mb-2">
                    <Activity size={32} color="#D4688A" />
                  </div>
-                 <div>
-                   <div className="text-[13px] font-semibold leading-[1.3] text-[#2D1B2E]">
-                     Track Today
-                   </div>
-                   <div className="text-[11px] mt-[3px] leading-[1.4] text-[#2D1B2E]/60">
-                     Log symptoms & cycle
-                   </div>
-                 </div>
+                  <div>
+                    <div className="text-[13px] font-semibold leading-[1.3] text-[#2D1B2E]">
+                      Track today
+                    </div>
+                    <div className="text-[11px] mt-[3px] leading-[1.4] text-[#2D1B2E]/60">
+                      Log symptoms & cycle
+                    </div>
+                  </div>
                </div>
              </Link>
 
@@ -184,33 +184,33 @@ export default function Dashboard() {
                  <div className="mb-2">
                    <Stethoscope size={32} color="#D4688A" />
                  </div>
-                 <div>
-                   <div className="text-[13px] font-semibold leading-[1.3] text-dark-plum">
-                     Find Specialist
-                   </div>
-                   <div className="text-[11px] mt-[3px] leading-[1.4] text-dark-plum/60">
-                     Lagos & Abuja vetted
-                   </div>
-                 </div>
+                  <div>
+                    <div className="text-[13px] font-semibold leading-[1.3] text-dark-plum">
+                      Find specialist
+                    </div>
+                    <div className="text-[11px] mt-[3px] leading-[1.4] text-dark-plum/60">
+                      Connect with experts
+                    </div>
+                  </div>
                </div>
              </Link>
 
-             <Link to="/sisterhood" className="block no-underline">
-               <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:scale-105 hover:shadow-card-hover bg-[#7B5EA7] text-white shadow-[0_4px_20px_rgba(123,94,167,0.3)]">
-                 <div className="absolute -bottom-[20px] -left-[20px] w-[80px] h-[80px] rounded-full bg-white/10"></div>
-                 <div className="mb-2 relative z-10">
-                   <Heart size={32} color="white" />
-                 </div>
-                 <div className="relative z-10">
-                   <div className="text-[13px] font-semibold leading-tight text-white">
-                     Wellness Circle
-                   </div>
-                   <div className="text-[11px] mt-[3px] leading-normal text-white/70">
-                     Heal together
-                   </div>
-                 </div>
-               </div>
-             </Link>
+              <Link to="/sisterhood" className="block no-underline">
+                <div className="rounded-[20px] p-4 cursor-pointer transition-all duration-250 relative overflow-hidden min-h-[110px] flex flex-col justify-between hover:-translate-y-[3px] hover:scale-105 hover:shadow-card-hover bg-[#D4688A] text-white shadow-[0_4px_20px_rgba(212,104,138,0.3)]">
+                  <div className="absolute -bottom-[20px] -left-[20px] w-[80px] h-[80px] rounded-full bg-white/10"></div>
+                  <div className="mb-2 relative z-10">
+                    <Heart size={32} color="white" />
+                  </div>
+                  <div className="relative z-10">
+                    <div className="text-[13px] font-semibold leading-tight text-white">
+                      Sisterhood
+                    </div>
+                    <div className="text-[11px] mt-[3px] leading-normal text-white/70">
+                      Heal together
+                    </div>
+                  </div>
+                </div>
+              </Link>
           </div>
         </div>
 

@@ -20,12 +20,11 @@ export default function BookingWizard() {
     package: "",
     fullName: "",
     whatsapp: "",
-    concern: "",
+    userConcerns: "",
     preferredTime: "",
     duration: "",
     seenDoctor: "",
     notes: "",
-    otherConcern: "",
   });
 
   const handlePackageSelect = (pkgName) => {
@@ -71,12 +70,11 @@ export default function BookingWizard() {
         package: "",
         fullName: "",
         whatsapp: "",
-        concern: "",
+        userConcerns: "",
         preferredTime: "",
         duration: "",
         seenDoctor: "",
         notes: "",
-        otherConcern: "",
       });
     } catch (err) {
       console.error("Error saving booking:", err);
@@ -323,59 +321,23 @@ export default function BookingWizard() {
                   />
                 </div>
 
-                <div>
+                <div className="pt-2">
                   <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
-                    Your main concern
+                    Is there anything you would like to share?
                   </label>
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {[
-                      "Fibroids",
-                      "PCOS",
-                      "Endometriosis",
-                      "Painful Periods",
-                      "Hormonal Issues",
-                      "Thyroid",
-                       "Fertility",
-                       "Perimenopause",
-                       "Not Sure",
-                       "Other",
-                     ].map((item) => (
-                       <div
-                         key={item}
-                         onClick={() =>
-                           setBookingData({ ...bookingData, concern: item })
-                         }
-                         className={`rounded-full px-4 py-2 text-sm cursor-pointer transition-all ${
-                           bookingData.concern === item
-                             ? "bg-[#D4688A] text-white border-transparent shadow-md"
-                             : "bg-[#FFF5F8]/40 border-[#D4688A]/10 text-[#2D1B2E]/70 hover:border-[#D4688A]/30 border-[1.5px]"
-                         }`}
-                       >
-                         {item}
-                       </div>
-                     ))}
-                   </div>
- 
-                   {bookingData.concern === "Other" && (
-                     <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                       <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">
-                         Please specify your concern
-                       </label>
-                       <textarea
-                         value={bookingData.otherConcern}
-                         onChange={(e) =>
-                           setBookingData({
-                             ...bookingData,
-                             otherConcern: e.target.value,
-                           })
-                         }
-                         rows={3}
-                         placeholder="Tell us a bit more..."
-                         className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[14px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white resize-none"
-                       />
-                     </div>
-                   )}
-                 </div>
+                  <textarea
+                    value={bookingData.userConcerns}
+                    onChange={(e) =>
+                      setBookingData({
+                        ...bookingData,
+                        userConcerns: e.target.value,
+                      })
+                    }
+                    rows={4}
+                    placeholder="Feel free to share any symptoms, concerns, or goals for this session..."
+                    className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-jost text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white resize-none"
+                  ></textarea>
+                </div>
 
                 <div>
                   <label className="text-[10px] font-bold text-[#2D1B2E]/60 mb-2 block">

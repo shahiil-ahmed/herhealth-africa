@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, Leaf, Activity, Moon, RefreshCw, Send, Heart, Trophy } from 'lucide-react';
+import { ChevronLeft, Leaf, Activity, Moon, RefreshCw, Send, Heart, Trophy, Baby, Dumbbell, Zap } from 'lucide-react';
 import { auth, db } from '../firebase/firebaseConfig';
 import { 
   collection, 
@@ -24,10 +24,13 @@ const Sisterhood = () => {
   const messagesEndRef = useRef(null);
 
   const circles = [
-    { id: 'anti-inflammatory', name: 'Anti-inflammatory living', icon: Leaf, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
-    { id: 'fatigue', name: 'Energy and fatigue', icon: Activity, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
-    { id: 'rest', name: 'Rest and stress', icon: Moon, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
-    { id: 'cycle', name: 'Cycle awareness', icon: RefreshCw, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' }
+    { id: 'period-hormone', name: 'Period & hormone health', icon: RefreshCw, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'food-gut', name: 'Food & gut health', icon: Leaf, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'sleep-stress', name: 'Sleep & stress', icon: Moon, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'fatigue', name: 'Energy & fatigue', icon: Activity, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'fertility', name: 'Fertility & conception', icon: Baby, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'sports-exercise', name: 'Sports & exercise', icon: Dumbbell, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' },
+    { id: 'menopause', name: 'Perimenopause & menopause', icon: Zap, bg: 'bg-[#FFF5F8]', color: 'text-[#D4688A]' }
   ];
 
   const getUserInitial = () => {
@@ -151,13 +154,14 @@ const Sisterhood = () => {
         </header>
 
         <div className="grid grid-cols-2 gap-4 mb-12">
-          {circles.map(circle => {
+          {circles.map((circle, index) => {
             const Icon = circle.icon;
+            const isLastOdd = index === circles.length - 1 && circles.length % 2 !== 0;
             return (
               <div 
                 key={circle.id}
                 onClick={() => setActiveCircle(circle)}
-                className="bg-white rounded-[28px] p-6 shadow-sm border border-black/5 flex flex-col items-center text-center cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all active:scale-95 group"
+                className={`bg-white rounded-[28px] p-6 shadow-sm border border-black/5 flex flex-col items-center text-center cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all active:scale-95 group ${isLastOdd ? 'col-span-2' : ''}`}
               >
                 <div className={`w-14 h-14 rounded-2xl ${circle.bg} ${circle.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                   <Icon size={28} strokeWidth={1.5} />
