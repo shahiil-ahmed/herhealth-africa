@@ -22,6 +22,7 @@ import {
   Timestamp, 
   serverTimestamp 
 } from 'firebase/firestore';
+import { calculateCyclePhase } from '../utils/cycleUtils';
 
 function RatingRow({ label, icon: Icon, value, onChange, readOnly = false }) {
   return (
@@ -69,6 +70,8 @@ export default function Tracker() {
   const [userProfile, setUserProfile] = useState(null);
   const [weeklyLogs, setWeeklyLogs] = useState([]);
   const [lastPeriodDate, setLastPeriodDate] = useState('');
+  const [cycleLength, setCycleLength] = useState(28);
+  const [periodLength, setPeriodLength] = useState(5);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSavedToday, setHasSavedToday] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -79,7 +82,16 @@ export default function Tracker() {
     
     const unsubscribe = onSnapshot(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), (doc) => {
       if (doc.exists()) {
-        setUserProfile(doc.data());
+        const data = doc.data();
+        setUserProfile(data);
+        if (data.cycleLength) setCycleLength(data.cycleLength);
+        if (data.periodLength) setPeriodLength(data.periodLength);
+        if (data.lastPeriodStart) {
+          const date = data.lastPeriodStart instanceof Timestamp 
+            ? data.lastPeriodStart.toDate() 
+            : new Date(data.lastPeriodStart);
+          setLastPeriodDate(date.toISOString().split('T')[0]);
+        }
       }
     });
     return () => unsubscribe();
@@ -113,47 +125,9 @@ export default function Tracker() {
     }
   }, [ratings, mood, energy, notes]);
 
-  const getPhaseInfo = (day) => {
-    if (typeof day !== 'number') return { name: "Set cycle", description: "Log your last period to track your cycle phases" };
-    if (day >= 1 && day <= 5) return { 
-      name: "Menstrual Phase", 
-      description: "Focus on rest and replenishment. Your body is renewing itself." 
-    };
-    if (day >= 6 && day <= 13) return { 
-      name: "Follicular Phase", 
-      description: "Your energy is rising. A great time for new projects and socialising." 
-    };
-    if (day >= 14 && day <= 16) return { 
-      name: "Ovulatory Phase", 
-      description: "You are at your peak vibrancy. Communication and confidence are high." 
-    };
-    if (day >= 17 && day <= 28) return { 
-      name: "Luteal Phase", 
-      description: "Slow down and practice self-care. Your body is preparing for a new cycle." 
-    };
-    if (day > 28) return { 
-      name: "Late/Unknown", 
-      description: "Your cycle is longer than 28 days. Log your period to stay updated." 
-    };
-    return { name: "Phase info", description: "Tracking your cycle..." };
-  };
-
-  const calculateCycleDay = (startDate) => {
-    if (!startDate) return null;
-    
-    const start = startDate instanceof Timestamp ? startDate.toDate() : new Date(startDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    start.setHours(0, 0, 0, 0);
-
-    const diffTime = Math.abs(today - start);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays > 35) return 'Reset Needed';
-    return diffDays + 1;
-  };
-
-  const cycleDay = calculateCycleDay(userProfile?.lastPeriodStart);
+  const cycleInfo = calculateCyclePhase(userProfile?.lastPeriodStart, userProfile?.cycleLength || 28);
+  const cycleDay = cycleInfo?.day;
+  const cyclePhase = cycleInfo?.phase;
 
   const handleSaveCycle = async () => {
     if (!auth.currentUser || !lastPeriodDate) return;
@@ -162,6 +136,8 @@ export default function Tracker() {
     try {
       await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
         lastPeriodStart: Timestamp.fromDate(new Date(lastPeriodDate)),
+        cycleLength: Number(cycleLength),
+        periodLength: Number(periodLength),
         updatedAt: serverTimestamp()
       }, { merge: true });
       setModalMode(null);
@@ -258,17 +234,17 @@ export default function Tracker() {
                   </div>
                   <div>
                     <h3 className="text-[15px] md:text-base font-semibold text-[#2D1B2E]">
-                      {cycleDay === 'Reset Needed' 
-                        ? 'Cycle Reset Needed' 
+                      {cyclePhase === 'Late' 
+                        ? 'Cycle Late' 
                         : cycleDay 
-                        ? `Day ${cycleDay} — ${getPhaseInfo(cycleDay).name}` 
+                        ? `Day ${cycleDay} — ${cyclePhase}` 
                         : 'Set your cycle'}
                     </h3>
                     <p className="text-[13px] md:text-[14px] text-[#2D1B2E]/60 mt-1 leading-relaxed">
-                      {cycleDay === 'Reset Needed' 
-                        ? 'Your last period was over 35 days ago. Please log your latest cycle.' 
+                      {cyclePhase === 'Late' 
+                        ? 'Your cycle is longer than expected. Log your period to stay updated.' 
                         : cycleDay 
-                        ? getPhaseInfo(cycleDay).description 
+                        ? 'Your cycle is being tracked in real-time across your dashboard.' 
                         : 'Log your last period to track your cycle phases'}
                     </p>
                   </div>
@@ -497,7 +473,8 @@ export default function Tracker() {
                 </label>
                 <input 
                   type="number" 
-                  defaultValue="28"
+                  value={cycleLength}
+                  onChange={(e) => setCycleLength(e.target.value)}
                   placeholder="28"
                   className="w-full bg-white border border-[#D4688A]/20 rounded-[16px] px-4 py-3.5 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] shadow-sm" 
                 />
@@ -508,7 +485,8 @@ export default function Tracker() {
                 </label>
                 <input 
                   type="number" 
-                  defaultValue="5"
+                  value={periodLength}
+                  onChange={(e) => setPeriodLength(e.target.value)}
                   placeholder="5"
                   className="w-full bg-white border border-[#D4688A]/20 rounded-[16px] px-4 py-3.5 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] shadow-sm" 
                 />

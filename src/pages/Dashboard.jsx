@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { Video, BookOpen, CheckSquare, Stethoscope, Leaf, BarChart3, ClipboardList, Activity, Heart } from "lucide-react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
+import { calculateCyclePhase } from "../utils/cycleUtils";
 import UserBookings from "../components/UserBookings";
 import ResourceModal from "../components/ResourceModal";
 import Linkify from "../components/Linkify";
@@ -62,11 +65,36 @@ export default function Dashboard() {
   const [selectedResource, setSelectedResource] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // eslint-disable-next-line no-unused-vars
-  const [cycleData, setCycleData] = useState({
-    phase: "Follicular Phase",
-    day: 8,
-  });
+  const [cycleData, setCycleData] = useState(null);
+  const [isCycleLoading, setIsCycleLoading] = useState(true);
+
+  // Fetch cycle data in real-time
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const unsubscribe = onSnapshot(
+      doc(db, "users", currentUser.uid, "profile", "data"),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.lastPeriodStart) {
+            const result = calculateCyclePhase(
+              data.lastPeriodStart,
+              data.cycleLength || 28
+            );
+            setCycleData(result);
+          }
+        }
+        setIsCycleLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching cycle data:", error);
+        setIsCycleLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [currentUser]);
 
   // Get first name or default to 'Sister'
   const userName = currentUser?.displayName
@@ -119,10 +147,16 @@ export default function Dashboard() {
               <em className="italic text-[#D4688A]">finally</em> understood.
             </div>
 
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 relative z-10">
-              <span className="w-2 h-2 rounded-full bg-[#D4688A] animate-pulse"></span>
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 relative z-10 transition-all duration-300">
+              <span className={`w-2 h-2 rounded-full bg-[#D4688A] ${isCycleLoading ? 'animate-bounce' : 'animate-pulse'}`}></span>
               <span className="text-[12px] font-medium text-white/80 tracking-wide">
-                Currently in: {cycleData.phase} • Day {cycleData.day}
+                {isCycleLoading ? (
+                  "Syncing cycle..."
+                ) : cycleData ? (
+                  `Currently in: ${cycleData.phase} • Day ${cycleData.day}`
+                ) : (
+                  "Set your cycle →"
+                )}
               </span>
             </div>
           </div>
