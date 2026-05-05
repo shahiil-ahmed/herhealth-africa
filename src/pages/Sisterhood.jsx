@@ -39,7 +39,7 @@ const Sisterhood = () => {
     return 'U';
   };
 
-  const getAvatarColor = (uid) => {
+  const getAvatarColor = () => {
     return 'bg-rose-pink text-white';
   };
 
@@ -263,7 +263,7 @@ const Sisterhood = () => {
                 {!isMe ? (
                   <div className="w-8 shrink-0 flex justify-center">
                     {isFirstInStreak ? (
-                      <div className={`w-8 h-8 rounded-full ${getAvatarColor(msg.senderUid)} flex items-center justify-center text-[10px] font-bold border border-black/5 shadow-sm`}>
+                      <div className={`w-8 h-8 rounded-full ${getAvatarColor()} flex items-center justify-center text-[10px] font-bold border border-black/5 shadow-sm`}>
                         {msg.senderInitial}
                       </div>
                     ) : null}

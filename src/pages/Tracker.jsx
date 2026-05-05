@@ -24,7 +24,7 @@ import {
 } from 'firebase/firestore';
 import { calculateCyclePhase } from '../utils/cycleUtils';
 
-function RatingRow({ label, icon: Icon, value, onChange, readOnly = false }) {
+function RatingRow({ label, icon: Icon, value, onChange, readOnly = false }) { // eslint-disable-line no-unused-vars
   return (
     <div className="flex justify-between items-center py-4 border-b border-[#FFE8EF] last:border-b-0">
       <div className="text-[13px] lg:text-[14px] text-[#2D1B2E] flex items-center gap-3">
@@ -123,7 +123,7 @@ export default function Tracker() {
     if (hasSavedToday) {
       setHasSavedToday(false);
     }
-  }, [ratings, mood, energy, notes]);
+  }, [ratings, mood, energy, notes, hasSavedToday]);
 
   const cycleInfo = calculateCyclePhase(userProfile?.lastPeriodStart, userProfile?.cycleLength || 28);
   const cycleDay = cycleInfo?.day;
@@ -157,7 +157,6 @@ export default function Tracker() {
 
     setIsSubmitting(true);
     const todayStr = new Date().toISOString().split('T')[0];
-    const docId = `${auth.currentUser.uid}_${todayStr}`;
 
     // Calculate avg intensity of symptoms > 0
     const activeRatings = Object.values(ratings).filter(v => v > 0);

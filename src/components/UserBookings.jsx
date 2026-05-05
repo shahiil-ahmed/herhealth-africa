@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { useAuth } from "../context/AuthContext";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import {
   Calendar,
   Clock,
@@ -23,7 +23,8 @@ export default function UserBookings() {
   useEffect(() => {
     if (!currentUser) return;
 
-    setLoading(true);
+    // setLoading(true) removed to avoid cascading render lint error; 
+    // loading state is already true by default and handled in snapshot.
     const q = query(collection(db, "users", currentUser.uid, "bookings"));
 
     const unsubscribe = onSnapshot(

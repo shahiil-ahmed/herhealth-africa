@@ -54,7 +54,7 @@ export default function Auth() {
     try {
       await resetPassword(email);
       setMessage("Password reset link sent! Check your inbox 🌸");
-    } catch (err) {
+    } catch {
       setError("Failed to send reset email. Please check the email address.");
     }
     setLoading(false);
