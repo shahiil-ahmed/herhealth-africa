@@ -38,7 +38,34 @@ export default function Auth() {
       }
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message || "Failed to authenticate");
+      let friendlyMessage = "An unexpected error occurred. Please try again.";
+      
+      switch (err.code) {
+        case "auth/user-not-found":
+          friendlyMessage = "User does not exist. Please check your email or sign up.";
+          break;
+        case "auth/wrong-password":
+          friendlyMessage = "Incorrect password. Please try again.";
+          break;
+        case "auth/invalid-email":
+          friendlyMessage = "The email address is invalid.";
+          break;
+        case "auth/invalid-credential":
+          friendlyMessage = "Invalid credentials. Please check your email and password.";
+          break;
+        case "auth/email-already-in-use":
+          friendlyMessage = "This email is already registered. Try logging in.";
+          break;
+        case "auth/weak-password":
+          friendlyMessage = "Password should be at least 6 characters.";
+          break;
+        case "auth/too-many-requests":
+          friendlyMessage = "Too many failed attempts. Please try again later.";
+          break;
+        default:
+          friendlyMessage = err.message || friendlyMessage;
+      }
+      setError(friendlyMessage);
     }
 
     setLoading(false);
