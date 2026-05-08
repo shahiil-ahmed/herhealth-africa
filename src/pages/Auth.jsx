@@ -51,7 +51,9 @@ export default function Auth() {
           friendlyMessage = "The email address is invalid.";
           break;
         case "auth/invalid-credential":
-          friendlyMessage = "Invalid credentials. Please check your email and password.";
+          friendlyMessage = isLogin 
+            ? "Invalid email or password. Please try again." 
+            : "Could not complete sign up. Please check your details.";
           break;
         case "auth/email-already-in-use":
           friendlyMessage = "This email is already registered. Try logging in.";
@@ -107,13 +109,27 @@ export default function Auth() {
         <div className="flex gap-5 mb-8 border-b border-black/5">
           <div
             className={`py-2 px-1 text-[14px] cursor-pointer transition-colors ${isLogin ? "text-[#D4688A] font-semibold border-b-2 border-[#D4688A]" : "text-[#2D1B2E]/60 font-medium hover:text-[#2D1B2E]"}`}
-            onClick={() => setIsLogin(true)}
+            onClick={() => {
+              setIsLogin(true);
+              setError("");
+              setMessage("");
+              setEmail("");
+              setPassword("");
+              setName("");
+            }}
           >
             Login
           </div>
           <div
             className={`py-2 px-1 text-[14px] cursor-pointer transition-colors ${!isLogin ? "text-[#D4688A] font-semibold border-b-2 border-[#D4688A]" : "text-[#2D1B2E]/60 font-medium hover:text-[#2D1B2E]"}`}
-            onClick={() => setIsLogin(false)}
+            onClick={() => {
+              setIsLogin(false);
+              setError("");
+              setMessage("");
+              setEmail("");
+              setPassword("");
+              setName("");
+            }}
           >
             Sign Up
           </div>
@@ -130,7 +146,7 @@ export default function Auth() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white mb-4"
-                placeholder="Amara Okafor"
+                placeholder=""
               />
             </div>
           )}
@@ -145,7 +161,7 @@ export default function Auth() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white mb-4"
-              placeholder="name@email.com"
+              placeholder=""
             />
           </div>
 
@@ -159,7 +175,7 @@ export default function Auth() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-[#FAF9F6] border-[1.5px] border-black/10 rounded-[16px] px-5 py-4 font-[Jost,sans-serif] text-[15px] text-[#2D1B2E] outline-none transition-all focus:border-[#D4688A] focus:bg-white mb-4"
-              placeholder="••••••••"
+              placeholder=""
             />
             {isLogin && (
               <div className="text-right mt-1 mb-4">
