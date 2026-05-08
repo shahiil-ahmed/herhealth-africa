@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { updateProfile } from "firebase/auth";
 import { db } from "../firebase/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,15 +27,26 @@ export default function Auth() {
       if (isLogin) {
         await login(email, password);
       } else {
+        // 1. Create the Auth account
         const userCred = await signup(email, password);
-        await updateProfile(userCred.user, { displayName: name });
-        await setDoc(doc(db, "users", userCred.user.uid, "profile", "data"), {
-          name,
-          email,
-          createdAt: new Date(),
+        const user = userCred.user;
+
+        // 2. Update Auth Profile (Display Name)
+        await updateProfile(user, { displayName: name });
+
+        // 3. Create the User Document in Firestore
+        // Path: users/{uid}
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          name: name,
+          email: email,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
           onboardingComplete: false,
+          role: "user", // Default role
         });
       }
+      
       navigate("/dashboard");
     } catch (err) {
       let friendlyMessage = "An unexpected error occurred. Please try again.";
