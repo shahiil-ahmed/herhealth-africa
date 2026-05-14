@@ -3,6 +3,7 @@ import { ChevronLeft, Video, BookOpen, Clock, MapPin, Send, PlayCircle, HelpCirc
 import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import ResourceModal from '../components/ResourceModal';
+import { useAuth } from '../context/AuthContext';
 
 const resources = [
   { 
@@ -73,10 +74,12 @@ const SpecialistCard = ({ name, specialty, location }) => (
 );
 
 export default function Discover() {
+  const { currentUser } = useAuth();
   const [specialists, setSpecialists] = useState([]);
   const [isNominationSubmitted, setIsNominationSubmitted] = useState(false);
-  const [nomination, setNomination] = useState({ doctorName: '', clinicName: '' });
+  const [nomination, setNomination] = useState({ doctorName: '', details: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nominationError, setNominationError] = useState("");
   
   // Modal state management
   const [selectedResource, setSelectedResource] = useState(null);
@@ -102,23 +105,27 @@ export default function Discover() {
 
   const handleNominate = async (e) => {
     e.preventDefault();
-    if (!nomination.doctorName || !nomination.clinicName) return;
+    if (!nomination.doctorName || !nomination.details) return;
     
     setIsSubmitting(true);
+    setNominationError("");
     try {
       await addDoc(collection(db, 'nominations'), {
-        ...nomination,
+        doctorName: nomination.doctorName,
+        details: nomination.details,
+        submittedBy: currentUser?.uid || "anonymous",
         createdAt: serverTimestamp()
       });
       setIsNominationSubmitted(true);
+      setNomination({ doctorName: '', details: '' });
       
-      // Reset logic: Clear form and result after 5 seconds
+      // Reset logic: Clear result banner after 5 seconds
       setTimeout(() => {
         setIsNominationSubmitted(false);
-        setNomination({ doctorName: '', clinicName: '' });
       }, 5000);
     } catch (error) {
       console.error("Error submitting nomination:", error);
+      setNominationError("Failed to submit nomination. Please try again. 🌸");
     } finally {
       setIsSubmitting(false);
     }
@@ -242,7 +249,18 @@ export default function Discover() {
             }`}
           >
             <span className="flex items-center gap-2">
-              Nomination Received • Thank you 🌸
+              Thank you! We will look into this specialist. 🌸
+            </span>
+          </div>
+
+          {/* Error Banner */}
+          <div 
+            className={`absolute top-0 left-0 right-0 w-full bg-rose-500 text-white text-[10px] md:text-xs py-4 px-6 font-bold tracking-[2px] transition-all duration-500 z-20 rounded-t-[32px] flex items-center justify-center md:justify-start ${
+              nominationError ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              {nominationError}
             </span>
           </div>
 
@@ -267,10 +285,10 @@ export default function Discover() {
                 <input 
                   required
                   type="text" 
-                  placeholder="Clinic or Hospital Name"
+                  placeholder="Reason or details (e.g. Clinic name)"
                   className="w-full bg-[#FAF9F6] border border-black/10 rounded-xl px-5 py-4 text-sm outline-none focus:border-rose-pink transition-all"
-                  value={nomination.clinicName}
-                  onChange={(e) => setNomination({...nomination, clinicName: e.target.value})}
+                  value={nomination.details}
+                  onChange={(e) => setNomination({...nomination, details: e.target.value})}
                 />
               </div>
               <div className="flex flex-col justify-end">
