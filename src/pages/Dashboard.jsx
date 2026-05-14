@@ -90,6 +90,9 @@ export default function Dashboard() {
       (error) => {
         console.error("Error fetching cycle data:", error);
         setIsCycleLoading(false);
+        if (error.code === 'permission-denied') {
+          unsubscribe();
+        }
       }
     );
 

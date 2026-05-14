@@ -31,51 +31,75 @@ export default function AdminPanel() {
   // Fetch Bookings Real-time (using collectionGroup to see all user bookings)
   useEffect(() => {
     const q = query(collectionGroup(db, 'bookings'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const bookingsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setBookings(bookingsData);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const bookingsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setBookings(bookingsData);
+      },
+      (error) => {
+        console.error("Error in Admin bookings listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
   // Fetch Users Real-time
   useEffect(() => {
     const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const usersData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setUsers(usersData);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const usersData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setUsers(usersData);
+      },
+      (error) => {
+        console.error("Error in Admin users listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
   // Fetch Specialists Real-time
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'specialists'), (snapshot) => {
-      const specialistsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setSpecialists(specialistsData);
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, 'specialists'), 
+      (snapshot) => {
+        const specialistsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setSpecialists(specialistsData);
+      },
+      (error) => {
+        console.error("Error in Admin specialists listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
   // Fetch Nominations Real-time
   useEffect(() => {
     const q = query(collection(db, 'nominations'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setNominations(data);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setNominations(data);
+      },
+      (error) => {
+        console.error("Error in Admin nominations listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 

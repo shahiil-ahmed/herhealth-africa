@@ -21,6 +21,7 @@ const Sisterhood = () => {
   const [messages, setMessages] = useState([]);
   const [wins, setWins] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [chatError, setChatError] = useState(null);
   const messagesEndRef = useRef(null);
 
   const circles = [
@@ -50,13 +51,22 @@ const Sisterhood = () => {
   // Real-time listener for Wins Board
   useEffect(() => {
     const q = query(collection(db, 'wins'), orderBy('createdAt', 'desc'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const winsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setWins(winsData);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const winsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setWins(winsData);
+      },
+      (error) => {
+        console.error("Error in Sisterhood wins listener:", error);
+        if (error.code === 'permission-denied') {
+          unsubscribe();
+        }
+      }
+    );
     return () => unsubscribe();
   }, []);
 
@@ -68,18 +78,29 @@ const Sisterhood = () => {
     }
 
     const q = query(
-      collection(db, `circles/${activeCircle.id}/messages`),
+      collection(db, `chats/${activeCircle.id}/messages`),
       orderBy('createdAt', 'asc')
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setMessages(msgs);
-      setTimeout(scrollToBottom, 100);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const msgs = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setMessages(msgs);
+        setChatError(null);
+        setTimeout(scrollToBottom, 100);
+      },
+      (error) => {
+        console.error("Error in Sisterhood chat listener:", error);
+        if (error.code === 'permission-denied') {
+          setChatError("You don't have permission to view this chat. Please check back later. 🌸");
+          unsubscribe();
+        }
+      }
+    );
 
     return () => unsubscribe();
   }, [activeCircle]);
@@ -92,9 +113,9 @@ const Sisterhood = () => {
     setNewMessage('');
 
     try {
-      await addDoc(collection(db, `circles/${activeCircle.id}/messages`), {
+      await addDoc(collection(db, `chats/${activeCircle.id}/messages`), {
         text: messageText,
-        senderUid: auth.currentUser.uid,
+        senderId: auth.currentUser.uid,
         senderInitial: getUserInitial(),
         createdAt: serverTimestamp()
       });
@@ -248,10 +269,15 @@ const Sisterhood = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2 [&::-webkit-scrollbar]:hidden">
+        {chatError && (
+          <div className="bg-rose-pink/5 border border-rose-pink/20 rounded-2xl p-6 text-center animate-in fade-in zoom-in-95 duration-300 mx-4">
+            <p className="text-rose-pink text-sm font-medium leading-relaxed">{chatError}</p>
+          </div>
+        )}
         {messages.map((msg, index) => {
-          const isMe = msg.senderUid === auth.currentUser?.uid;
-          const isFirstInStreak = index === 0 || messages[index - 1].senderUid !== msg.senderUid;
-          const isLastInStreak = index === messages.length - 1 || messages[index + 1].senderUid !== msg.senderUid;
+          const isMe = (msg.senderId || msg.senderUid) === auth.currentUser?.uid;
+          const isFirstInStreak = index === 0 || (messages[index - 1].senderId || messages[index - 1].senderUid) !== (msg.senderId || msg.senderUid);
+          const isLastInStreak = index === messages.length - 1 || (messages[index + 1].senderId || messages[index + 1].senderUid) !== (msg.senderId || msg.senderUid);
 
           return (
             <div 
@@ -298,9 +324,10 @@ const Sisterhood = () => {
           <input 
             type="text"
             value={newMessage}
+            disabled={!auth.currentUser}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Write anonymously..."
-            className="flex-1 bg-transparent border-none outline-none px-4 text-sm text-dark-plum placeholder:text-dark-plum/30"
+            placeholder={auth.currentUser ? "Write anonymously..." : "Please sign in to chat..."}
+            className="flex-1 bg-transparent border-none outline-none px-4 text-sm text-dark-plum placeholder:text-dark-plum/30 disabled:opacity-50"
           />
           <button 
             type="submit"

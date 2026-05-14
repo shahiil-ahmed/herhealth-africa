@@ -24,11 +24,20 @@ export default function Profile({ isOpen, onClose }) {
   useEffect(() => {
     if (!currentUser) return;
 
-    const unsubscribe = onSnapshot(doc(db, 'users', currentUser.uid, 'profile', 'data'), (doc) => {
-      if (doc.exists()) {
-        setProfileData(doc.data());
+    const unsubscribe = onSnapshot(
+      doc(db, 'users', currentUser.uid, 'profile', 'data'), 
+      (doc) => {
+        if (doc.exists()) {
+          setProfileData(doc.data());
+        }
+      },
+      (error) => {
+        console.error("Error in Profile listener:", error);
+        if (error.code === 'permission-denied') {
+          unsubscribe();
+        }
       }
-    });
+    );
 
     return () => unsubscribe();
   }, [currentUser]);

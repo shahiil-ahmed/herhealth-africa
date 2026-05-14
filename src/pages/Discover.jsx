@@ -84,13 +84,19 @@ export default function Discover() {
 
   useEffect(() => {
     console.log("🚀 Discover Component Mounted - Port 5173 Check");
-    const unsubscribe = onSnapshot(collection(db, 'specialists'), (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setSpecialists(data);
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, 'specialists'), 
+      (snapshot) => {
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setSpecialists(data);
+      },
+      (error) => {
+        console.error("Error in Discover specialists listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 

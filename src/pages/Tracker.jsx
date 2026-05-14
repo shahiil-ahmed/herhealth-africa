@@ -80,20 +80,26 @@ export default function Tracker() {
   useEffect(() => {
     if (!auth.currentUser) return;
     
-    const unsubscribe = onSnapshot(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), (doc) => {
-      if (doc.exists()) {
-        const data = doc.data();
-        setUserProfile(data);
-        if (data.cycleLength) setCycleLength(data.cycleLength);
-        if (data.periodLength) setPeriodLength(data.periodLength);
-        if (data.lastPeriodStart) {
-          const date = data.lastPeriodStart instanceof Timestamp 
-            ? data.lastPeriodStart.toDate() 
-            : new Date(data.lastPeriodStart);
-          setLastPeriodDate(date.toISOString().split('T')[0]);
+    const unsubscribe = onSnapshot(
+      doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), 
+      (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          setUserProfile(data);
+          if (data.cycleLength) setCycleLength(data.cycleLength);
+          if (data.periodLength) setPeriodLength(data.periodLength);
+          if (data.lastPeriodStart) {
+            const date = data.lastPeriodStart instanceof Timestamp 
+              ? data.lastPeriodStart.toDate() 
+              : new Date(data.lastPeriodStart);
+            setLastPeriodDate(date.toISOString().split('T')[0]);
+          }
         }
+      },
+      (error) => {
+        console.error("Error in Tracker profile listener:", error);
       }
-    });
+    );
     return () => unsubscribe();
   }, []);
 
@@ -111,10 +117,16 @@ export default function Tracker() {
       orderBy('date', 'asc')
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const logs = snapshot.docs.map(doc => doc.data());
-      setWeeklyLogs(logs);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        const logs = snapshot.docs.map(doc => doc.data());
+        setWeeklyLogs(logs);
+      },
+      (error) => {
+        console.error("Error in Tracker logs listener:", error);
+      }
+    );
     return () => unsubscribe();
   }, []);
 
