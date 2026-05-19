@@ -33,19 +33,26 @@ function RatingRow({ label, icon: Icon, value, onChange, readOnly = false }) { /
         </div>
         <span className="font-medium opacity-90">{label}</span>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         {[1, 2, 3, 4, 5].map((level) => (
-          <div
+          <button
             key={level}
-            onClick={() => !readOnly && onChange(level)}
-            className={`w-[13px] h-[13px] rounded-full transition-all duration-150 ${
+            type="button"
+            onClick={() => !readOnly && onChange(value === level ? 0 : level)}
+            disabled={readOnly}
+            className={`group relative p-2 -m-2 focus:outline-none transition-all duration-150 ${
               readOnly ? 'cursor-default' : 'cursor-pointer'
-            } ${
-              level <= value 
-                ? 'bg-[#D4688A] scale-110 shadow-sm' 
-                : 'bg-[#D4688A]/40' + (!readOnly ? ' hover:bg-[#D4688A]/60' : '')
             }`}
-          />
+            aria-label={`Rate ${label} as ${level} out of 5`}
+          >
+            <div
+              className={`w-[14px] h-[14px] rounded-full transition-all duration-150 ${
+                level <= value 
+                  ? 'bg-[#D4688A] scale-110 shadow-[0_2px_6px_rgba(212,104,138,0.3)]' 
+                  : 'bg-[#D4688A]/20' + (!readOnly ? ' group-hover:bg-[#D4688A]/60 group-hover:scale-110' : '')
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>
@@ -160,8 +167,22 @@ export default function Tracker() {
     }
   };
 
-  const updateRating = (symptom, value) => {
+  const updateRating = async (symptom, value) => {
+    // Update local state for immediate feedback
     setRatings(prev => ({ ...prev, [symptom]: value }));
+
+    // Immediate Firestore update
+    if (!auth.currentUser) return;
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    try {
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'dailyLogs', todayStr), {
+        ratings: { [symptom]: value },
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    } catch (error) {
+      console.error("Error updating rating:", error);
+    }
   };
 
   const saveLog = async () => {
@@ -276,15 +297,15 @@ export default function Tracker() {
                   Today's symptoms
                 </div>
                 
-                <RatingRow label="Pelvic Pain" icon={Activity} value={ratings.pelvicPain} onChange={(v) => updateRating('pelvicPain', v)} readOnly={true} />
-                <RatingRow label="Bleeding" icon={Droplets} value={ratings.bleeding} onChange={(v) => updateRating('bleeding', v)} readOnly={true} />
-                <RatingRow label="Bloating" icon={Wind} value={ratings.bloating} onChange={(v) => updateRating('bloating', v)} readOnly={true} />
-                <RatingRow label="Fatigue" icon={BatteryLow} value={ratings.fatigue} onChange={(v) => updateRating('fatigue', v)} readOnly={true} />
+                <RatingRow label="Pelvic Pain" icon={Activity} value={ratings.pelvicPain} onChange={(v) => updateRating('pelvicPain', v)} />
+                <RatingRow label="Bleeding" icon={Droplets} value={ratings.bleeding} onChange={(v) => updateRating('bleeding', v)} />
+                <RatingRow label="Bloating" icon={Wind} value={ratings.bloating} onChange={(v) => updateRating('bloating', v)} />
+                <RatingRow label="Fatigue" icon={BatteryLow} value={ratings.fatigue} onChange={(v) => updateRating('fatigue', v)} />
                 
-                <RatingRow label="Nausea" icon={GlassWater} value={ratings.nausea} onChange={(v) => updateRating('nausea', v)} readOnly={true} />
-                <RatingRow label="Hot Flashes" icon={Thermometer} value={ratings.hotFlashes} onChange={(v) => updateRating('hotFlashes', v)} readOnly={true} />
-                <RatingRow label="Brain Fog" icon={Cloud} value={ratings.brainFog} onChange={(v) => updateRating('brainFog', v)} readOnly={true} />
-                <RatingRow label="Back Pain" icon={Zap} value={ratings.backPain} onChange={(v) => updateRating('backPain', v)} readOnly={true} />
+                <RatingRow label="Nausea" icon={GlassWater} value={ratings.nausea} onChange={(v) => updateRating('nausea', v)} />
+                <RatingRow label="Hot Flashes" icon={Thermometer} value={ratings.hotFlashes} onChange={(v) => updateRating('hotFlashes', v)} />
+                <RatingRow label="Brain Fog" icon={Cloud} value={ratings.brainFog} onChange={(v) => updateRating('brainFog', v)} />
+                <RatingRow label="Back Pain" icon={Zap} value={ratings.backPain} onChange={(v) => updateRating('backPain', v)} />
               </div>
 
             </div>
