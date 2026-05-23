@@ -251,60 +251,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Testimonial Section */}
-        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8">
-          <h2 className="text-2xl mb-6 text-[#2D1B2E]">
-            She said{" "}
-            <span className="italic text-[#D4688A] font-[Fraunces,serif]">
-              it first
-            </span>
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6 items-start">
-            <div className="bg-[#2D1B2E] rounded-[24px] p-6 md:p-8 max-w-3xl shadow-lg border border-black/5">
-              <p className="text-white text-lg md:text-xl italic font-[Fraunces,serif] leading-relaxed mb-6">
-                "I was 25 when I was diagnosed. Heavy bleeding, severe pain,
-                constantly bloated. The nurse handed me my results with a look
-                of pity. I just wanted someone to tell me I would be fine."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#D4688A] flex items-center justify-center text-white font-semibold text-lg shrink-0">
-                  A
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-white text-sm font-medium">
-                    Amara, 26 — Lagos
-                  </span>
-                  <span className="text-white/60 text-xs mt-0.5">
-                    Fibroids diagnosed at 25
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-[#2D1B2E] rounded-[24px] p-6 md:p-8 max-w-3xl shadow-lg border border-black/5">
-              <p className="text-white text-lg md:text-xl italic font-[Fraunces,serif] leading-relaxed mb-6">
-                "My journey with HerHealth changed everything. From the first
-                consultation to finding a vetted specialist, I felt seen and
-                supported. My health is now a conversation, not a series of
-                dismissive appointments."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#D4688A] flex items-center justify-center text-white font-semibold text-lg shrink-0">
-                  C
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-white text-sm font-medium">
-                    Chinaza, 29 — Lagos
-                  </span>
-                  <span className="text-white/60 text-xs mt-0.5">
-                    PCOS management journey
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Resources Section */}
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 pb-24">
           <h2 className="text-2xl mb-6 text-[#2D1B2E]">

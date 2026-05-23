@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, MapPin, Send, Stethoscope } from 'lucide-react';
+import { ChevronLeft, MapPin, Send, Stethoscope, ChevronDown, Heart } from 'lucide-react';
 import { db } from '../firebase/firebaseConfig';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
@@ -35,6 +35,7 @@ export default function Discover() {
   const [nomination, setNomination] = useState({ doctorName: '', details: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nominationError, setNominationError] = useState("");
+  const [showReviews, setShowReviews] = useState(false);
   
 
 
@@ -145,6 +146,79 @@ export default function Discover() {
               </div>
             );
           })}
+        </div>
+
+        {/* Community Testimonials Accordion */}
+        <div className="mt-12 bg-white rounded-[24px] border border-[#FFE8EF] overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md">
+          <button 
+            onClick={() => setShowReviews(!showReviews)}
+            className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#FAF9F6] transition-colors focus:outline-none"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-pink/10 flex items-center justify-center text-rose-pink shrink-0">
+                <Heart size={18} className="fill-rose-pink/20" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-dark-plum text-sm md:text-base">Sister Testimonials</h3>
+                <p className="text-xs text-dark-plum/50 mt-0.5">Read real stories from our community</p>
+              </div>
+            </div>
+            <ChevronDown 
+              size={20} 
+              className={`text-dark-plum/60 transition-transform duration-300 shrink-0 ${showReviews ? 'rotate-180' : ''}`} 
+            />
+          </button>
+          
+          {showReviews && (
+            <div className="px-6 pb-6 pt-2 border-t border-[#FFE8EF]/50 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="grid md:grid-cols-2 gap-6 items-start mt-4">
+                {/* Amara Review */}
+                <div className="bg-[#2D1B2E] rounded-[20px] p-6 shadow-md border border-black/5 hover:scale-[1.01] transition-transform">
+                  <p className="text-white text-sm md:text-base italic font-[Fraunces,serif] leading-relaxed mb-6">
+                    "I was 25 when I was diagnosed. Heavy bleeding, severe pain,
+                    constantly bloated. The nurse handed me my results with a look
+                    of pity. I just wanted someone to tell me I would be fine."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#D4688A] flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                      A
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-white text-xs font-semibold">
+                        Amara, 26 — Lagos
+                      </span>
+                      <span className="text-white/60 text-[10px] mt-0.5">
+                        Fibroids diagnosed at 25
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Janet Review */}
+                <div className="bg-[#2D1B2E] rounded-[20px] p-6 shadow-md border border-black/5 hover:scale-[1.01] transition-transform">
+                  <p className="text-white text-sm md:text-base italic font-[Fraunces,serif] leading-relaxed mb-6">
+                    "My journey with HerHealth changed everything. From the first
+                    consultation to finding a vetted specialist, I felt seen and
+                    supported. My health is now a conversation, not a series of
+                    dismissive appointments."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#D4688A] flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                      J
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-white text-xs font-semibold">
+                        Janet, 29 — Lagos
+                      </span>
+                      <span className="text-white/60 text-[10px] mt-0.5">
+                        PCOS management journey
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Nomination Form Section */}
