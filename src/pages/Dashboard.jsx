@@ -1,69 +1,16 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import { Video, BookOpen, CheckSquare, Stethoscope, Leaf, BarChart3, ClipboardList, Activity, Heart } from "lucide-react";
+import { Stethoscope, BarChart3, ClipboardList, Activity, Heart } from "lucide-react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { calculateCyclePhase } from "../utils/cycleUtils";
 import UserBookings from "../components/UserBookings";
-import ResourceModal from "../components/ResourceModal";
 import Linkify from "../components/Linkify";
 
-const resources = [
-  {
-    icon: Video,
-    title: "What Are Fibroids? Explained Simply",
-    subtitle: "Whiteboard video",
-    color: "text-[#D4688A]",
-    bg: "bg-[#D4688A]/10",
-    content: "Text coming soon..."
-  },
-  {
-    icon: BookOpen,
-    title: "Endometriosis: The 7-year wait",
-    subtitle: "Guide",
-    color: "text-[#8B5CF6]",
-    bg: "bg-[#8B5CF6]/10",
-    content: "Text coming soon..."
-  },
-  {
-    icon: CheckSquare,
-    title: "Doctor visit prep checklist",
-    subtitle: "Free tool",
-    color: "text-[#065F46]",
-    bg: "bg-[#065F46]/10",
-    content: "Text coming soon..."
-  },
-  {
-    icon: Stethoscope,
-    title: "Questions to ask your gynaecologist",
-    subtitle: "Guide",
-    color: "text-[#D4688A]",
-    bg: "bg-[#D4688A]/10",
-    content: "Text coming soon..."
-  },
-  {
-    icon: Leaf,
-    title: "Anti-inflammatory food guide for Nigerian women",
-    subtitle: "Nutrition",
-    color: "text-[#065F46]",
-    bg: "bg-[#065F46]/10",
-    content: "Text coming soon..."
-  },
-  {
-    icon: Video,
-    title: "Cycle charting: A practical guide",
-    subtitle: "Whiteboard video",
-    color: "text-[#8B5CF6]",
-    bg: "bg-[#8B5CF6]/10",
-    content: "Text coming soon..."
-  },
-];
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
-  const [selectedResource, setSelectedResource] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [cycleData, setCycleData] = useState(null);
   const [isCycleLoading, setIsCycleLoading] = useState(true);
@@ -103,24 +50,6 @@ export default function Dashboard() {
   const userName = currentUser?.displayName
     ? currentUser.displayName.split(" ")[0]
     : "Sister";
-
-  const handleResourceClick = (resource) => {
-    console.log("📍 Dashboard Card Clicked:", resource.title);
-    // Map 'subtitle' to 'type' for ResourceModal compatibility
-    const mappedResource = {
-      ...resource,
-      type: resource.subtitle
-    };
-    setSelectedResource(mappedResource);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => {
-      setSelectedResource(null);
-    }, 300);
-  };
 
   return (
     <div className="flex flex-col h-full flex-1 bg-petal">
@@ -250,44 +179,6 @@ export default function Dashboard() {
               </Link>
           </div>
         </div>
-
-        {/* Resources Section */}
-        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 pb-24">
-          <h2 className="text-2xl mb-6 text-[#2D1B2E]">
-            Learn &{" "}
-            <span className="italic text-[#D4688A] font-[Fraunces,serif]">
-              Understand
-            </span>
-          </h2>
-
-          <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {resources.map((resource, index) => (
-              <div
-                key={index}
-                onClick={() => handleResourceClick(resource)}
-                className="bg-white rounded-[20px] p-5 min-w-[280px] snap-start shadow-sm border border-black/5 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform pointer-events-auto relative z-10"
-              >
-                <div>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${resource.bg} ${resource.color}`}>
-                    <resource.icon size={20} />
-                  </div>
-                  <div className="text-[#2D1B2E] text-base font-medium mt-4 leading-snug">
-                    {resource.title}
-                  </div>
-                </div>
-                <div className="text-gray-400 text-[10px] tracking-wider mt-2 font-semibold">
-                  {resource.subtitle}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <ResourceModal 
-          isOpen={isModalOpen} 
-          onClose={closeModal} 
-          resource={selectedResource} 
-        />
       </div>
     </div>
   );
