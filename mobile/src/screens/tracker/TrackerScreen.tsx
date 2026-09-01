@@ -248,10 +248,11 @@ export default function TrackerScreen() {
     if (!auth.currentUser || !lastPeriodDate) return;
     setIsSubmitting(true);
     try {
+      const localDateStr = lastPeriodDate.includes('T') ? lastPeriodDate : `${lastPeriodDate}T00:00:00`;
       await setDoc(
         doc(db, 'users', auth.currentUser.uid, 'profile', 'data'),
         {
-          lastPeriodStart: Timestamp.fromDate(new Date(lastPeriodDate)),
+          lastPeriodStart: Timestamp.fromDate(new Date(localDateStr)),
           cycleLength: Number(cycleLength),
           periodLength: Number(periodLength),
           updatedAt: serverTimestamp(),

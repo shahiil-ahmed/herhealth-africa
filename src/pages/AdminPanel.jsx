@@ -130,6 +130,7 @@ export default function AdminPanel() {
       await updateDoc(bookingRef, { status });
     } catch (error) {
       console.error("Error updating status:", error);
+      alert("Failed to update status. Please try again.");
     }
   };
 

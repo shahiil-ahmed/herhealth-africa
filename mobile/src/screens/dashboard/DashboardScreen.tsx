@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -71,13 +72,20 @@ export default function DashboardScreen() {
     if (!currentUser) return;
 
     const q = query(collection(db, 'users', currentUser.uid, 'bookings'), limit(20));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs
-        .map((doc) => ({ id: doc.id, ...doc.data() } as Booking))
-        .filter((b) => ['pending', 'confirmed'].includes(b.status?.toLowerCase() || ''))
-        .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-      setBookings(data);
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as Booking))
+          .filter((b) => ['pending', 'confirmed'].includes(b.status?.toLowerCase() || ''))
+          .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        setBookings(data);
+      },
+      (error) => {
+        console.error('Error fetching bookings:', error);
+        Alert.alert('Error', 'Unable to load your bookings. Please check your connection.');
+      }
+    );
 
     return () => unsubscribe();
   }, [currentUser]);

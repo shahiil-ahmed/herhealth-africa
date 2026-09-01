@@ -52,6 +52,7 @@ export default function Discover() {
       },
       (error) => {
         console.error("Error in Discover specialists listener:", error);
+        alert("Unable to connect to the directory. Please check your internet connection.");
       }
     );
     return () => unsubscribe();

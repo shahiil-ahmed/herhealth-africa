@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -89,9 +90,16 @@ export default function DiscoverScreen() {
   const [nominationError, setNominationError] = useState('');
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'specialists'), (snap) => {
-      setSpecialists(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Specialist)));
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, 'specialists'),
+      (snap) => {
+        setSpecialists(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Specialist)));
+      },
+      (error) => {
+        console.error('Error fetching specialists:', error);
+        Alert.alert('Error', 'Unable to load the directory. Please check your connection.');
+      }
+    );
     return () => unsubscribe();
   }, []);
 

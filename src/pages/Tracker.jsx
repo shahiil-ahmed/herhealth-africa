@@ -153,8 +153,9 @@ export default function Tracker() {
     
     setIsSubmitting(true);
     try {
+      const localDateStr = lastPeriodDate.includes('T') ? lastPeriodDate : `${lastPeriodDate}T00:00:00`;
       await setDoc(doc(db, 'users', auth.currentUser.uid, 'profile', 'data'), {
-        lastPeriodStart: Timestamp.fromDate(new Date(lastPeriodDate)),
+        lastPeriodStart: Timestamp.fromDate(new Date(localDateStr)),
         cycleLength: Number(cycleLength),
         periodLength: Number(periodLength),
         updatedAt: serverTimestamp()
@@ -162,6 +163,7 @@ export default function Tracker() {
       setModalMode(null);
     } catch (error) {
       console.error("Error saving cycle:", error);
+      alert("Failed to save cycle settings. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -182,6 +184,7 @@ export default function Tracker() {
       }, { merge: true });
     } catch (error) {
       console.error("Error updating rating:", error);
+      alert("Failed to update symptom rating. Please check your connection.");
     }
   };
 
@@ -215,6 +218,7 @@ export default function Tracker() {
       setTimeout(() => setShowToast(false), 3000);
     } catch (error) {
       console.error("Error saving log:", error);
+      alert("Failed to save today's log. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

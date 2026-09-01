@@ -37,7 +37,7 @@ export const calculateCyclePhase = (
   startNormalized.setHours(0, 0, 0, 0);
 
   const diffTime = today.getTime() - startNormalized.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
   const currentDay = diffDays + 1;
 
   if (currentDay < 1) return { day: 1, phase: 'Menstrual phase' };

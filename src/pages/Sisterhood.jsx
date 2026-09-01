@@ -121,6 +121,7 @@ const Sisterhood = () => {
       });
     } catch (error) {
       console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again.");
     }
   };
 
@@ -141,6 +142,7 @@ const Sisterhood = () => {
       setNewWin('');
     } catch (error) {
       console.error("Error sharing win:", error);
+      alert("Failed to share win. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -155,6 +157,7 @@ const Sisterhood = () => {
       });
     } catch (error) {
       console.error("Error celebrating:", error);
+      alert("Failed to celebrate. Please check your connection.");
     }
   };
 
@@ -224,6 +227,11 @@ const Sisterhood = () => {
           </div>
 
           <div className="space-y-4">
+            {wins.length === 0 && (
+              <p className="text-[#2D1B2E]/40 text-[13px] italic text-center py-8">
+                No wins shared yet. Be the first! 🌸
+              </p>
+            )}
             {wins.map(win => (
               <div key={win.id} className="bg-white rounded-[24px] p-5 shadow-sm border border-black/5 flex gap-4 items-start animate-in slide-in-from-bottom-4 duration-300">
                 <div className="w-10 h-10 rounded-full bg-rose-pink text-white font-semibold flex items-center justify-center shrink-0 shadow-sm">
@@ -272,6 +280,13 @@ const Sisterhood = () => {
         {chatError && (
           <div className="bg-rose-pink/5 border border-rose-pink/20 rounded-2xl p-6 text-center animate-in fade-in zoom-in-95 duration-300 mx-4">
             <p className="text-rose-pink text-sm font-medium leading-relaxed">{chatError}</p>
+          </div>
+        )}
+        {messages.length === 0 && !chatError && (
+          <div className="flex flex-col items-center justify-center pt-20 pb-10 opacity-60">
+            <span className="text-4xl mb-3">🌸</span>
+            <p className="text-dark-plum font-medium text-[15px]">Be the first to post</p>
+            <p className="text-dark-plum/60 text-[13px] mt-1 text-center">This is a safe, anonymous space.</p>
           </div>
         )}
         {messages.map((msg, index) => {
