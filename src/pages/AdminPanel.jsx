@@ -36,6 +36,7 @@ export default function AdminPanel() {
       (snapshot) => {
         const bookingsData = snapshot.docs.map(doc => ({
           id: doc.id,
+          path: doc.ref.path,
           ...doc.data()
         }));
         setBookings(bookingsData);
@@ -119,9 +120,13 @@ export default function AdminPanel() {
     activeCircle: "Cycle Awareness" // Mocked for now until Wellness Circle logic implemented
   };
 
-  const handleStatusUpdate = async (id, status) => {
+  const handleStatusUpdate = async (bookingPath, status) => {
     try {
-      const bookingRef = doc(db, 'bookings', id);
+      if (!bookingPath) {
+        console.error("Missing booking path");
+        return;
+      }
+      const bookingRef = doc(db, bookingPath);
       await updateDoc(bookingRef, { status });
     } catch (error) {
       console.error("Error updating status:", error);
@@ -329,7 +334,7 @@ export default function AdminPanel() {
                           <select 
                             className="bg-transparent border border-black/10 rounded-lg text-sm px-2 py-1.5 outline-none focus:border-[#D4688A] hover:border-black/20 transition-colors cursor-pointer"
                             value={booking.status || 'pending'}
-                            onChange={(e) => handleStatusUpdate(booking.id, e.target.value)}
+                            onChange={(e) => handleStatusUpdate(booking.path, e.target.value)}
                           >
                             <option value="pending">Pending</option>
                             <option value="confirmed">Confirmed</option>

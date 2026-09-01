@@ -2,9 +2,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    match /{path=**}/bookings/{bookingId} {
+      allow read, update: if isAdmin();
+    }
+    
     // Core user data rule: users can read/write their own document
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if (request.auth != null && request.auth.uid == userId) || isAdmin();
+      allow write: if request.auth != null && request.auth.uid == userId;
       
       // Subcollections under user (dailyLogs, bookings, profile)
       match /{document=**} {
@@ -15,13 +24,14 @@ service cloud.firestore {
     // Specialists directory: read-only for authenticated users
     match /specialists/{specialistId} {
       allow read: if request.auth != null;
-      allow write: if false; // Admin-only writes (managed via Admin SDK / Firebase Console)
+      allow create, update, delete: if isAdmin();
     }
     
     // Nominations: users can submit
     match /nominations/{nominationId} {
       allow create: if request.auth != null && request.resource.data.submittedBy == request.auth.uid;
-      allow read, update, delete: if false; // Admin-only review
+      allow read, delete: if isAdmin();
+      allow update: if false;
     }
     
     // Wins community board
